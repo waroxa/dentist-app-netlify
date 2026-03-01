@@ -1,0 +1,37 @@
+[build]
+  command   = "npm run build"
+  publish   = "build"
+  functions = "netlify/functions"
+
+# SPA fallback – all unmatched routes serve index.html
+# (must be LAST after the function rules)
+
+# GHL callback lands here as a GET from GHL servers
+[[redirects]]
+  from   = "/ghl-callback"
+  to     = "/.netlify/functions/ghl-callback"
+  status = 200
+  force  = true
+
+# Token refresh called by frontend
+[[redirects]]
+  from   = "/api/ghl-refresh"
+  to     = "/.netlify/functions/ghl-refresh"
+  status = 200
+  force  = true
+
+# Install webhook – GHL POSTs here on app install
+[[redirects]]
+  from   = "/api/ghl-install"
+  to     = "/.netlify/functions/ghl-install"
+  status = 200
+  force  = true
+
+# SPA catch-all (must be last)
+[[redirects]]
+  from   = "/*"
+  to     = "/index.html"
+  status = 200
+
+[build.environment]
+  NODE_VERSION = "20"
