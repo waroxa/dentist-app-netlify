@@ -23,45 +23,13 @@ interface OAuthConnection {
 const SUPABASE_BASE = `https://${projectId}.supabase.co/functions/v1/make-server-c5a5d193`;
 
 const API = {
-  // Start OAuth flow - redirects browser to GHL via Supabase server function
+  // Start OAuth flow - navigate browser directly to Supabase function URL.
+  // We cannot use fetch() here because the server returns a 302 redirect to GHL,
+  // which browsers block with CORS when called via fetch. Direct navigation works perfectly.
   async startOAuth() {
-    try {
-      console.log('🚀 Starting OAuth flow...');
-
-      const response = await fetch(`${SUPABASE_BASE}/oauth/start`, {
-        method: 'GET',
-        headers: { 'Authorization': `Bearer ${publicAnonKey}` },
-        redirect: 'manual',
-      });
-
-      console.log('📥 Response status:', response.status);
-
-      const redirectUrl = response.headers.get('location') || response.url;
-      console.log('🔗 Redirect URL:', redirectUrl);
-
-      if (redirectUrl && redirectUrl.includes('gohighlevel.com')) {
-        window.location.href = redirectUrl;
-        return;
-      }
-
-      if (response.ok) {
-        const data = await response.json();
-        if (data.authUrl) {
-          window.location.href = data.authUrl;
-          return;
-        }
-      }
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`Backend error (${response.status}): ${errorText}`);
-      }
-
-      throw new Error('Failed to start OAuth flow - no redirect URL received');
-    } catch (error) {
-      console.error('❌ OAuth start error:', error);
-      throw error;
-    }
+    const oauthUrl = `${SUPABASE_BASE}/oauth/start`;
+    console.log('🚀 Navigating to OAuth start:', oauthUrl);
+    window.location.href = oauthUrl;
   },
 
   // Get connection status (existing Supabase function)
