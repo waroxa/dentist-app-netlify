@@ -41,7 +41,7 @@ export function Terms() {
             <li>Generates enhanced smile visualizations using artificial intelligence</li>
             <li>Creates animated smile transformation videos</li>
             <li>Captures and manages lead information for dental practices</li>
-            <li>Integrates with GoHighLevel CRM for contact management</li>
+            <li>Integrates with CRM platforms for contact management</li>
           </ul>
 
           <ImportantBox>
@@ -108,7 +108,7 @@ export function Terms() {
           <ul>
             <li><strong>AI Technology:</strong> Advanced AI for image processing</li>
             <li><strong>Video Services:</strong> For video generation and hosting</li>
-            <li><strong>GoHighLevel:</strong> CRM and contact management</li>
+            <li><strong>CRM Platform:</strong> CRM and contact management</li>
           </ul>
           <p>
             These services have their own terms and privacy policies. We are not responsible for their practices or content.
@@ -179,14 +179,14 @@ export function Terms() {
           </p>
         </Section>
 
-        <Section title="14. GoHighLevel Integration">
+        <Section title="14. CRM Integration">
           <p>
-            If you use this Service through a GoHighLevel installation:
+            If you use this Service through a CRM platform installation:
           </p>
           <ul>
             <li>Your data will be shared with the dental practice that installed the app</li>
             <li>The practice's privacy policy also applies to your data</li>
-            <li>GoHighLevel's terms of service also apply</li>
+            <li>The CRM platform's terms of service also apply</li>
             <li>Contact the practice directly for data deletion requests</li>
           </ul>
         </Section>

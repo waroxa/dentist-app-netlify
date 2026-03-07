@@ -86,20 +86,20 @@ export function Support() {
           <h2 style={{ color: '#0EA5E9', margin: '30px 0 20px' }}>❓ Common Questions</h2>
           
           <div style={{ margin: '30px 0' }}>
-            <FAQItem 
-              question="Q: How do I get my GHL API credentials?"
-              answer="Go to GoHighLevel → Settings → API → Create API Key. Copy the key and your Location ID from Settings → Business Profile."
+            <FAQItem
+              question="Q: How do I connect my CRM?"
+              answer="Go to Staff Login → Settings → Integration Tab. Enter your API Key and Location ID, then click Save Settings."
             />
-            <FAQItem 
-              question="Q: Where are the videos saved in GHL?"
+            <FAQItem
+              question="Q: Where are the videos saved?"
               answer='Videos are saved in two places: (1) Custom field "smile_video_url" and (2) Contact Notes with a clickable link.'
             />
-            <FAQItem 
+            <FAQItem
               question="Q: What custom fields do I need?"
               answer="You need 5 custom fields: service_interest, transformation_status, before_image_url, after_image_url, and smile_video_url. See the setup guide for details."
             />
-            <FAQItem 
-              question="Q: Why aren't contacts being created in GHL?"
+            <FAQItem
+              question="Q: Why aren't contacts being created?"
               answer="Check that your API Key and Location ID are correctly saved in Settings → Integration. Verify your API key has contacts.write permission."
             />
             <FAQItem 
