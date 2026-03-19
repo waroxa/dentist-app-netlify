@@ -20,7 +20,7 @@ export async function handler(event) {
 
   const jobId = body.jobId || crypto.randomUUID();
   const intensity = body.intensity && PROMPTS[body.intensity] ? body.intensity : 'natural';
-  const model = process.env.GEMINI_IMAGE_MODEL || 'gemini-2.5-flash-image-preview';
+  const model = process.env.GEMINI_IMAGE_MODEL || 'gemini-2.5-flash-image';
   const now = new Date().toISOString();
 
   try {

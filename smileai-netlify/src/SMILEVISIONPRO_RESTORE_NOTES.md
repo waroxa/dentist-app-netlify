@@ -10,7 +10,7 @@
 ## Environment variables and usage
 - `GOOGLE_GEMINI_API_KEY`: accepted as the deployment secret for Gemini image generation and mapped as a compatibility alias for `GEMINI_API_KEY` in the backend helper.
 - `GEMINI_API_KEY`: canonical backend lookup for Gemini requests after compatibility mapping.
-- `GEMINI_IMAGE_MODEL`: optional model override for Gemini smile preview generation.
+- `GEMINI_IMAGE_MODEL`: optional model override for Gemini smile preview generation. Defaults to `gemini-2.5-flash-image`.
 - `FAL_API_KEY`: authenticates the FAL image-to-video request.
 - `FAL_VIDEO_MODEL`: selects the FAL video model endpoint.
 - `GOOGLE_CLOUD_PROJECT_ID`: identifies the Vertex AI project for Veo.
