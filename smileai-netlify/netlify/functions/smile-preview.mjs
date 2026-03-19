@@ -20,6 +20,7 @@ export async function handler(event) {
 
   const jobId = body.jobId || crypto.randomUUID();
   const intensity = body.intensity && PROMPTS[body.intensity] ? body.intensity : 'natural';
+  const model = process.env.GEMINI_IMAGE_MODEL || 'gemini-2.5-flash-image-preview';
   const now = new Date().toISOString();
 
   try {
@@ -35,6 +36,8 @@ export async function handler(event) {
       lead_id: body.leadId || null,
       input_image_data_url: body.imageDataUrl,
       error_message: null,
+      provider: 'gemini',
+      model,
       metadata: { intensity, mimeType: parsed.mimeType, imageBytes: parsed.bytes.length },
       created_at: now,
       updated_at: now,
@@ -44,7 +47,7 @@ export async function handler(event) {
 
     const ai = new GoogleGenAI({ apiKey: geminiApiKey });
     const result = await retry(() => ai.models.generateContent({
-      model: process.env.GEMINI_IMAGE_MODEL || 'gemini-2.5-flash-image-preview',
+      model,
       contents: [{
         role: 'user',
         parts: [
@@ -78,6 +81,8 @@ export async function handler(event) {
       output_image_data_url: previewUrl,
       output_asset_url: uploaded.publicUrl,
       error_message: null,
+      provider: 'gemini',
+      model,
       metadata: { intensity, mimeType: inlineData.mimeType || parsed.mimeType, storagePath: uploaded.path },
       created_at: now,
       updated_at: new Date().toISOString(),
@@ -97,6 +102,8 @@ export async function handler(event) {
         lead_id: body.leadId || null,
         input_image_data_url: body.imageDataUrl,
         error_message: message,
+        provider: 'gemini',
+        model,
         metadata: { intensity },
         created_at: now,
         updated_at: new Date().toISOString(),

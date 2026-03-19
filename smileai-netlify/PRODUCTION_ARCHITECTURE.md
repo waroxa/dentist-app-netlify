@@ -68,6 +68,8 @@
 ## Deployment checklist
 - Add all required environment variables in Netlify.
 - Create the Supabase tables from `supabase/migrations/20260319_smilevision_backend.sql`.
+- The `smile_jobs` table is the production contract: Gemini preview data stays in `output_image_data_url`, video URLs stay in `output_asset_url`, failures stay in `error_message`, provider names stay in `provider`, provider model IDs stay in `model`, and extra request details stay in `metadata`.
+- The migration is idempotent and reconciles older deployments by adding `provider`, `model`, and `metadata`, copying any legacy `provider_model` values into `model`, and then removing `provider_model` so production matches the deployed code.
 - Set `PUBLIC_APP_URL` to the live canonical domain.
 - Confirm `GHL_REDIRECT_URI` matches `/api/oauth/callback` exactly.
 - Rotate any previously exposed provider keys before redeploying.
