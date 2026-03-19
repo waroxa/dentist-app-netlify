@@ -1,18 +1,27 @@
 import crypto from 'node:crypto';
 import { auditLog, errorLog, json, upsertJob, safeParse } from './_lib.mjs';
-import { createVideoWithProvider, getDefaultVideoPrompt, providerEnabled, providerSetupError, resolveVideoModel, resolveVideoProvider, validateVideoProviderConfig } from './_video-providers.mjs';
+import {
+  createVideoWithProvider,
+  getDefaultVideoPrompt,
+  providerEnabled,
+  providerSetupError,
+  resolveVideoModel,
+  resolveVideoProvider,
+  validateVideoProviderConfig,
+} from './_video-providers.mjs';
 
-export async function handler(event) {
-  if (event.httpMethod !== 'POST') return json(405, { error: 'Method not allowed' });
+export async function processVideoCreate(event, forcedProvider = null) {
+  if (event.httpMethod != 'POST') return json(405, { success: false, error: 'Method not allowed' });
   const body = safeParse(event.body);
-  if (!body?.imageUrl) return json(400, { error: 'A generated preview is required before video creation.' });
+  if (!body) return json(400, { success: false, error: 'Invalid JSON request body.' });
+  if (!body.imageUrl) return json(400, { success: false, error: 'A generated preview is required before video creation.' });
 
   const jobId = crypto.randomUUID();
   let provider;
   try {
-    provider = resolveVideoProvider(body.provider);
+    provider = resolveVideoProvider(forcedProvider || body.provider);
   } catch (error) {
-    return json(400, { error: error.message });
+    return json(400, { success: false, error: error.message });
   }
 
   const configError = validateVideoProviderConfig(provider);
@@ -34,7 +43,7 @@ export async function handler(event) {
     output_asset_url: null,
     error_message: null,
     provider,
-    model: model,
+    model,
     metadata: { provider, promptLength: prompt.length },
     created_at: now,
     updated_at: now,
@@ -49,12 +58,17 @@ export async function handler(event) {
       input_image_data_url: body.imageUrl,
       error_message: `${provider} is disabled.`,
       provider,
-      model: model,
+      model,
       metadata: { provider, disabled: true },
       created_at: now,
       updated_at: new Date().toISOString(),
     });
-    return providerSetupError(provider);
+    return providerSetupError(provider, {
+      statusCode: 503,
+      provider,
+      success: false,
+      error: `${provider.toUpperCase()} video generation is disabled.`,
+    });
   }
 
   try {
@@ -78,6 +92,7 @@ export async function handler(event) {
 
     return json(200, {
       success: true,
+      error: null,
       jobId,
       status: 'completed',
       assetUrl: result.assetUrl,
@@ -99,12 +114,16 @@ export async function handler(event) {
       output_asset_url: null,
       error_message: message,
       provider,
-      model: model,
+      model,
       metadata: { provider, model },
       created_at: now,
       updated_at: new Date().toISOString(),
     });
     await auditLog('smile_video_failed', { jobId, leadId: body.leadId || null, provider, model, message });
-    return json(502, { error: message, provider, model, jobId });
+    return json(502, { success: false, error: message, provider, model, jobId });
   }
+}
+
+export async function handler(event) {
+  return processVideoCreate(event);
 }

@@ -25,6 +25,7 @@ export function resolveVideoModel(provider) {
 function buildProviderError(provider, message, details = {}, statusCode = 500) {
   return {
     statusCode,
+    success: false,
     provider,
     error: message,
     ...details,

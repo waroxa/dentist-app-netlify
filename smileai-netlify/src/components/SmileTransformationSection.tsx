@@ -34,6 +34,19 @@ interface ProviderUiMessage {
   message: string;
 }
 
+async function parseJsonResponse(response: Response) {
+  const contentType = response.headers.get('content-type') || '';
+  if (!contentType.includes('application/json')) {
+    const text = await response.text();
+    throw new Error(`Video API returned non-JSON response. Check backend route/rewrite. Non-JSON API response: ${text.slice(0, 300)}`);
+  }
+  return response.json();
+}
+
+function getVideoEndpoint(provider: VideoProvider) {
+  return provider === 'fal' ? '/api/video/fal' : '/api/video/veo';
+}
+
 const STEP_LABELS = [
   'Upload Photo',
   'Choose Preview Style',
@@ -177,7 +190,7 @@ export function SmileTransformationSection() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ imageDataUrl: uploadedImage, intensity: style }),
       });
-      const data = await res.json();
+      const data = await parseJsonResponse(res);
       if (!res.ok) throw new Error(data.error || 'We couldn’t generate the smile preview right now. Please try again.');
       setPreviewImage(data.previewImageUrl);
       setPreviewAssetUrl(data.previewAssetUrl || data.previewImageUrl);
@@ -200,12 +213,12 @@ export function SmileTransformationSection() {
     setProviderMessages((current) => ({ ...current, [provider]: undefined }));
 
     try {
-      const res = await fetch('/api/video-create', {
+      const res = await fetch(getVideoEndpoint(provider), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ imageUrl: previewImage, provider }),
       });
-      const data = await res.json();
+      const data = await parseJsonResponse(res);
       if (!res.ok) throw new Error(data.error || 'This video could not be generated yet. Please try again.');
 
       setVideoResults((current) => ({
@@ -249,12 +262,12 @@ export function SmileTransformationSection() {
     try {
       const providers: VideoProvider[] = ['fal', 'veo'];
       const results = await Promise.allSettled(providers.map(async (provider) => {
-        const res = await fetch('/api/video-create', {
+        const res = await fetch(getVideoEndpoint(provider), {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ imageUrl: previewImage, provider }),
         });
-        const data = await res.json();
+        const data = await parseJsonResponse(res);
         if (!res.ok) {
           throw new Error(data.error || `Unable to generate ${provider.toUpperCase()} video.`);
         }
