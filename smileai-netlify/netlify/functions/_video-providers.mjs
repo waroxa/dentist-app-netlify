@@ -17,9 +17,56 @@ export function resolveVideoProvider(requestedProvider) {
 
 export function resolveVideoModel(provider) {
   if (provider === 'veo') {
-    return process.env.VEO_MODEL || 'veo-3.1-generate-001';
+    return getEnv('VEO_MODEL');
   }
   return process.env.FAL_VIDEO_MODEL || 'fal-ai/kling-video/v2.6/pro/image-to-video';
+}
+
+function buildProviderError(provider, message, details = {}, statusCode = 500) {
+  return {
+    statusCode,
+    provider,
+    error: message,
+    ...details,
+  };
+}
+
+export function validateVideoProviderConfig(provider) {
+  if (provider === 'fal') {
+    const missing = [];
+    if (!process.env.FAL_API_KEY) missing.push('FAL_API_KEY');
+    if (missing.length) {
+      return buildProviderError('fal', 'FAL is not configured yet. Missing FAL backend configuration.', {
+        missingEnv: missing,
+        logHint: 'Add the missing FAL environment variables in Netlify to enable FAL video generation.',
+      });
+    }
+    return null;
+  }
+
+  const missing = [];
+  for (const name of ['GOOGLE_CLOUD_PROJECT_ID', 'GOOGLE_CLOUD_LOCATION', 'VEO_MODEL', 'GOOGLE_APPLICATION_CREDENTIALS_JSON']) {
+    if (!process.env[name]) missing.push(name);
+  }
+
+  if (missing.length) {
+    return buildProviderError('veo', 'Veo is not configured yet. Missing Google Cloud backend configuration.', {
+      missingEnv: missing,
+      logHint: 'Confirm the Netlify Veo environment variables are set and that Vertex AI is enabled in the target Google Cloud project.',
+    });
+  }
+
+  try {
+    parseGoogleCredentials();
+  } catch (error) {
+    return buildProviderError('veo', 'Veo is not configured yet. Missing Google Cloud backend configuration.', {
+      missingEnv: ['GOOGLE_APPLICATION_CREDENTIALS_JSON'],
+      details: error.message,
+      logHint: 'Verify GOOGLE_APPLICATION_CREDENTIALS_JSON is valid service account JSON with Vertex AI access.',
+    });
+  }
+
+  return null;
 }
 
 export function providerEnabled(provider) {
@@ -97,8 +144,23 @@ async function createFalVideo({ imageUrl, prompt, leadId, jobId }) {
 function parseGoogleCredentials() {
   const raw = process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON;
   if (!raw) throw new Error('Missing GOOGLE_APPLICATION_CREDENTIALS_JSON');
-  const creds = JSON.parse(raw);
-  if (!creds.client_email || !creds.private_key) throw new Error('GOOGLE_APPLICATION_CREDENTIALS_JSON is missing client_email or private_key');
+
+  let creds;
+  try {
+    creds = JSON.parse(raw);
+  } catch {
+    throw new Error('GOOGLE_APPLICATION_CREDENTIALS_JSON is not valid JSON');
+  }
+
+  const missingFields = ['client_email', 'private_key', 'token_uri'].filter((field) => !creds[field]);
+  if (missingFields.length) {
+    throw new Error(`GOOGLE_APPLICATION_CREDENTIALS_JSON is missing ${missingFields.join(', ')}`);
+  }
+
+  if (creds.type && creds.type !== 'service_account') {
+    throw new Error('GOOGLE_APPLICATION_CREDENTIALS_JSON must be a service account credential');
+  }
+
   return creds;
 }
 
@@ -121,6 +183,7 @@ function createSignedJwt({ clientEmail, privateKey, scope, tokenUri }) {
 }
 
 async function getGoogleAccessToken() {
+  log('veo_auth_initializing', { provider: 'veo' });
   const creds = parseGoogleCredentials();
   const tokenUri = creds.token_uri || 'https://oauth2.googleapis.com/token';
   const assertion = createSignedJwt({
@@ -144,6 +207,7 @@ async function getGoogleAccessToken() {
     throw new Error(`Google OAuth token request failed: ${tokenBody?.error_description || tokenBody?.error || response.status}`);
   }
 
+  log('veo_auth_ready', { provider: 'veo' });
   return tokenBody.access_token;
 }
 
@@ -200,7 +264,7 @@ async function normalizeVeoAsset(video, leadId, jobId) {
 
 async function createVeoVideo({ imageUrl, prompt, leadId, jobId }) {
   const projectId = getEnv('GOOGLE_CLOUD_PROJECT_ID');
-  const location = process.env.GOOGLE_CLOUD_LOCATION || 'us-central1';
+  const location = getEnv('GOOGLE_CLOUD_LOCATION');
   const model = resolveVideoModel('veo');
   const accessToken = await getGoogleAccessToken();
   const parsed = parseDataUrl(imageUrl);
@@ -265,17 +329,25 @@ async function createVeoVideo({ imageUrl, prompt, leadId, jobId }) {
   };
 }
 
-export function providerSetupError(provider) {
-  if (provider === 'veo') {
-    return json(500, {
-      error: 'Veo is not configured.',
-      provider: 'veo',
-      requiredEnv: ['GOOGLE_CLOUD_PROJECT_ID', 'GOOGLE_CLOUD_LOCATION', 'GOOGLE_APPLICATION_CREDENTIALS_JSON', 'VEO_MODEL'],
-    });
-  }
-  return json(500, {
-    error: 'FAL is not configured.',
-    provider: 'fal',
-    requiredEnv: ['FAL_API_KEY', 'FAL_VIDEO_MODEL'],
+export function providerSetupError(provider, override = null) {
+  const failure = override || validateVideoProviderConfig(provider) || buildProviderError(
+    provider,
+    provider === 'veo'
+      ? 'Veo is not configured yet. Missing Google Cloud backend configuration.'
+      : 'FAL is not configured yet. Missing FAL backend configuration.',
+    {
+      requiredEnv: provider === 'veo'
+        ? ['GOOGLE_CLOUD_PROJECT_ID', 'GOOGLE_CLOUD_LOCATION', 'VEO_MODEL', 'GOOGLE_APPLICATION_CREDENTIALS_JSON']
+        : ['FAL_API_KEY', 'FAL_VIDEO_MODEL'],
+    },
+  );
+
+  errorLog('video_provider_not_configured', new Error(failure.error), {
+    provider,
+    missingEnv: failure.missingEnv || failure.requiredEnv || [],
+    details: failure.details || null,
+    logHint: failure.logHint || null,
   });
+
+  return json(failure.statusCode || 500, failure);
 }
