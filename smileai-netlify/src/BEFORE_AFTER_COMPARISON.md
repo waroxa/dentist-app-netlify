@@ -242,7 +242,7 @@ SECURITY: ✅ All auth server-side
 POST https://pvophjpndtqxkoygposy.supabase.co/functions/v1/make-server-c5a5d193/oauth/initiate
 
 Request Headers:
-  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+  Authorization: Bearer REDACTED_SUPABASE_ANON_KEY
   ↑ ↑ ↑
   EXPOSED IN BROWSER! Anyone can see this!
 
@@ -353,7 +353,7 @@ NO AUTH HEADERS! Clean redirect!
 ```bash
 # ❌ Complex: Need to provide auth header
 curl -X POST https://pvophjpndtqxkoygposy.supabase.co/functions/v1/make-server-c5a5d193/oauth/initiate \
-  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." \
+  -H "Authorization: Bearer REDACTED_SUPABASE_ANON_KEY" \
   -H "Content-Type: application/json"
 ```
 

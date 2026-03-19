@@ -3,35 +3,102 @@
   publish   = "build"
   functions = "netlify/functions"
 
-# SPA fallback – all unmatched routes serve index.html
-# (must be LAST after the function rules)
-
-# OAuth callback lands here as a GET from the platform
-[[redirects]]
-  from   = "/ghl-callback"
-  to     = "/.netlify/functions/ghl-callback"
-  status = 200
-  force  = true
-
-# Token refresh called by frontend
-[[redirects]]
-  from   = "/api/ghl-refresh"
-  to     = "/.netlify/functions/ghl-refresh"
-  status = 200
-  force  = true
-
-# Install webhook – the platform POSTs here on app install
-[[redirects]]
-  from   = "/api/ghl-install"
-  to     = "/.netlify/functions/ghl-install"
-  status = 200
-  force  = true
-
-# SPA catch-all (must be last)
-[[redirects]]
-  from   = "/*"
-  to     = "/index.html"
-  status = 200
-
 [build.environment]
   NODE_VERSION = "20"
+
+[[redirects]]
+  from = "/api/admin/login"
+  to = "/.netlify/functions/admin-login"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/admin/session"
+  to = "/.netlify/functions/admin-session"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/admin/logout"
+  to = "/.netlify/functions/admin-logout"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/lead-submit"
+  to = "/.netlify/functions/lead-submit"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/smile-preview"
+  to = "/.netlify/functions/smile-preview"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/video-create"
+  to = "/.netlify/functions/video-create"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/video-status"
+  to = "/.netlify/functions/video-status"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/oauth/start"
+  to = "/.netlify/functions/oauth-start"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/oauth/callback"
+  to = "/.netlify/functions/oauth-callback"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/oauth/status"
+  to = "/.netlify/functions/oauth-status"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/oauth/disconnect"
+  to = "/.netlify/functions/oauth-disconnect"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/ghl-refresh"
+  to = "/.netlify/functions/ghl-refresh"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/marketplace"
+  to = "/"
+  status = 301
+
+[[redirects]]
+  from = "/download-marketplace"
+  to = "/"
+  status = 301
+
+[[redirects]]
+  from = "/admin/ghl-connect"
+  to = "/admin"
+  status = 301
+
+[[redirects]]
+  from = "/ghl-callback"
+  to = "/"
+  status = 301
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
