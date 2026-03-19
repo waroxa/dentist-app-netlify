@@ -1,0 +1,75 @@
+# SmileVisionPro AI production architecture
+
+## Public routes
+- `/`
+- `/privacy`
+- `/terms`
+- `/support`
+- `/getting-started`
+- `/setup-guide`
+
+## Private routes
+- `/admin`
+- `/admin/integrations`
+- `/api/admin/login`
+- `/api/admin/session`
+- `/api/admin/logout`
+- `/api/lead-submit`
+- `/api/smile-preview`
+- `/api/video-create`
+- `/api/video-status`
+- `/api/oauth/start`
+- `/api/oauth/callback`
+- `/api/oauth/status`
+- `/api/oauth/disconnect`
+- `/api/ghl-refresh`
+
+## Workflow summary
+1. Public visitor submits lead details to `lead-submit`.
+2. Backend validates, stores, and optionally syncs the lead to the connected CRM.
+3. Public visitor uploads a photo and requests `smile-preview`.
+4. Backend validates the image, creates a job record, calls Gemini server-side, and stores the result.
+5. Public visitor can request `video-create`.
+6. Backend creates a traceable job record and returns the configured output asset.
+7. Private staff open `/admin`, authenticate through an HTTP-only session cookie, and manage integrations through backend OAuth routes.
+
+## Environment variables
+- `PUBLIC_APP_URL`: canonical site URL used for redirects.
+- `SUPABASE_URL`: Supabase project URL for data storage.
+- `SUPABASE_SERVICE_KEY`: service role key used only in Netlify functions.
+- `SMILEVISION_ADMIN_PASSWORD`: private admin password for staff access.
+- `SMILEVISION_ADMIN_SESSION_SECRET`: signing secret for HTTP-only admin sessions.
+- `TOKEN_ENCRYPTION_KEY`: 32-byte AES key used to encrypt stored OAuth tokens.
+- `GEMINI_API_KEY`: server-side image generation key.
+- `GEMINI_IMAGE_MODEL`: optional override for the image model.
+- `GHL_CLIENT_ID`: CRM OAuth client id.
+- `GHL_CLIENT_SECRET`: CRM OAuth client secret.
+- `GHL_REDIRECT_URI`: callback URL, typically `https://your-domain/api/oauth/callback`.
+- `GHL_SCOPES`: optional OAuth scopes override.
+- `FAL_API_KEY`: optional video provider key when you enable rendered video generation.
+- `FAL_VIDEO_MODEL`: optional video model identifier.
+- `SMILEVISION_VIDEO_FALLBACK_URL`: optional fallback asset if rendered video is disabled.
+
+## Security review summary
+- Removed hard-coded provider keys and anon tokens from the frontend.
+- Replaced client-stored admin auth with backend session cookies.
+- Moved lead creation, AI generation, video requests, and OAuth token handling behind server routes.
+- Added AES-GCM encryption helpers for persisted OAuth tokens.
+- Added audit logging hooks for login, lead, preview, video, and integration events.
+- Redirected legacy public marketplace/OAuth routes away from the public site.
+
+## Deployment checklist
+- Add all required environment variables in Netlify.
+- Create the Supabase tables from `supabase/migrations/20260319_smilevision_backend.sql`.
+- Set `PUBLIC_APP_URL` to the live canonical domain.
+- Confirm `GHL_REDIRECT_URI` matches `/api/oauth/callback` exactly.
+- Rotate any previously exposed provider keys before redeploying.
+- Run a production smoke test: lead submit, preview generation, admin login, OAuth connect, OAuth refresh.
+
+## Marketplace readiness checklist
+- Public docs exist at `/getting-started` and `/setup-guide`.
+- Public site is branded as SmileVisionPro AI only.
+- Legacy public marketplace pages redirect away.
+- Admin integration controls are private.
+- Tokens and secrets remain server-side.
+- Lead, smile preview, and video workflows are backend mediated.

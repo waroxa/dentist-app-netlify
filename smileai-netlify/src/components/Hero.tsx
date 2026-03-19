@@ -50,13 +50,13 @@ export function Hero({ clinicBranding }: HeroProps) {
             )}
             <div>
               <h1 className="text-base sm:text-lg lg:text-xl font-semibold text-gray-900">{clinicBranding.clinicName}</h1>
-              <p className="text-xs text-gray-600 hidden sm:block">AI-Powered Smile Previews</p>
+              <p className="text-xs text-gray-600 hidden sm:block">SmileVisionPro AI Previews</p>
             </div>
           </div>
           <div className="flex items-center gap-2 sm:gap-4">
             <div className="hidden md:flex items-center gap-2 text-sm text-gray-600">
               <MapPin className="w-4 h-4 text-teal-600" />
-              <span>Miami, FL</span>
+              <span>Online smile preview platform</span>
             </div>
             <Button 
               onClick={scrollToTransform}
@@ -76,7 +76,7 @@ export function Hero({ clinicBranding }: HeroProps) {
             {/* Trust Badge */}
             <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-2 bg-white rounded-full shadow-sm mb-4 sm:mb-6">
               <Star className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-500 fill-yellow-500" />
-              <span className="text-xs sm:text-sm font-medium text-gray-700">Trusted by {stats.patients}+ patients in Miami</span>
+              <span className="text-xs sm:text-sm font-medium text-gray-700">Trusted by modern dental teams and cosmetic consult workflows</span>
             </div>
 
             <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-gray-900 mb-4 sm:mb-6 leading-tight">
@@ -87,7 +87,7 @@ export function Hero({ clinicBranding }: HeroProps) {
             </h1>
             
             <p className="text-base sm:text-lg lg:text-xl text-gray-600 mb-6 sm:mb-8 max-w-xl mx-auto lg:mx-0">
-              Upload a photo and instantly see what your smile could look like with AI-powered dental treatment preview. No commitment, completely free.
+              Upload a clear smile photo and receive an AI-generated cosmetic preview in seconds. Secure, guided, and designed for modern dental consultations.
             </p>
 
             {/* CTA Buttons */}
@@ -144,7 +144,7 @@ export function Hero({ clinicBranding }: HeroProps) {
             <div className="relative rounded-2xl overflow-hidden shadow-2xl">
               <img
                 src={clinicBranding.heroImage || "https://images.unsplash.com/photo-1606811841689-23dfddce3e95?w=800&q=80"}
-                alt="Beautiful smile transformation"
+                alt="SmileVisionPro AI smile preview"
                 className="w-full h-[250px] sm:h-[350px] lg:h-[450px] xl:h-[500px] object-cover"
               />
               {/* Overlay Badge */}
@@ -154,7 +154,7 @@ export function Hero({ clinicBranding }: HeroProps) {
                     <span className="text-white text-lg sm:text-xl">✨</span>
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-xs sm:text-sm font-semibold text-gray-900 truncate">AI-Powered Smile Preview</p>
+                    <p className="text-xs sm:text-sm font-semibold text-gray-900 truncate">SmileVisionPro AI Preview</p>
                     <p className="text-xs text-gray-600">See results in seconds</p>
                   </div>
                 </div>
