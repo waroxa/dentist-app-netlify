@@ -44,5 +44,19 @@ create table if not exists audit_logs (
 
 
 alter table if exists smile_jobs add column if not exists provider text;
-alter table if exists smile_jobs add column if not exists provider_model text;
+alter table if exists smile_jobs add column if not exists model text;
+
+do $$
+begin
+  if exists (
+    select 1
+    from information_schema.columns
+    where table_schema = current_schema()
+      and table_name = 'smile_jobs'
+      and column_name = 'provider_model'
+  ) then
+    execute 'update smile_jobs set model = coalesce(model, provider_model)';
+    execute 'alter table smile_jobs drop column if exists provider_model';
+  end if;
+end $$;
 alter table if exists smile_jobs add column if not exists metadata jsonb not null default '{}'::jsonb;

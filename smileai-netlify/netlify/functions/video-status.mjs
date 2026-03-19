@@ -12,7 +12,7 @@ export async function handler(event) {
     assetUrl: data.output_asset_url || null,
     error: data.error_message || null,
     provider: data.provider || null,
-    model: data.provider_model || null,
+    model: data.model || null,
     providerJobId: data.provider_job_id || null,
   });
 }
