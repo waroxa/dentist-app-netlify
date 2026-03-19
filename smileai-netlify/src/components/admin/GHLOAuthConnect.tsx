@@ -24,7 +24,7 @@ const SUPABASE_BASE = `https://${projectId}.supabase.co/functions/v1/make-server
 
 const API = {
   // Start OAuth flow - navigate browser directly to Supabase function URL.
-  // We cannot use fetch() here because the server returns a 302 redirect to GHL,
+  // We cannot use fetch() here because the server returns a 302 redirect to the platform authorization page,
   // which browsers block with CORS when called via fetch. Direct navigation works perfectly.
   async startOAuth() {
     const oauthUrl = `${SUPABASE_BASE}/oauth/start`;
@@ -93,7 +93,7 @@ export function GHLOAuthConnect() {
     const locationName = params.get('locationName');
 
     if (successParam === 'true' && locationId) {
-      setSuccess(`✅ GoHighLevel Connected! Location: ${locationName || locationId}`);
+      setSuccess(`✅ CRM Connected! Location: ${locationName || locationId}`);
       setSelectedLocation(locationId);
       // Clean URL
       window.history.replaceState({}, '', window.location.pathname);
@@ -126,13 +126,13 @@ export function GHLOAuthConnect() {
     }
   };
 
-  // Connect to GoHighLevel - calls backend which redirects
+  // Connect to the CRM - calls backend which redirects
   const handleConnect = async () => {
     try {
       setIsConnecting(true);
       setError(null);
       
-      // This will redirect the browser to GHL
+      // This will redirect the browser to the CRM authorization page
       await API.startOAuth();
     } catch (err: any) {
       console.error('Error connecting:', err);
@@ -198,10 +198,10 @@ export function GHLOAuthConnect() {
         {/* Header */}
         <div className="mb-6 sm:mb-8">
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
-            GoHighLevel OAuth Connection
+            CRM Connection
           </h1>
           <p className="text-sm sm:text-base text-gray-600">
-            Securely connect your GoHighLevel sub-account to enable forms, custom fields, and video metadata management.
+            Securely connect your CRM workspace to enable forms, custom fields, and video metadata management.
           </p>
         </div>
 
@@ -293,7 +293,7 @@ export function GHLOAuthConnect() {
                     ) : (
                       <>
                         <Link2 className="w-4 h-4 mr-2" />
-                        Connect GoHighLevel
+                        Connect CRM
                       </>
                     )}
                   </Button>
@@ -309,7 +309,7 @@ export function GHLOAuthConnect() {
                   <Shield className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-4 text-gray-300" />
                   <p className="text-sm sm:text-base text-gray-600 mb-2">No locations connected yet</p>
                   <p className="text-xs sm:text-sm text-gray-500 mb-6 px-4">
-                    Click "Connect GoHighLevel" to authorize access to your sub-account
+                    Click "Connect CRM" to authorize access to your workspace
                   </p>
                   <Button
                     onClick={handleConnect}
@@ -439,7 +439,7 @@ export function GHLOAuthConnect() {
                     1
                   </div>
                   <p className="text-xs sm:text-sm text-gray-600">
-                    Click "Connect GoHighLevel" to start
+                    Click "Connect CRM" to start
                   </p>
                 </div>
                 <div className="flex items-start gap-2">
@@ -447,7 +447,7 @@ export function GHLOAuthConnect() {
                     2
                   </div>
                   <p className="text-xs sm:text-sm text-gray-600">
-                    Authorize and select your location in GHL
+                    Authorize and select your workspace location
                   </p>
                 </div>
                 <div className="flex items-start gap-2">
@@ -475,7 +475,7 @@ export function GHLOAuthConnect() {
                 <AlertCircle className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" />
                 <div>
                   <p className="text-xs sm:text-sm text-yellow-800">
-                    <strong>Need help?</strong> Make sure you have admin access to your GoHighLevel sub-account before connecting.
+                    <strong>Need help?</strong> Make sure you have admin access to your CRM workspace before connecting.
                   </p>
                 </div>
               </div>

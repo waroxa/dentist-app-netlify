@@ -6,7 +6,7 @@
 # SPA fallback – all unmatched routes serve index.html
 # (must be LAST after the function rules)
 
-# GHL callback lands here as a GET from GHL servers
+# OAuth callback lands here as a GET from the platform
 [[redirects]]
   from   = "/ghl-callback"
   to     = "/.netlify/functions/ghl-callback"
@@ -20,7 +20,7 @@
   status = 200
   force  = true
 
-# Install webhook – GHL POSTs here on app install
+# Install webhook – the platform POSTs here on app install
 [[redirects]]
   from   = "/api/ghl-install"
   to     = "/.netlify/functions/ghl-install"

@@ -30,7 +30,7 @@ export function SettingsView({ clinicBranding, onBrandingChange }: SettingsViewP
   const handleSave = async () => {
     setIsSaving(true);
     try {
-      // Save to GHL Custom Values
+      // Save to platform custom values
       const success = await setClinicBranding(localBranding);
       
       if (success) {

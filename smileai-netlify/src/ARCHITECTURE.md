@@ -24,11 +24,11 @@ This application consists of **TWO SEPARATE VIEWS**:
 
 ---
 
-### 2️⃣ GHL Internal Dashboard (Staff-Only)
+### 2️⃣ CRM Internal Dashboard (Staff-Only)
 **URL:** `/?ghl=true` (demo mode)
 
 **Purpose:**
-- Internal GoHighLevel marketplace app
+- Internal CRM platform marketplace app
 - Dental staff manage patient submissions
 - Review uploaded media
 - Update patient status through pipeline
@@ -47,10 +47,10 @@ This application consists of **TWO SEPARATE VIEWS**:
 ### In Development (Current):
 Look for the **floating button in bottom-right corner**:
 - **"🌐 Public Landing Page"** - Currently viewing landing page
-- **"🏥 GHL Internal App"** - Currently viewing GHL dashboard
+- **"🏥 CRM Internal App"** - Currently viewing CRM dashboard
 
 Click the button to expand and see details, then click:
-- **"Open GHL Internal Dashboard"** - Switch to staff view
+- **"Open CRM Internal Dashboard"** - Switch to staff view
 - **"Switch to Public Landing Page"** - Switch to patient view
 
 ### In Production:
@@ -61,12 +61,12 @@ The app mode switcher is **removed in production**. Instead:
 - Accessible to everyone
 - No authentication required
 
-**GHL Internal Dashboard:**
-- Accessed through GoHighLevel Marketplace
+**CRM Internal Dashboard:**
+- Accessed through CRM platform Marketplace
 - URL: `https://app.gohighlevel.com/location/{locationId}/marketplace/apps/smilevisionpro`
-- **OAuth Authentication** handled automatically by GHL
+- **OAuth Authentication** handled automatically by CRM
 - Only authorized clinic staff can access
-- GHL passes authentication tokens in URL/headers
+- CRM passes authentication tokens in URL/headers
 
 ---
 
@@ -74,19 +74,19 @@ The app mode switcher is **removed in production**. Instead:
 
 ### Public Landing Page
 - ✅ No authentication required (public-facing)
-- ✅ Form submissions create GHL contacts via webhook
-- ✅ CORS configured for GHL API calls
+- ✅ Form submissions create CRM contacts via webhook
+- ✅ CORS configured for CRM API calls
 - ✅ API keys stored securely (environment variables)
 
-### GHL Internal Dashboard
+### CRM Internal Dashboard
 **Development Mode:**
 - No authentication (demo purposes)
 - Access via `/?ghl=true` URL parameter
 
 **Production Mode:**
-- 🔒 **OAuth 2.0** authentication via GoHighLevel
-- 🔒 GHL automatically validates user sessions
-- 🔒 Location/Agency permissions enforced by GHL
+- 🔒 **OAuth 2.0** authentication via CRM platform
+- 🔒 CRM automatically validates user sessions
+- 🔒 Location/Agency permissions enforced by CRM
 - 🔒 Only staff with proper roles can access
 
 ---
@@ -105,15 +105,15 @@ The app mode switcher is **removed in production**. Instead:
    ↓
 5. Submits form
    ↓
-6. Webhook fires to GoHighLevel API
+6. Webhook fires to CRM platform API
    ↓
-7. New contact created in GHL with:
+7. New contact created in CRM with:
    - Contact info (name, email, phone)
    - Custom fields (interested in, notes)
    - Uploaded media files
    - Tags ("New Lead", "Veneers Interest", etc.)
    ↓
-8. Contact appears in GHL Internal Dashboard
+8. Contact appears in CRM Internal Dashboard
    ↓
 9. Dental staff reviews submission
    ↓
@@ -124,12 +124,12 @@ The app mode switcher is **removed in production**. Instead:
     - Dentist Reviewed
     - Patient Contacted
    ↓
-11. Automated follow-up workflows trigger (GHL automations)
+11. Automated follow-up workflows trigger (CRM automations)
 ```
 
 ---
 
-## 🎨 GHL Marketplace App Components
+## 🎨 CRM Marketplace App Components
 
 ### SmileVisionPro Dashboard Features:
 
@@ -202,7 +202,7 @@ The app mode switcher is **removed in production**. Instead:
 
 ---
 
-## 🚀 Deployment to GoHighLevel
+## 🚀 Deployment to CRM platform
 
 ### Step 1: Deploy Landing Page
 ```bash
@@ -216,8 +216,8 @@ npm run build
 # - VITE_GEMINI_API_KEY
 ```
 
-### Step 2: Register GHL Marketplace App
-1. Go to GoHighLevel Developer Portal
+### Step 2: Register CRM Marketplace App
+1. Go to CRM platform Developer Portal
 2. Create new Marketplace App
 3. App Name: **SmileVisionPro**
 4. App Type: **Location-level App**
@@ -236,17 +236,17 @@ npm run build
 
 ### Step 4: Implement OAuth
 ```typescript
-// Handle GHL OAuth callback
+// Handle CRM OAuth callback
 // Extract location_id and access_token
 // Store securely in session/database
-// Redirect to GHL dashboard
+// Redirect to CRM dashboard
 ```
 
 ### Step 5: Submit for Review
 - Upload app screenshots
 - Write app description
 - Set pricing (free or paid)
-- Submit to GHL for approval
+- Submit to CRM for approval
 
 ---
 
@@ -258,10 +258,10 @@ npm run build
 3. Fill out intake form
 4. Upload test image
 5. Submit form
-6. Check GHL for new contact
+6. Check CRM for new contact
 
-### Test GHL Dashboard:
-1. Click floating button → "Open GHL Internal Dashboard"
+### Test CRM Dashboard:
+1. Click floating button → "Open CRM Internal Dashboard"
 2. Explore Dashboard view (metrics)
 3. Navigate to Patients view
 4. Click "View" on patient card
@@ -281,7 +281,7 @@ npm run build
 /
 ├── App.tsx                           # Main app router
 ├── components/
-│   ├── AppModeSwitcher.tsx          # Toggle between landing/GHL
+│   ├── AppModeSwitcher.tsx          # Toggle between landing/CRM
 │   ├── Hero.tsx                     # Landing page hero
 │   ├── SmileTransformationSection.tsx
 │   ├── PatientIntakeFormSection.tsx # Form with upload
@@ -289,9 +289,9 @@ npm run build
 │   ├── Testimonials.tsx
 │   ├── Footer.tsx
 │   └── ghl/
-│       ├── SmileVisionProApp.tsx    # GHL app container
-│       ├── AppHeader.tsx            # GHL header with branding
-│       ├── AppNavigation.tsx        # GHL sidebar nav
+│       ├── SmileVisionProApp.tsx    # CRM app container
+│       ├── AppHeader.tsx            # CRM header with branding
+│       ├── AppNavigation.tsx        # CRM sidebar nav
 │       ├── DashboardView.tsx        # Metrics & overview
 │       ├── PatientsView.tsx         # Patient list
 │       ├── ContactProfile.tsx       # Full patient profile ⭐
@@ -318,7 +318,7 @@ npm run build
 - Social proof notifications
 - Compliance disclaimer
 
-### ✅ GHL Internal Dashboard
+### ✅ CRM Internal Dashboard
 - Multi-view navigation (Dashboard, Patients, Smile Tool, Settings)
 - Customizable clinic branding
 - Patient contact management
@@ -333,7 +333,7 @@ npm run build
 ## 🔧 Environment Variables
 
 ```env
-# GoHighLevel
+# CRM platform
 VITE_GHL_API_KEY=your-ghl-api-key
 VITE_GHL_LOCATION_ID=your-location-id
 
@@ -349,33 +349,33 @@ VITE_GHL_OAUTH_REDIRECT=https://your-domain.com/auth/callback
 
 ## ❓ FAQ
 
-### Q: How do I access the GHL dashboard?
-**A:** Click the floating button in the bottom-right corner that says "🌐 Public Landing Page" or "🏥 GHL Internal App" and click "Open GHL Internal Dashboard"
+### Q: How do I access the CRM dashboard?
+**A:** Click the floating button in the bottom-right corner that says "🌐 Public Landing Page" or "🏥 CRM Internal App" and click "Open CRM Internal Dashboard"
 
 ### Q: Why don't I see a login screen?
-**A:** In development mode, authentication is bypassed for demo purposes. In production, GoHighLevel handles OAuth automatically when users access the app through the GHL marketplace.
+**A:** In development mode, authentication is bypassed for demo purposes. In production, CRM platform handles OAuth automatically when users access the app through the CRM marketplace.
 
-### Q: How do patient submissions reach the GHL dashboard?
-**A:** When a patient submits the intake form, a webhook fires to the GHL API creating a new contact with all form data and uploaded media. This contact then appears in the Patients view of the GHL dashboard.
+### Q: How do patient submissions reach the CRM dashboard?
+**A:** When a patient submits the intake form, a webhook fires to the CRM API creating a new contact with all form data and uploaded media. This contact then appears in the Patients view of the CRM dashboard.
 
 ### Q: Can I customize the branding?
-**A:** Yes! In the GHL dashboard, go to Settings view to upload your clinic logo and change primary/accent colors. Changes apply instantly. There's also a quick demo panel in the bottom-left corner for testing.
+**A:** Yes! In the CRM dashboard, go to Settings view to upload your clinic logo and change primary/accent colors. Changes apply instantly. There's also a quick demo panel in the bottom-left corner for testing.
 
 ### Q: What happens to uploaded photos?
-**A:** Photos are stored in GoHighLevel's media library and linked to the contact record. Dental staff can view, download, and manage all uploaded media in the Contact Profile's media gallery.
+**A:** Photos are stored in CRM platform's media library and linked to the contact record. Dental staff can view, download, and manage all uploaded media in the Contact Profile's media gallery.
 
 ### Q: How does the review status pipeline work?
-**A:** Staff can update a patient's status through 5 stages (New Submission → Media Received → Under Review → Dentist Reviewed → Patient Contacted). This is visible in the Contact Profile and can trigger automated workflows in GHL.
+**A:** Staff can update a patient's status through 5 stages (New Submission → Media Received → Under Review → Dentist Reviewed → Patient Contacted). This is visible in the Contact Profile and can trigger automated workflows in CRM.
 
 ---
 
 ## 📞 Support
 
 For questions about:
-- **GoHighLevel Integration:** [GHL Developer Docs](https://developers.gohighlevel.com/)
-- **App Configuration:** See Settings view in GHL dashboard
+- **CRM platform Integration:** [CRM Developer Docs](https://developers.gohighlevel.com/)
+- **App Configuration:** See Settings view in CRM dashboard
 - **Technical Issues:** Check browser console for errors
 
 ---
 
-**Built with:** React, TypeScript, Tailwind CSS, GoHighLevel API, Google Gemini AI
+**Built with:** React, TypeScript, Tailwind CSS, CRM platform API, Google Gemini AI

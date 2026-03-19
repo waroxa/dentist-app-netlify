@@ -1,11 +1,11 @@
 // netlify/functions/ghl-callback.mjs
-// Handles GHL OAuth callback – exchanges auth code for tokens SERVER-SIDE.
+// Handles the CRM OAuth callback and exchanges the auth code for tokens server-side.
 // GHL_CLIENT_SECRET lives only here, never in the browser bundle.
 //
 // Set these in Netlify Dashboard → Site → Environment Variables:
 //   GHL_CLIENT_ID
 //   GHL_CLIENT_SECRET
-//   GHL_REDIRECT_URI      (e.g. https://www.smilevisionpro.ai/ghl-callback)
+//   GHL_REDIRECT_URI      (for example: https://www.smilevisionpro.ai/ghl-callback)
 //   SUPABASE_URL
 //   SUPABASE_SERVICE_KEY  (service role key, NOT anon key)
 //   FRONTEND_URL          (e.g. https://www.smilevisionpro.ai)
@@ -31,7 +31,7 @@ function jsonError(status, message) {
 }
 
 export const handler = async (event) => {
-  // GHL redirects here as GET with ?code=XXX&state=YYY
+  // The platform redirects here as GET with ?code=XXX&state=YYY
   // We also accept POST from GHLCallbackPage.tsx as a fallback
   let code, state;
 

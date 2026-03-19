@@ -1,6 +1,6 @@
 // src/pages/GHLCallbackPage.tsx
-// Browser landing page when GHL redirects back after authorization.
-// Reads ?code from URL, sends it to our Netlify Function (not directly to GHL),
+// Browser landing page when the CRM redirects back after authorization.
+// Reads ?code from URL, sends it to our Netlify Function (not directly to the CRM),
 // then redirects to the admin panel. client_secret NEVER touches this file.
 
 import { useEffect, useState } from 'react';
@@ -8,7 +8,7 @@ import { Loader2, CheckCircle, AlertCircle } from 'lucide-react';
 
 export function GHLCallbackPage() {
   const [status, setStatus] = useState<'processing' | 'success' | 'error'>('processing');
-  const [message, setMessage] = useState('Connecting to GoHighLevel…');
+  const [message, setMessage] = useState('Connecting to CRM…');
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -17,13 +17,13 @@ export function GHLCallbackPage() {
 
     if (errorParam) {
       setStatus('error');
-      setMessage(`GoHighLevel returned an error: ${errorParam}`);
+      setMessage(`The CRM returned an error: ${errorParam}`);
       return;
     }
 
     if (!code) {
       setStatus('error');
-      setMessage('No authorization code received from GoHighLevel.');
+      setMessage('No authorization code received from the CRM.');
       return;
     }
 
@@ -61,7 +61,7 @@ export function GHLCallbackPage() {
         }, 1000);
       })
       .catch((err) => {
-        console.error('GHL callback error:', err);
+        console.error('CRM callback error:', err);
         setStatus('error');
         setMessage(err.message ?? 'Connection failed. Please try again.');
       });
@@ -75,7 +75,7 @@ export function GHLCallbackPage() {
           <>
             <Loader2 className="w-12 h-12 animate-spin text-blue-600 mx-auto mb-4" />
             <h1 className="text-xl font-semibold text-gray-900 mb-2">
-              Connecting to GoHighLevel
+              Connecting to CRM
             </h1>
             <p className="text-gray-500 text-sm">{message}</p>
           </>

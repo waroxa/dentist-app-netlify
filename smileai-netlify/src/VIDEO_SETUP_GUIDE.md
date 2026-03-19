@@ -2,10 +2,10 @@
 
 ## Current Issues
 
-### 1. ❌ GHL API Credentials Warning
+### 1. ❌ CRM API Credentials Warning
 **Status:** ⚠️ Warning only - app works without it  
-**Impact:** Lead capture works, but data won't sync to GoHighLevel  
-**Fix:** Optional - only needed if you want GHL integration
+**Impact:** Lead capture works, but data won't sync to CRM platform  
+**Fix:** Optional - only needed if you want CRM integration
 
 ### 2. ❌ Video Generation Error (500)
 **Status:** 🔴 Blocking video generation  
@@ -55,31 +55,31 @@
 
 ---
 
-## 🔧 Fix GHL Integration (Optional)
+## 🔧 Fix CRM Integration (Optional)
 
-Only needed if you want leads to sync to GoHighLevel.
+Only needed if you want leads to sync to CRM platform.
 
-### Step 1: Get GHL API Key & Location ID
+### Step 1: Get CRM API Key & Location ID
 
-1. **Go to GoHighLevel Dashboard:**
+1. **Go to CRM platform Dashboard:**
    - Open: https://app.gohighlevel.com
    - Click: **Settings** → **API**
    - Copy your **API Key**
 
 2. **Get Location ID:**
-   - In GHL, go to **Settings** → **Business Profile**
+   - In CRM, go to **Settings** → **Business Profile**
    - Copy your **Location ID**
 
-### Step 2: Add GHL Credentials to Security Settings
+### Step 2: Add CRM Credentials to Security Settings
 
 1. **Open your app**
 2. Click **Staff Login** (lock icon in top right)
 3. Enter staff password
 4. Go to **⚙️ Settings** → **🔐 Security**
-5. Scroll to **GoHighLevel Integration**
+5. Scroll to **CRM platform Integration**
 6. Enter:
-   - **GHL API Key:** Your API key
-   - **GHL Location ID:** Your location ID
+   - **CRM API Key:** Your API key
+   - **CRM Location ID:** Your location ID
 7. Click **"Save Settings"**
 
 ---
@@ -91,11 +91,11 @@ Only needed if you want leads to sync to GoHighLevel.
 - [ ] Edge Function redeployed
 - [ ] Video generation works (no more 500 error)
 
-### GHL Integration (Optional):
-- [ ] GHL API Key added to Security settings
-- [ ] GHL Location ID added to Security settings
-- [ ] Lead form creates contacts in GHL
-- [ ] Images upload to GHL contact
+### CRM Integration (Optional):
+- [ ] CRM API Key added to Security settings
+- [ ] CRM Location ID added to Security settings
+- [ ] Lead form creates contacts in CRM
+- [ ] Images upload to CRM contact
 
 ---
 
@@ -141,7 +141,7 @@ supabase functions deploy make-server-1ddb0231
 |-------|----------|
 | **Server error (500)** | Add FAL_API_KEY to Supabase |
 | **FAL_API_KEY not configured** | Add to Supabase environment variables |
-| **GHL API credentials not configured** | Add to Security settings (optional) |
+| **CRM API credentials not configured** | Add to Security settings (optional) |
 | **Function not found (404)** | Deploy Edge Function |
 
 ---
@@ -152,7 +152,7 @@ supabase functions deploy make-server-1ddb0231
 - ✅ Video generates in ~20-30 seconds
 - ✅ Real video plays (not animated preview)
 - ✅ Video shows person smiling naturally
-- ✅ Video auto-uploaded to GHL (if configured)
+- ✅ Video auto-uploaded to CRM (if configured)
 
 ### Without FAL_API_KEY:
 - ⚠️ Falls back to animated preview

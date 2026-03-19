@@ -97,7 +97,7 @@ Stores video metadata:
 - `video_url`
 - `title`, `tags`
 - `workflow_step`
-- `custom_value_id` (GHL reference)
+- `custom_value_id` (CRM reference)
 - `metadata` (jsonb)
 - `created_at`, `updated_at`
 
@@ -110,7 +110,7 @@ Stores video metadata:
 GHL_REDIRECT_URI=https://pvophjpndtqxkoygposy.supabase.co/functions/v1/make-server-c5a5d193/oauth/callback
 ```
 
-### ✅ In GHL Marketplace:
+### ✅ In CRM Marketplace:
 **Redirect URL:**
 ```
 https://pvophjpndtqxkoygposy.supabase.co/functions/v1/make-server-c5a5d193/oauth/callback
@@ -135,12 +135,12 @@ forms.readonly
 
 ### OAuth Flow:
 1. User visits `/admin/ghl-connect`
-2. Clicks "Connect GoHighLevel"
+2. Clicks "Connect CRM platform"
 3. Frontend calls `POST /make-server-c5a5d193/oauth/initiate`
 4. Server generates state → saves to `ghl_oauth_states` table
-5. Server returns GHL authorization URL
-6. User authorizes in GHL
-7. **GHL redirects to:** `/make-server-c5a5d193/oauth/callback?code=xxx&state=xxx`
+5. Server returns CRM authorization URL
+6. User authorizes in CRM
+7. **CRM redirects to:** `/make-server-c5a5d193/oauth/callback?code=xxx&state=xxx`
 8. Server validates state from `ghl_oauth_states` table
 9. Server exchanges code for tokens
 10. **Server encrypts and saves to:** `ghl_connections` table
@@ -149,7 +149,7 @@ forms.readonly
 
 ### Data Flow:
 ```
-GHL OAuth → Backend Server → PostgreSQL Database
+CRM OAuth → Backend Server → PostgreSQL Database
                            ↓
                     Frontend Dashboard
 ```
@@ -170,7 +170,7 @@ GHL_CLIENT_SECRET=<from_ghl_marketplace>
 GHL_REDIRECT_URI=https://pvophjpndtqxkoygposy.supabase.co/functions/v1/make-server-c5a5d193/oauth/callback
 ```
 
-### 3. ⏳ GHL Marketplace App
+### 3. ⏳ CRM Marketplace App
 Create app with:
 - Redirect URL: `https://pvophjpndtqxkoygposy.supabase.co/functions/v1/make-server-c5a5d193/oauth/callback`
 - Scopes: (list above)
@@ -179,8 +179,8 @@ Create app with:
 
 ### 4. ⏳ Test
 - Navigate to `/admin/ghl-connect`
-- Click "Connect GoHighLevel"
-- Authorize in GHL
+- Click "Connect CRM platform"
+- Authorize in CRM
 - Verify success
 
 ---
@@ -191,14 +191,14 @@ Create app with:
 - [ ] Database migration run
 - [ ] Tables created (`ghl_connections`, `ghl_oauth_states`, `ghl_audit_log`, `ghl_videos`)
 - [ ] Environment variables set in Supabase
-- [ ] GHL Marketplace app created
+- [ ] CRM Marketplace app created
 - [ ] Client ID and Client Secret added to Supabase
 
 ### During Testing:
 - [ ] `/admin/ghl-connect` loads
-- [ ] "Connect GoHighLevel" button works
-- [ ] Redirects to GHL authorization
-- [ ] Can select location in GHL
+- [ ] "Connect CRM platform" button works
+- [ ] Redirects to CRM authorization
+- [ ] Can select location in CRM
 - [ ] Redirects back to admin with success
 - [ ] Location appears in connected list
 
@@ -267,7 +267,7 @@ LIMIT 10;
 **Next Steps:**
 1. Run database migration
 2. Add environment variables
-3. Create GHL Marketplace app
+3. Create CRM Marketplace app
 4. Test OAuth flow
 
 ---

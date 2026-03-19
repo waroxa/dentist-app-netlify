@@ -1,8 +1,8 @@
 // netlify/functions/ghl-install.mjs
-// GHL Marketplace install webhook – called by GHL when a user installs the app.
-// MUST return 200 immediately – GHL will retry if it gets anything else.
+// Marketplace install webhook – called by the platform when a user installs the app.
+// Must return 200 immediately – the platform will retry if it gets anything else.
 //
-// In GHL Marketplace Dashboard set "App Webhook URL" to:
+// Set the app webhook URL to:
 //   https://www.smilevisionpro.ai/.netlify/functions/ghl-install
 
 import { createClient } from "@supabase/supabase-js";
@@ -20,7 +20,7 @@ export const handler = async (event) => {
     console.warn("⚠️ ghl-install: non-JSON body");
   }
 
-  console.log("📦 GHL install webhook:", JSON.stringify(payload));
+  console.log("📦 CRM install webhook:", JSON.stringify(payload));
 
   const locationId = payload.locationId ?? payload.location_id ?? "";
   const agencyId   = payload.agencyId   ?? payload.agency_id   ?? "";

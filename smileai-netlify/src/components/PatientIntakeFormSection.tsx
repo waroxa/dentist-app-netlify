@@ -194,7 +194,7 @@ export function PatientIntakeFormSection() {
     // Simulate API call
     await new Promise((resolve) => setTimeout(resolve, 2000));
 
-    // Here you would send data to GoHighLevel
+    // Here you would send data to the CRM
     console.log('Form submitted:', formData);
 
     setIsSubmitting(false);
