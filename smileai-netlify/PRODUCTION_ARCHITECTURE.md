@@ -30,7 +30,7 @@
 3. Public visitor uploads a photo and requests `smile-preview`.
 4. Backend validates the image, creates a job record, calls Gemini server-side, and stores the result.
 5. Public visitor can request `video-create`.
-6. Backend creates a traceable job record and returns the configured output asset.
+6. Backend creates a traceable job record, records the selected provider/model, and calls the requested video provider (FAL or Veo).
 7. Private staff open `/admin`, authenticate through an HTTP-only session cookie, and manage integrations through backend OAuth routes.
 
 ## Environment variables
@@ -46,9 +46,16 @@
 - `GHL_CLIENT_SECRET`: CRM OAuth client secret.
 - `GHL_REDIRECT_URI`: callback URL, typically `https://your-domain/api/oauth/callback`.
 - `GHL_SCOPES`: optional OAuth scopes override.
-- `FAL_API_KEY`: optional video provider key when you enable rendered video generation.
-- `FAL_VIDEO_MODEL`: optional video model identifier.
-- `SMILEVISION_VIDEO_FALLBACK_URL`: optional fallback asset if rendered video is disabled.
+- `VIDEO_PROVIDER_DEFAULT`: optional default video provider (`fal` or `veo`).
+- `FAL_ENABLED`: optional flag to enable/disable FAL.
+- `FAL_API_KEY`: FAL API key for real rendered video generation.
+- `FAL_VIDEO_MODEL`: optional FAL model identifier.
+- `VEO_ENABLED`: optional flag to enable/disable Veo.
+- `GOOGLE_CLOUD_PROJECT_ID`: Google Cloud project ID for Vertex AI Veo.
+- `GOOGLE_CLOUD_LOCATION`: Vertex AI region, typically `us-central1`.
+- `GOOGLE_APPLICATION_CREDENTIALS_JSON`: service-account JSON stored server-side for Vertex AI auth.
+- `VEO_MODEL`: optional Veo model identifier, default `veo-3.1-generate-001`.
+- `VEO_FAST_MODEL`: optional secondary Veo fast model identifier.
 
 ## Security review summary
 - Removed hard-coded provider keys and anon tokens from the frontend.
@@ -73,3 +80,4 @@
 - Admin integration controls are private.
 - Tokens and secrets remain server-side.
 - Lead, smile preview, and video workflows are backend mediated.
+- The public UI keeps the original before/after + style selection + provider-based video flow while secrets remain server-side.

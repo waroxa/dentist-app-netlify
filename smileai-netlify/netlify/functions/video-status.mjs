@@ -6,5 +6,13 @@ export async function handler(event) {
   const { data, error } = await supabase.from('smile_jobs').select('*').eq('id', id).maybeSingle();
   if (error) return json(500, { error: 'Unable to load job.' });
   if (!data) return json(404, { error: 'Job not found.' });
-  return json(200, { jobId: data.id, status: data.status, assetUrl: data.output_asset_url || null, error: data.error_message || null });
+  return json(200, {
+    jobId: data.id,
+    status: data.status,
+    assetUrl: data.output_asset_url || null,
+    error: data.error_message || null,
+    provider: data.provider || null,
+    model: data.provider_model || null,
+    providerJobId: data.provider_job_id || null,
+  });
 }

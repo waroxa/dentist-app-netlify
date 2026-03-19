@@ -41,3 +41,8 @@ create table if not exists audit_logs (
   metadata jsonb not null default '{}'::jsonb,
   created_at timestamptz not null default now()
 );
+
+
+alter table if exists smile_jobs add column if not exists provider text;
+alter table if exists smile_jobs add column if not exists provider_model text;
+alter table if exists smile_jobs add column if not exists metadata jsonb not null default '{}'::jsonb;
