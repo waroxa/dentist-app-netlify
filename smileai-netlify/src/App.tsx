@@ -70,18 +70,18 @@ function App() {
   // Simple router - check URL path
   const path = window.location.pathname;
 
-  // Initialize GHL SSO on mount
+  // Initialize embedded CRM SSO on mount
   useEffect(() => {
-    // Try to detect and configure GHL SSO
+    // Try to detect and configure embedded CRM SSO
     const ghlDetected = initializeGHLSSO();
     
     if (ghlDetected) {
       const status = getGHLConfigStatus();
-      console.log('🎉 GHL Integration Status:', status);
+      console.log('🎉 CRM integration status:', status);
       
-      // Show a friendly notification if GHL was just configured
+      // Show a friendly notification if the CRM connection was just configured
       if (status.configured) {
-        console.log('✅ App is now connected to GoHighLevel!');
+        console.log('✅ App is now connected to the CRM.');
         console.log('   Location ID:', status.locationId);
       }
     }
@@ -112,7 +112,7 @@ function App() {
     return <Terms />;
   }
 
-  // GHL OAuth callback – browser lands here after GHL authorization redirect
+  // OAuth callback – browser lands here after CRM authorization redirect
   if (path === '/ghl-callback') {
     return <GHLCallbackPage />;
   }
@@ -128,7 +128,7 @@ function App() {
     return <DownloadMarketplaceCode />;
   }
 
-  // Marketplace App (GHL embedded view)
+  // Marketplace app (embedded CRM view)
   if (path === '/marketplace' || path === '/marketplace/') {
     return <SmileVisionMarketplaceApp />;
   }

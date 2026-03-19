@@ -1,4 +1,4 @@
-# GoHighLevel OAuth Testing Guide
+# CRM platform OAuth Testing Guide
 
 ## Prerequisites Checklist
 
@@ -6,7 +6,7 @@ Before testing, ensure you have:
 
 - [ ] Applied database migration (`001_create_ghl_connections.sql`)
 - [ ] Added environment variables to Supabase
-- [ ] Created GHL Marketplace app (or have test credentials)
+- [ ] Created CRM Marketplace app (or have test credentials)
 - [ ] Deployed Edge Functions
 - [ ] Added routing for admin dashboard
 
@@ -50,9 +50,9 @@ GHL_CLIENT_SECRET=<your_client_secret_from_marketplace>
 GHL_REDIRECT_URI=https://www.smilevisionpro.ai/oauth/callback
 ```
 
-### Get GHL Credentials
+### Get CRM Credentials
 
-**Option A: Create Real GHL Marketplace App**
+**Option A: Create Real CRM Marketplace App**
 
 1. Go to https://marketplace.gohighlevel.com/
 2. Sign up/login
@@ -64,7 +64,7 @@ GHL_REDIRECT_URI=https://www.smilevisionpro.ai/oauth/callback
 
 **Option B: Use Test Mode (For Development)**
 
-If you don't have GHL access yet, you can test the UI flow:
+If you don't have CRM access yet, you can test the UI flow:
 - Leave secrets empty for now
 - Test will show error at token exchange (expected)
 - You can still verify UI, routing, and database setup
@@ -92,23 +92,23 @@ if (path === '/admin/ghl-connect') {
 
 ---
 
-## Step 4: Test OAuth Flow (With Real GHL)
+## Step 4: Test OAuth Flow (With Real CRM)
 
 ### 4.1 Start OAuth Flow
 
 1. Navigate to: `https://www.smilevisionpro.ai/admin/ghl-connect`
 
 2. You should see:
-   - "GoHighLevel OAuth Connection" header
-   - "Connect GoHighLevel" button
+   - "CRM platform OAuth Connection" header
+   - "Connect CRM platform" button
    - No connections yet message
 
-3. Click **"Connect GoHighLevel"** button
+3. Click **"Connect CRM platform"** button
 
 ### 4.2 Verify Authorization URL
 
 **What should happen:**
-- Browser redirects to GHL authorization page
+- Browser redirects to CRM authorization page
 - URL should look like:
   ```
   https://marketplace.gohighlevel.com/oauth/chooselocation?
@@ -123,9 +123,9 @@ if (path === '/admin/ghl-connect') {
 - Check URL parameters are present
 - State parameter is a long random string
 
-### 4.3 Authorize in GHL
+### 4.3 Authorize in CRM
 
-1. Login to GoHighLevel (if not already)
+1. Login to CRM platform (if not already)
 2. Select a location (sub-account)
 3. Review permissions requested
 4. Click "Authorize" or "Allow"
@@ -318,20 +318,20 @@ LIMIT 1;
 
 ---
 
-## Step 8: Test Without GHL (UI Only)
+## Step 8: Test Without CRM (UI Only)
 
-If you don't have GHL credentials yet, you can still test:
+If you don't have CRM credentials yet, you can still test:
 
 ### Test UI Rendering
 
 1. Navigate to `/admin/ghl-connect`
 2. Should see admin dashboard
-3. Should see "Connect GoHighLevel" button
+3. Should see "Connect CRM platform" button
 
 ### Test OAuth Initiate (Will Fail)
 
-1. Click "Connect GoHighLevel"
-2. Will show error: "GHL OAuth credentials not configured"
+1. Click "Connect CRM platform"
+2. Will show error: "CRM OAuth credentials not configured"
 3. This is expected - proves UI works
 
 ### Add Mock Environment Variables
@@ -345,8 +345,8 @@ GHL_CLIENT_SECRET=test_client_secret
 
 Now clicking "Connect" will:
 - Generate authorization URL
-- Redirect to GHL
-- Fail at GHL (invalid credentials)
+- Redirect to CRM
+- Fail at CRM (invalid credentials)
 - But proves your code works!
 
 ---
@@ -372,9 +372,9 @@ Now clicking "Connect" will:
 - [ ] Shows error if not configured
 
 ### OAuth Flow (Full)
-- [ ] Initiate redirects to GHL
+- [ ] Initiate redirects to CRM
 - [ ] State parameter generated
-- [ ] Can authorize in GHL
+- [ ] Can authorize in CRM
 - [ ] Callback returns successfully
 - [ ] Success message shown
 - [ ] Connection appears in list
@@ -431,18 +431,18 @@ Now clicking "Connect" will:
 
 **Solution:**
 - Double-check credentials in Supabase secrets
-- Verify redirect URL matches exactly in GHL Marketplace
+- Verify redirect URL matches exactly in CRM Marketplace
 - Try OAuth flow again
 
 ### Issue: "No locationId in response"
 
 **Causes:**
-- GHL didn't return location info
+- CRM didn't return location info
 - User didn't select a location
 
 **Solution:**
 - Make sure you select a location during OAuth
-- Check GHL Marketplace app is approved
+- Check CRM Marketplace app is approved
 
 ### Issue: Connection appears but API calls fail
 
@@ -452,7 +452,7 @@ Now clicking "Connect" will:
 
 **Solution:**
 - Click "Refresh" button
-- Check scopes in GHL Marketplace match required list
+- Check scopes in CRM Marketplace match required list
 - Reconnect with new scopes
 
 ---
@@ -462,11 +462,11 @@ Now clicking "Connect" will:
 ### Check Network Tab
 
 1. Open DevTools → Network
-2. Click "Connect GoHighLevel"
+2. Click "Connect CRM platform"
 3. Should see:
    - POST to `/oauth/initiate`
    - Response with `authUrl`
-   - Redirect to GHL
+   - Redirect to CRM
 
 4. After authorizing:
    - GET to `/oauth/callback?code=xxx&state=xxx`
@@ -524,14 +524,14 @@ console.log('Audit:', await audit.json());
 
 OAuth implementation is working if:
 
-✅ Can click "Connect GoHighLevel"  
-✅ Redirects to GHL authorization  
+✅ Can click "Connect CRM platform"  
+✅ Redirects to CRM authorization  
 ✅ After authorizing, returns to admin dashboard  
 ✅ Success message appears  
 ✅ Location shows in connected list  
 ✅ Database has connection record  
 ✅ Can refresh token  
-✅ Can call GHL API endpoints  
+✅ Can call CRM API endpoints  
 ✅ Audit log tracks all actions  
 ✅ Can disconnect successfully  
 
@@ -542,17 +542,17 @@ OAuth implementation is working if:
 Once OAuth works:
 
 1. **Integrate with your smile transformation flow**
-   - Save before/after images to GHL custom fields
-   - Save video URL to GHL contact
-   - Create contact in GHL when user submits
+   - Save before/after images to CRM custom fields
+   - Save video URL to CRM contact
+   - Create contact in CRM when user submits
 
 2. **Setup custom fields automatically**
    - Call `/ghl/setup-custom-fields` on first connection
-   - Map form fields to GHL custom fields
+   - Map form fields to CRM custom fields
 
 3. **Add form submission integration**
    - When user submits smile transformation
-   - Create/update GHL contact
+   - Create/update CRM contact
    - Save images and video to custom fields
    - Track in workflow
 

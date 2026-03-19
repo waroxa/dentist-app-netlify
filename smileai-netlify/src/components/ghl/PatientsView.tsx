@@ -18,7 +18,7 @@ export function PatientsView({ clinicBranding, onViewContact }: PatientsViewProp
   const [isLoading, setIsLoading] = useState(true);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
-  // Fetch patients from GHL on component mount
+  // Fetch patients from the CRM on component mount
   useEffect(() => {
     fetchPatients();
   }, []);
@@ -30,7 +30,7 @@ export function PatientsView({ clinicBranding, onViewContact }: PatientsViewProp
       const ghlLocationId = localStorage.getItem('ghl_location_id');
 
       if (!ghlApiKey || !ghlLocationId) {
-        console.log('GHL credentials not configured');
+        console.log('CRM credentials not configured');
         setIsLoading(false);
         return;
       }

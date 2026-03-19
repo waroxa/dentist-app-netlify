@@ -1,5 +1,5 @@
 // netlify/functions/ghl-refresh.mjs
-// Refreshes a GHL access token using the stored refresh_token.
+// Refreshes a platform access token using the stored refresh_token.
 // Called by the admin panel when token is near expiry.
 //
 // POST body: { locationId: string }
@@ -41,7 +41,7 @@ export const handler = async (event) => {
   const supabaseKey  = process.env.SUPABASE_SERVICE_KEY;
 
   if (!clientId || !clientSecret) {
-    return json(500, { error: "Server misconfiguration: missing GHL credentials" });
+    return json(500, { error: "Server misconfiguration: missing platform credentials" });
   }
   if (!supabaseUrl || !supabaseKey) {
     return json(500, { error: "Server misconfiguration: missing Supabase credentials" });
@@ -60,7 +60,7 @@ export const handler = async (event) => {
     return json(404, { error: "Location not connected or token not found" });
   }
 
-  // Call GHL refresh endpoint
+  // Call the platform refresh endpoint
   let tokens;
   try {
     const res = await fetch("https://services.leadconnectorhq.com/oauth/token", {

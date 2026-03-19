@@ -15,7 +15,7 @@ STEPS:
 EXPECTED:
 ✅ Login successful
 ✅ Redirected to staff dashboard
-✅ Default password hash created in GHL Custom Values
+✅ Default password hash created in CRM Custom Values
 ✅ Session stored in sessionStorage
 
 VERIFY:
@@ -38,7 +38,7 @@ STEPS:
 EXPECTED:
 ✅ Success message appears
 ✅ New password hashed with PBKDF2
-✅ Hash stored in GHL Custom Values
+✅ Hash stored in CRM Custom Values
 ✅ Can login with new password
 
 VERIFY:
@@ -67,15 +67,15 @@ VERIFY:
 - Correct password logs in
 ```
 
-### Test 4: GHL Custom Values Integration
+### Test 4: CRM Custom Values Integration
 ```
-SCENARIO: Verify data is stored in GHL
+SCENARIO: Verify data is stored in CRM
 
 SETUP:
 1. Login to staff dashboard
 2. Go to Settings → API Settings
-3. Enter GHL API Key
-4. Enter GHL Location ID
+3. Enter CRM API Key
+4. Enter CRM Location ID
 5. Save settings
 
 STEPS:
@@ -85,8 +85,8 @@ STEPS:
 4. Save all changes
 
 EXPECTED:
-✅ Password hash saved to GHL Custom Values
-✅ Branding JSON saved to GHL Custom Values
+✅ Password hash saved to CRM Custom Values
+✅ Branding JSON saved to CRM Custom Values
 ✅ API calls successful
 ✅ Data cached in localStorage
 
@@ -99,7 +99,7 @@ API Network Requests:
 
 ### Test 5: Location Isolation
 ```
-SCENARIO: Two different GHL locations use the app
+SCENARIO: Two different CRM locations use the app
 
 LOCATION A:
 1. Install app
@@ -139,12 +139,12 @@ STEPS:
 3. Click "Get Started Free ✨"
 
 EXPECTED:
-✅ Lead sent to GHL Contacts API
-✅ Contact created in GHL
+✅ Lead sent to CRM Contacts API
+✅ Contact created in CRM
 ✅ Custom fields populated
 ✅ User redirected to image upload
 
-VERIFY (in GHL):
+VERIFY (in CRM):
 - New contact exists
 - Email: john@example.com
 - Phone: 555-1234
@@ -164,10 +164,10 @@ STEPS:
 EXPECTED:
 ✅ Image sent to Gemini API
 ✅ AI-enhanced image generated
-✅ Image uploaded to GHL Media API
+✅ Image uploaded to CRM Media API
 ✅ Attached to contact record
 
-VERIFY (in GHL):
+VERIFY (in CRM):
 - Contact has media attachment
 - Media type: image/png or image/jpeg
 - Media uploaded successfully
@@ -212,13 +212,13 @@ localStorage.setItem('smileai_admin_password', 'plaintext123');
 localStorage.setItem('smileai_clinic_branding', '{"clinicName":"Old Clinic"}');
 
 STEPS:
-1. Configure GHL API credentials
+1. Configure CRM API credentials
 2. Run migration: await migrateLocalStorageToGHL()
 
 EXPECTED:
 ✅ Plain text password is hashed
-✅ Hash stored in GHL Custom Values
-✅ Branding migrated to GHL Custom Values
+✅ Hash stored in CRM Custom Values
+✅ Branding migrated to CRM Custom Values
 ✅ Old data preserved in localStorage (cache)
 
 VERIFY:
@@ -259,7 +259,7 @@ All tests must pass for production deployment:
 - [ ] Test 1: Fresh Install ✅
 - [ ] Test 2: Change Password ✅
 - [ ] Test 3: Login with New Password ✅
-- [ ] Test 4: GHL Custom Values Integration ✅
+- [ ] Test 4: CRM Custom Values Integration ✅
 - [ ] Test 5: Location Isolation ✅
 - [ ] Test 6: Lead Submission ✅
 - [ ] Test 7: Image Upload & AI Processing ✅
@@ -285,7 +285,7 @@ All tests must pass for production deployment:
 - [ ] Branding updates work
 - [ ] Testimonials save correctly
 
-### GHL Integration
+### CRM Integration
 - [ ] API credentials can be configured
 - [ ] Contacts API creates leads
 - [ ] Media API uploads images
@@ -301,7 +301,7 @@ All tests must pass for production deployment:
 
 ## 🚀 Deployment Checklist
 
-Before deploying to GHL marketplace:
+Before deploying to CRM marketplace:
 
 - [ ] All 10 integration tests pass
 - [ ] Manual testing checklist complete

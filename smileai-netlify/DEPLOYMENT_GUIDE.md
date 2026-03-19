@@ -1,4 +1,4 @@
-# 🚀 SmileAI – Netlify + GHL Marketplace Deployment Guide
+# 🚀 SmileAI – Netlify + CRM Marketplace Deployment Guide
 # Get approved TODAY – follow these steps in order
 
 ---
@@ -9,7 +9,7 @@
 |------|------|
 | `netlify/functions/ghl-callback.mjs` | NEW – secure token exchange (client_secret server-only) |
 | `netlify/functions/ghl-refresh.mjs`  | NEW – token refresh via server |
-| `netlify/functions/ghl-install.mjs`  | NEW – GHL install webhook handler |
+| `netlify/functions/ghl-install.mjs`  | NEW – CRM install webhook handler |
 | `netlify.toml`                        | NEW – build config + URL routing |
 | `src/pages/GHLCallbackPage.tsx`       | NEW – browser landing at /ghl-callback |
 | `src/App.tsx`                         | +2 lines: import + /ghl-callback route |
@@ -62,7 +62,7 @@ You need this for the Netlify functions to write tokens to Supabase.
 3. Drag the `build/` folder onto the page
 4. Note your Netlify URL
 
-### Set your custom domain (optional but recommended for GHL approval)
+### Set your custom domain (optional but recommended for CRM approval)
 - Netlify → Site settings → Domain management → Add custom domain
 - Point `www.smilevisionpro.ai` to Netlify (add CNAME in your DNS)
 
@@ -77,8 +77,8 @@ You need this for the Netlify functions to write tokens to Supabase.
 
 | Key | Value |
 |-----|-------|
-| `GHL_CLIENT_ID` | Your GHL app client_id (from GHL Developer portal) |
-| `GHL_CLIENT_SECRET` | Your GHL app client_secret ← **never put this in code** |
+| `GHL_CLIENT_ID` | Your CRM app client_id (from CRM Developer portal) |
+| `GHL_CLIENT_SECRET` | Your CRM app client_secret ← **never put this in code** |
 | `GHL_REDIRECT_URI` | `https://www.smilevisionpro.ai/ghl-callback` |
 | `FRONTEND_URL` | `https://www.smilevisionpro.ai` |
 | `SUPABASE_URL` | `https://pvophjpndtqxkoygposy.supabase.co` |
@@ -90,7 +90,7 @@ You need this for the Netlify functions to write tokens to Supabase.
 
 ---
 
-## STEP 5 — Configure GHL Marketplace Dashboard (5 minutes)
+## STEP 5 — Configure CRM Marketplace Dashboard (5 minutes)
 
 Go to https://marketplace.gohighlevel.com → your app → **App Settings**
 
@@ -131,11 +131,11 @@ Expected: `{"success":true}`
 
 ### Test 2: Full OAuth connect
 1. Go to `https://www.smilevisionpro.ai/admin/ghl-connect`
-2. Click **Connect GoHighLevel**
-3. You should be redirected to GHL's authorization page
+2. Click **Connect CRM platform**
+3. You should be redirected to CRM's authorization page
 4. Authorize the app
-5. GHL redirects to `https://www.smilevisionpro.ai/ghl-callback`
-6. You'll briefly see the "Connecting to GoHighLevel…" spinner
+5. CRM redirects to `https://www.smilevisionpro.ai/ghl-callback`
+6. You'll briefly see the "Connecting to CRM platform…" spinner
 7. Then redirect to `/admin/ghl-connect?success=true`
 8. Your location should appear in the "Connected Locations" list
 
@@ -152,9 +152,9 @@ Expected: `{"success":true}`
 
 ---
 
-## STEP 7 — Submit for GHL Marketplace Approval
+## STEP 7 — Submit for CRM Marketplace Approval
 
-GHL's checklist for approval:
+CRM's checklist for approval:
 - ✅ `client_secret` server-side only (Netlify function env var)
 - ✅ OAuth redirect URI matches exactly in code and dashboard
 - ✅ Install webhook returns 200 OK
@@ -170,15 +170,15 @@ GHL's checklist for approval:
 
 ### "Connection Failed" on /ghl-callback
 - Check Netlify logs: Site → Functions → ghl-callback → View logs
-- Most likely: `GHL_REDIRECT_URI` in Netlify doesn't match exactly what's set in GHL dashboard
+- Most likely: `GHL_REDIRECT_URI` in Netlify doesn't match exactly what's set in CRM dashboard
 
 ### Functions not found (404)
 - Check netlify.toml is in the repo root
 - Make sure `netlify/functions/` folder exists with .mjs files
 
-### Token exchange fails (401 from GHL)
+### Token exchange fails (401 from CRM)
 - Double-check `GHL_CLIENT_SECRET` in Netlify env vars
-- Make sure `GHL_REDIRECT_URI` matches EXACTLY what's registered in GHL
+- Make sure `GHL_REDIRECT_URI` matches EXACTLY what's registered in CRM
 
 ### Netlify build fails
 - Check build log for errors
@@ -188,7 +188,7 @@ GHL's checklist for approval:
 
 ## WHY NETLIFY OVER VERCEL FOR THIS?
 
-- Netlify Functions work as CommonJS/ESM without any config – simpler for GHL's redirect flow
-- The `netlify.toml` redirects let GHL hit `/ghl-callback` directly (no path gymnastics)
+- Netlify Functions work as CommonJS/ESM without any config – simpler for CRM's redirect flow
+- The `netlify.toml` redirects let CRM hit `/ghl-callback` directly (no path gymnastics)
 - Free tier includes 125k function invocations/month – plenty for OAuth flows
 - Deploy preview URLs are great for testing before going live

@@ -62,7 +62,7 @@ export interface Submission {
  * 
  * Features:
  * - Detects embedded/standalone mode
- * - Optimized for GoHighLevel Marketplace iframe
+ * - Optimized for embedded CRM iframe deployment
  * - Responsive with 8px grid spacing
  * - No horizontal scroll
  * - Proper viewport handling
@@ -91,16 +91,16 @@ function App() {
     }
   }, []);
 
-  // Initialize GHL SSO on mount
+  // Initialize embedded CRM SSO on mount
   useEffect(() => {
     const ghlDetected = initializeGHLSSO();
     
     if (ghlDetected) {
       const status = getGHLConfigStatus();
-      console.log('🎉 GHL Integration Status:', status);
+      console.log('🎉 CRM integration status:', status);
       
       if (status.configured) {
-        console.log('✅ App is now connected to GoHighLevel!');
+        console.log('✅ App is now connected to the CRM.');
         console.log('   Location ID:', status.locationId);
       }
     }

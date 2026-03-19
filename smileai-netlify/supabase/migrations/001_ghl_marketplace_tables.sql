@@ -2,7 +2,7 @@
 -- Paste this into Supabase Dashboard → SQL Editor → Run
 -- Or run: supabase db push
 
--- ── Tokens table: one row per connected GHL location
+-- ── Tokens table: one row per connected platform location
 CREATE TABLE IF NOT EXISTS public.ghl_tokens (
   "locationId"   TEXT        PRIMARY KEY,
   access_token   TEXT        NOT NULL,
@@ -19,7 +19,7 @@ DROP POLICY IF EXISTS "service_role_only_tokens" ON public.ghl_tokens;
 CREATE POLICY "service_role_only_tokens" ON public.ghl_tokens
   USING (auth.role() = 'service_role');
 
--- ── Installs table: records when GHL sends the install webhook
+-- ── Installs table: records when the platform sends the install webhook
 CREATE TABLE IF NOT EXISTS public.ghl_installs (
   "locationId"   TEXT        PRIMARY KEY,
   "agencyId"     TEXT,

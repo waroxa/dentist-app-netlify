@@ -247,7 +247,7 @@ Deploy to https://www.smilevisionpro.ai/marketplace/
 
 ---
 
-## GHL Marketplace Integration
+## CRM Marketplace Integration
 
 ### Iframe URL
 ```

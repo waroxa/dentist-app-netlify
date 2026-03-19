@@ -247,7 +247,7 @@ Result: Granular permissions ✅
 
 ---
 
-## 💰 Cost Savings (GHL API Calls)
+## 💰 Cost Savings (CRM API Calls)
 
 ### Monthly Usage Example:
 
