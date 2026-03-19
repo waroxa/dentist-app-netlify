@@ -42,6 +42,19 @@
   status = 200
   force = true
 
+
+[[redirects]]
+  from = "/api/video/fal"
+  to = "/.netlify/functions/video-fal"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/video/veo"
+  to = "/.netlify/functions/video-veo"
+  status = 200
+  force = true
+
 [[redirects]]
   from = "/api/video-status"
   to = "/.netlify/functions/video-status"
