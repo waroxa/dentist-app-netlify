@@ -6,6 +6,10 @@ const jsonHeaders = {
   'Cache-Control': 'no-store',
 };
 
+const envAliases = {
+  GEMINI_API_KEY: ['GOOGLE_GEMINI_API_KEY'],
+};
+
 export function json(statusCode, body, extraHeaders = {}) {
   return {
     statusCode,
@@ -26,9 +30,18 @@ export function getSupabase() {
 }
 
 export function getEnv(name, required = true) {
-  const value = process.env[name];
-  if (required && !value) throw new Error(`Missing ${name}`);
-  return value;
+  const candidates = [name, ...(envAliases[name] || [])];
+  for (const candidate of candidates) {
+    const value = process.env[candidate];
+    if (value) return value;
+  }
+  if (required) throw new Error(`Missing ${name}${envAliases[name] ? ` (accepted aliases: ${envAliases[name].join(', ')})` : ''}`);
+  return undefined;
+}
+
+export function setDerivedEnv(name, value) {
+  if (value && !process.env[name]) process.env[name] = value;
+  return process.env[name];
 }
 
 export function safeParse(body) {
@@ -56,9 +69,25 @@ export function validateImageUpload({ mimeType, bytes }) {
 }
 
 export function parseDataUrl(value = '') {
-  const match = String(value).match(/^data:(image\/[a-zA-Z0-9.+-]+);base64,(.+)$/);
-  if (!match) throw new Error('Invalid image data.');
+  const match = String(value).match(/^data:([\w/+.-]+);base64,(.+)$/);
+  if (!match) throw new Error('Invalid data URL payload.');
   return { mimeType: match[1], base64: match[2], bytes: Buffer.from(match[2], 'base64') };
+}
+
+export async function uploadBase64Asset({ bucket = process.env.SMILEVISION_STORAGE_BUCKET || 'smilevision-assets', folder = 'generated', fileName, dataUrl, contentType, cacheControl = '3600' }) {
+  const supabase = getSupabase();
+  const parsed = parseDataUrl(dataUrl);
+  const assetType = contentType || parsed.mimeType;
+  const extension = assetType.split('/')[1]?.replace('jpeg', 'jpg') || 'bin';
+  const assetPath = `${folder}/${fileName || crypto.randomUUID()}.${extension}`;
+  const { error } = await supabase.storage.from(bucket).upload(assetPath, parsed.bytes, {
+    contentType: assetType,
+    cacheControl,
+    upsert: true,
+  });
+  if (error) throw new Error(`Storage upload failed: ${error.message}`);
+  const { data } = supabase.storage.from(bucket).getPublicUrl(assetPath);
+  return { bucket, path: assetPath, publicUrl: data.publicUrl, contentType: assetType };
 }
 
 export function adminCookieName() { return 'svpro_admin'; }

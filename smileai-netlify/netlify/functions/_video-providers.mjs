@@ -1,5 +1,5 @@
 import crypto from 'node:crypto';
-import { errorLog, getEnv, json, log, parseDataUrl, retry, safeParse } from './_lib.mjs';
+import { errorLog, getEnv, json, log, parseDataUrl, retry, safeParse, uploadBase64Asset } from './_lib.mjs';
 
 const DEFAULT_VIDEO_PROMPT = 'Professional dental testimonial style: The person smoothly and naturally showcases their beautiful white teeth with confidence. Starts with a gentle, warm smile that gradually widens to reveal the perfect teeth. Natural facial expressions flow smoothly - subtle head movements, soft eye expressions, and genuine joy. Like someone proudly showing their smile transformation in a high-end dental commercial. Movements are slow, graceful, and professional. Natural breathing, soft blinking, gentle smile variations. No sudden jerks or awkward expressions - everything flows beautifully and naturally. The person looks comfortable, confident, and genuinely happy with their smile.';
 
@@ -27,23 +27,34 @@ export function providerEnabled(provider) {
   return String(process.env.FAL_ENABLED || 'true').toLowerCase() !== 'false';
 }
 
-export async function createVideoWithProvider({ provider, imageUrl, prompt }) {
-  if (provider === 'veo') return createVeoVideo({ imageUrl, prompt });
-  return createFalVideo({ imageUrl, prompt });
+export async function createVideoWithProvider({ provider, imageUrl, prompt, leadId, jobId }) {
+  if (provider === 'veo') return createVeoVideo({ imageUrl, prompt, leadId, jobId });
+  return createFalVideo({ imageUrl, prompt, leadId, jobId });
 }
 
-async function createFalVideo({ imageUrl, prompt }) {
+async function ensurePublicImageUrl(imageUrl, leadId, jobId) {
+  if (!String(imageUrl).startsWith('data:')) return imageUrl;
+  const upload = await uploadBase64Asset({
+    folder: `video-inputs/${leadId || 'anonymous'}`,
+    fileName: jobId || crypto.randomUUID(),
+    dataUrl: imageUrl,
+  });
+  return upload.publicUrl;
+}
+
+async function createFalVideo({ imageUrl, prompt, leadId, jobId }) {
   const apiKey = getEnv('FAL_API_KEY');
   const model = resolveVideoModel('fal');
   const endpoint = model.startsWith('http') ? model : `https://fal.run/${model}`;
+  const publicImageUrl = await ensurePublicImageUrl(imageUrl, leadId, jobId);
   const payload = {
-    image_url: imageUrl,
+    image_url: publicImageUrl,
     prompt: prompt || DEFAULT_VIDEO_PROMPT,
     duration: '5',
     aspect_ratio: '1:1',
   };
 
-  log('video_provider_request', { provider: 'fal', endpoint, promptLength: payload.prompt.length, imageUrlLength: imageUrl.length });
+  log('video_provider_request', { provider: 'fal', endpoint, promptLength: payload.prompt.length, publicImageUrl });
 
   const response = await retry(() => fetch(endpoint, {
     method: 'POST',
@@ -165,7 +176,27 @@ async function pollVeoOperation({ operationName, model, accessToken, projectId, 
   throw new Error(`Veo video generation timed out. Last response: ${JSON.stringify(lastBody || {})}`);
 }
 
-async function createVeoVideo({ imageUrl, prompt }) {
+async function normalizeVeoAsset(video, leadId, jobId) {
+  if (video.bytesBase64Encoded) {
+    const dataUrl = `data:${video.mimeType || 'video/mp4'};base64,${video.bytesBase64Encoded}`;
+    const upload = await uploadBase64Asset({
+      folder: `video-results/${leadId || 'anonymous'}`,
+      fileName: `${jobId || crypto.randomUUID()}-veo`,
+      dataUrl,
+      contentType: video.mimeType || 'video/mp4',
+      cacheControl: '31536000',
+    });
+    return { assetUrl: upload.publicUrl, storagePath: upload.path };
+  }
+
+  if (video.gcsUri) {
+    return { assetUrl: video.gcsUri, storagePath: null };
+  }
+
+  throw new Error('Veo returned neither inline video bytes nor a storage URI.');
+}
+
+async function createVeoVideo({ imageUrl, prompt, leadId, jobId }) {
   const projectId = getEnv('GOOGLE_CLOUD_PROJECT_ID');
   const location = process.env.GOOGLE_CLOUD_LOCATION || 'us-central1';
   const model = resolveVideoModel('veo');
@@ -220,22 +251,14 @@ async function createVeoVideo({ imageUrl, prompt }) {
     throw new Error(`Veo returned no videos. Response: ${JSON.stringify(operation?.response || {})}`);
   }
 
-  let assetUrl = null;
-  if (video.bytesBase64Encoded) {
-    assetUrl = `data:${video.mimeType || 'video/mp4'};base64,${video.bytesBase64Encoded}`;
-  } else if (video.gcsUri) {
-    assetUrl = video.gcsUri;
-  }
-
-  if (!assetUrl) {
-    throw new Error('Veo returned neither inline video bytes nor a storage URI.');
-  }
+  const normalized = await normalizeVeoAsset(video, leadId, jobId);
 
   return {
     provider: 'veo',
     model,
     providerJobId: body.name,
-    assetUrl,
+    assetUrl: normalized.assetUrl,
+    storagePath: normalized.storagePath,
     raw: operation,
   };
 }

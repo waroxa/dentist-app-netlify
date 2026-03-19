@@ -17,6 +17,7 @@ export async function handler(event) {
 
   const model = resolveVideoModel(provider);
   const prompt = body.prompt || getDefaultVideoPrompt();
+  const now = new Date().toISOString();
 
   await upsertJob({
     id: jobId,
@@ -30,8 +31,8 @@ export async function handler(event) {
     provider,
     provider_model: model,
     metadata: { provider, promptLength: prompt.length },
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
+    created_at: now,
+    updated_at: now,
   });
 
   if (!providerEnabled(provider)) {
@@ -45,14 +46,14 @@ export async function handler(event) {
       provider,
       provider_model: model,
       metadata: { provider, disabled: true },
-      created_at: new Date().toISOString(),
+      created_at: now,
       updated_at: new Date().toISOString(),
     });
     return providerSetupError(provider);
   }
 
   try {
-    const result = await createVideoWithProvider({ provider, imageUrl: body.imageUrl, prompt });
+    const result = await createVideoWithProvider({ provider, imageUrl: body.imageUrl, prompt, leadId: body.leadId || null, jobId });
     await upsertJob({
       id: jobId,
       type: 'smile_video',
@@ -64,11 +65,11 @@ export async function handler(event) {
       error_message: null,
       provider: result.provider,
       provider_model: result.model,
-      metadata: { provider: result.provider, model: result.model },
-      created_at: new Date().toISOString(),
+      metadata: { provider: result.provider, model: result.model, storagePath: result.storagePath || null },
+      created_at: now,
       updated_at: new Date().toISOString(),
     });
-    await auditLog('smile_video_completed', { jobId, leadId: body.leadId || null, provider: result.provider, model: result.model });
+    await auditLog('smile_video_completed', { jobId, leadId: body.leadId || null, provider: result.provider, model: result.model, assetUrl: result.assetUrl });
 
     return json(200, {
       success: true,
@@ -95,7 +96,7 @@ export async function handler(event) {
       provider,
       provider_model: model,
       metadata: { provider, model },
-      created_at: new Date().toISOString(),
+      created_at: now,
       updated_at: new Date().toISOString(),
     });
     await auditLog('smile_video_failed', { jobId, leadId: body.leadId || null, provider, model, message });
