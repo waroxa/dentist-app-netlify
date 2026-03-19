@@ -1,5 +1,5 @@
 import crypto from 'node:crypto';
-import { errorLog, getEnv, json, log, parseDataUrl, retry, safeParse, uploadBase64Asset } from './_lib.mjs';
+import { errorLog, getEnv, getImageBucket, getVideoBucket, json, log, parseDataUrl, retry, safeParse, uploadBase64Asset } from './_lib.mjs';
 
 const DEFAULT_VIDEO_PROMPT = 'Professional dental testimonial style: The person smoothly and naturally showcases their beautiful white teeth with confidence. Starts with a gentle, warm smile that gradually widens to reveal the perfect teeth. Natural facial expressions flow smoothly - subtle head movements, soft eye expressions, and genuine joy. Like someone proudly showing their smile transformation in a high-end dental commercial. Movements are slow, graceful, and professional. Natural breathing, soft blinking, gentle smile variations. No sudden jerks or awkward expressions - everything flows beautifully and naturally. The person looks comfortable, confident, and genuinely happy with their smile.';
 
@@ -35,6 +35,7 @@ export async function createVideoWithProvider({ provider, imageUrl, prompt, lead
 async function ensurePublicImageUrl(imageUrl, leadId, jobId) {
   if (!String(imageUrl).startsWith('data:')) return imageUrl;
   const upload = await uploadBase64Asset({
+    bucket: getImageBucket(),
     folder: `video-inputs/${leadId || 'anonymous'}`,
     fileName: jobId || crypto.randomUUID(),
     dataUrl: imageUrl,
@@ -180,6 +181,7 @@ async function normalizeVeoAsset(video, leadId, jobId) {
   if (video.bytesBase64Encoded) {
     const dataUrl = `data:${video.mimeType || 'video/mp4'};base64,${video.bytesBase64Encoded}`;
     const upload = await uploadBase64Asset({
+      bucket: getVideoBucket(),
       folder: `video-results/${leadId || 'anonymous'}`,
       fileName: `${jobId || crypto.randomUUID()}-veo`,
       dataUrl,
