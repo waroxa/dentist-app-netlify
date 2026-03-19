@@ -1,12 +1,17 @@
 import crypto from 'node:crypto';
 import { GoogleGenAI } from '@google/genai';
-import { auditLog, errorLog, getEnv, json, log, parseDataUrl, retry, upsertJob, validateImageUpload, safeParse } from './_lib.mjs';
+import { auditLog, errorLog, getEnv, json, log, parseDataUrl, retry, upsertJob, validateImageUpload, safeParse, setDerivedEnv, uploadBase64Asset } from './_lib.mjs';
 
 const PROMPTS = {
   subtle: 'Transform only the teeth into a beautiful, natural smile. Remove any braces, retainers, or dental hardware. Fix crooked teeth to be perfectly straight and evenly aligned. Rebuild any missing or damaged teeth. Whiten teeth to a clean, natural shade with subtle highlights. Fix any gaps, chips, or discoloration. Maintain realistic texture and natural gum line. Do NOT change skin, hair, eyes, face shape, background or lighting. Focus exclusively on creating amazingly beautiful, straight, white teeth.',
   natural: 'Transform only the teeth into a gorgeous, natural smile. Remove any braces, retainers, or dental hardware. Straighten all crooked teeth into perfect alignment with even spacing. Rebuild any missing or damaged teeth completely. Whiten teeth to a bright, natural pearly white with proper highlights and depth. Fix all gaps, chips, stains, or discoloration. Create a beautiful, symmetrical smile with realistic texture and healthy-looking gums. Do NOT change skin, hair, eyes, face shape, background or lighting. Focus exclusively on creating stunningly beautiful, perfectly straight, naturally white teeth.',
   bright: 'Transform only the teeth into an absolutely flawless, professional Hollywood smile - like the final result after complete dental treatment by an expert cosmetic dentist. COMPLETELY remove all braces, retainers, wires, brackets, and any dental hardware - leave zero trace of orthodontics. Straighten EVERY tooth into PERFECT, FLAWLESS alignment with ideal spacing and absolute symmetry - ensure there is not even the slightest hint of crookedness. Each tooth must be perfectly positioned, perfectly straight, and perfectly even. Rebuild any missing or damaged teeth to absolute perfection with no imperfections whatsoever. Whiten teeth to a bright, luminous professional white with realistic depth, natural highlights, and subtle translucency - like celebrity teeth that are professionally whitened but still look achievable and real. Create perfectly even tooth sizes and shapes with beautiful natural texture, subtle shine, and healthy pink gums. The smile must look like a completed professional dental transformation - perfectly straight, perfectly aligned, perfectly white - yet still realistic and not fake or overly artificial. Zero crookedness allowed. Do NOT change skin, hair, eyes, face shape, background or lighting. Focus exclusively on creating a PERFECTLY STRAIGHT, PERFECTLY ALIGNED, professionally whitened Hollywood smile with zero imperfections.',
 };
+
+function extractImagePart(result) {
+  const candidateParts = result?.candidates?.flatMap((candidate) => candidate?.content?.parts || []) || [];
+  return candidateParts.find((part) => part?.inlineData?.data) || result?.generatedImages?.[0]?.image || null;
+}
 
 export async function handler(event) {
   if (event.httpMethod !== 'POST') return json(405, { error: 'Method not allowed' });
@@ -15,9 +20,11 @@ export async function handler(event) {
 
   const jobId = body.jobId || crypto.randomUUID();
   const intensity = body.intensity && PROMPTS[body.intensity] ? body.intensity : 'natural';
+  const now = new Date().toISOString();
 
   try {
-    getEnv('GEMINI_API_KEY');
+    const geminiApiKey = getEnv('GEMINI_API_KEY');
+    setDerivedEnv('GEMINI_API_KEY', geminiApiKey);
     const parsed = parseDataUrl(body.imageDataUrl);
     validateImageUpload(parsed);
 
@@ -28,26 +35,39 @@ export async function handler(event) {
       lead_id: body.leadId || null,
       input_image_data_url: body.imageDataUrl,
       error_message: null,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
+      metadata: { intensity, mimeType: parsed.mimeType, imageBytes: parsed.bytes.length },
+      created_at: now,
+      updated_at: now,
     });
 
-    const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+    log('smile_preview_request', { jobId, leadId: body.leadId || null, intensity, mimeType: parsed.mimeType, imageBytes: parsed.bytes.length, usingEnv: process.env.GEMINI_API_KEY === process.env.GOOGLE_GEMINI_API_KEY ? 'GOOGLE_GEMINI_API_KEY' : 'GEMINI_API_KEY' });
+
+    const ai = new GoogleGenAI({ apiKey: geminiApiKey });
     const result = await retry(() => ai.models.generateContent({
-      model: process.env.GEMINI_IMAGE_MODEL || 'gemini-2.5-flash-image',
-      contents: [
-        { text: PROMPTS[intensity] },
-        { inlineData: { mimeType: parsed.mimeType, data: parsed.base64 } },
-      ],
+      model: process.env.GEMINI_IMAGE_MODEL || 'gemini-2.5-flash-image-preview',
+      contents: [{
+        role: 'user',
+        parts: [
+          { text: PROMPTS[intensity] },
+          { inlineData: { mimeType: parsed.mimeType, data: parsed.base64 } },
+        ],
+      }],
     }), 1);
 
-    const candidateParts = result?.candidates?.flatMap((candidate) => candidate?.content?.parts || []) || [];
-    const imgPart = candidateParts.find((part) => part?.inlineData?.data);
-    if (!imgPart?.inlineData?.data) {
+    const imgPart = extractImagePart(result);
+    const inlineData = imgPart?.inlineData || imgPart;
+    if (!inlineData?.data) {
+      errorLog('smile_preview_missing_image', new Error('Gemini returned no inline image'), { jobId, resultKeys: Object.keys(result || {}) });
       throw new Error('Gemini returned no image output for this request.');
     }
 
-    const previewUrl = `data:${imgPart.inlineData.mimeType || parsed.mimeType};base64,${imgPart.inlineData.data}`;
+    const previewUrl = `data:${inlineData.mimeType || parsed.mimeType};base64,${inlineData.data}`;
+    const uploaded = await uploadBase64Asset({
+      folder: 'smile-previews',
+      fileName: `${jobId}-${intensity}`,
+      dataUrl: previewUrl,
+      contentType: inlineData.mimeType || parsed.mimeType,
+    });
 
     await upsertJob({
       id: jobId,
@@ -56,14 +76,16 @@ export async function handler(event) {
       lead_id: body.leadId || null,
       input_image_data_url: body.imageDataUrl,
       output_image_data_url: previewUrl,
+      output_asset_url: uploaded.publicUrl,
       error_message: null,
-      created_at: new Date().toISOString(),
+      metadata: { intensity, mimeType: inlineData.mimeType || parsed.mimeType, storagePath: uploaded.path },
+      created_at: now,
       updated_at: new Date().toISOString(),
     });
 
-    await auditLog('smile_preview_completed', { jobId, leadId: body.leadId || null, intensity });
-    log('smile_preview_completed', { jobId, intensity });
-    return json(200, { success: true, jobId, previewImageUrl: previewUrl, intensity });
+    await auditLog('smile_preview_completed', { jobId, leadId: body.leadId || null, intensity, previewAssetUrl: uploaded.publicUrl });
+    log('smile_preview_completed', { jobId, intensity, previewAssetUrl: uploaded.publicUrl });
+    return json(200, { success: true, jobId, previewImageUrl: previewUrl, previewAssetUrl: uploaded.publicUrl, intensity, provider: 'gemini' });
   } catch (error) {
     const message = error?.message || 'Unknown smile preview error';
     errorLog('smile_preview_failed', error, { jobId, intensity, leadId: body.leadId || null });
@@ -75,7 +97,8 @@ export async function handler(event) {
         lead_id: body.leadId || null,
         input_image_data_url: body.imageDataUrl,
         error_message: message,
-        created_at: new Date().toISOString(),
+        metadata: { intensity },
+        created_at: now,
         updated_at: new Date().toISOString(),
       });
     } catch {}
@@ -86,6 +109,7 @@ export async function handler(event) {
       jobId,
       intensity,
       provider: 'gemini',
+      expectedEnv: ['GEMINI_API_KEY', 'GOOGLE_GEMINI_API_KEY'],
     });
   }
 }
