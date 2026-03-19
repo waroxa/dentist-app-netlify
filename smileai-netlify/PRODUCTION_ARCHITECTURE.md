@@ -41,7 +41,7 @@
 - `SMILEVISION_ADMIN_SESSION_SECRET`: signing secret for HTTP-only admin sessions.
 - `TOKEN_ENCRYPTION_KEY`: 32-byte AES key used to encrypt stored OAuth tokens.
 - `GEMINI_API_KEY`: server-side image generation key.
-- `GEMINI_IMAGE_MODEL`: optional override for the image model.
+- `GEMINI_IMAGE_MODEL`: optional override for the image model. Defaults to `gemini-2.5-flash-image`.
 - `GHL_CLIENT_ID`: CRM OAuth client id.
 - `GHL_CLIENT_SECRET`: CRM OAuth client secret.
 - `GHL_REDIRECT_URI`: callback URL, typically `https://your-domain/api/oauth/callback`.
