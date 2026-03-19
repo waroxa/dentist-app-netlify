@@ -1,6 +1,6 @@
 import crypto from 'node:crypto';
 import { auditLog, errorLog, json, upsertJob, safeParse } from './_lib.mjs';
-import { createVideoWithProvider, getDefaultVideoPrompt, providerEnabled, providerSetupError, resolveVideoModel, resolveVideoProvider } from './_video-providers.mjs';
+import { createVideoWithProvider, getDefaultVideoPrompt, providerEnabled, providerSetupError, resolveVideoModel, resolveVideoProvider, validateVideoProviderConfig } from './_video-providers.mjs';
 
 export async function handler(event) {
   if (event.httpMethod !== 'POST') return json(405, { error: 'Method not allowed' });
@@ -13,6 +13,11 @@ export async function handler(event) {
     provider = resolveVideoProvider(body.provider);
   } catch (error) {
     return json(400, { error: error.message });
+  }
+
+  const configError = validateVideoProviderConfig(provider);
+  if (configError) {
+    return providerSetupError(provider, configError);
   }
 
   const model = resolveVideoModel(provider);

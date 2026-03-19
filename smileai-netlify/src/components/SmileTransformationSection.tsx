@@ -29,6 +29,11 @@ interface VideoResult {
   note?: string;
 }
 
+interface ProviderUiMessage {
+  type: 'error' | 'success';
+  message: string;
+}
+
 const STEP_LABELS = [
   'Upload Photo',
   'Choose Preview Style',
@@ -93,6 +98,7 @@ export function SmileTransformationSection() {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [previewError, setPreviewError] = useState<string | null>(null);
   const [videoError, setVideoError] = useState<string | null>(null);
+  const [providerMessages, setProviderMessages] = useState<Partial<Record<VideoProvider, ProviderUiMessage>>>({});
   const [favoriteResult, setFavoriteResult] = useState<FavoriteResult>(null);
   const [favoriteMessage, setFavoriteMessage] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -112,12 +118,14 @@ export function SmileTransformationSection() {
     setSuccessMessage(null);
     setFavoriteResult(null);
     setFavoriteMessage(null);
+    setProviderMessages({});
   }
 
   async function handleFile(file: File) {
     setPreviewError(null);
     setVideoError(null);
     setFavoriteMessage(null);
+    setProviderMessages({});
 
     if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) {
       setPreviewError('Please upload a JPG, PNG, or WEBP image.');
@@ -189,6 +197,7 @@ export function SmileTransformationSection() {
     setVideoProvider(provider);
     setVideoError(null);
     setSuccessMessage(null);
+    setProviderMessages((current) => ({ ...current, [provider]: undefined }));
 
     try {
       const res = await fetch('/api/video-create', {
@@ -209,9 +218,21 @@ export function SmileTransformationSection() {
           note: data.note || 'Generated from your AI smile preview',
         },
       }));
+      setProviderMessages((current) => ({
+        ...current,
+        [provider]: {
+          type: 'success',
+          message: `${provider === 'fal' ? 'FAL' : 'Veo'} video ready.`,
+        },
+      }));
       setSuccessMessage(`${provider === 'fal' ? 'FAL' : 'Veo'} video ready. Continue generating more results or compare what you have.`);
     } catch (error: any) {
-      setVideoError(error.message || 'This video could not be generated yet. Please try again.');
+      const message = error.message || 'This video could not be generated yet. Please try again.';
+      setProviderMessages((current) => ({
+        ...current,
+        [provider]: { type: 'error', message },
+      }));
+      setVideoError(message);
     } finally {
       setVideoProcessing(null);
     }
@@ -223,30 +244,63 @@ export function SmileTransformationSection() {
     setVideoProcessing('both');
     setVideoError(null);
     setSuccessMessage(null);
+    setProviderMessages({});
 
     try {
-      for (const provider of ['fal', 'veo'] as VideoProvider[]) {
+      const providers: VideoProvider[] = ['fal', 'veo'];
+      const results = await Promise.allSettled(providers.map(async (provider) => {
         const res = await fetch('/api/video-create', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ imageUrl: previewImage, provider }),
         });
         const data = await res.json();
-        if (!res.ok) throw new Error(data.error || `Unable to generate ${provider.toUpperCase()} video.`);
-        setVideoResults((current) => ({
-          ...current,
-          [provider]: {
+        if (!res.ok) {
+          throw new Error(data.error || `Unable to generate ${provider.toUpperCase()} video.`);
+        }
+        return { provider, data };
+      }));
+
+      const messages: Partial<Record<VideoProvider, ProviderUiMessage>> = {};
+      const failures: string[] = [];
+      let successCount = 0;
+      const nextVideoResults: Partial<Record<VideoProvider, VideoResult>> = {};
+
+      results.forEach((result, index) => {
+        const provider = providers[index];
+        if (result.status === 'fulfilled') {
+          const { data } = result.value;
+          successCount += 1;
+          nextVideoResults[provider] = {
             provider,
             assetUrl: data.assetUrl,
             jobId: data.jobId || null,
             model: data.model || null,
             note: data.note || 'Generated from your AI smile preview',
-          },
-        }));
+          };
+          messages[provider] = {
+            type: 'success',
+            message: `${provider === 'fal' ? 'FAL' : 'Veo'} video ready.`,
+          };
+        } else {
+          const message = result.reason?.message || `Unable to generate ${provider.toUpperCase()} video.`;
+          messages[provider] = { type: 'error', message };
+          failures.push(`${provider === 'fal' ? 'FAL' : 'Veo'}: ${message}`);
+        }
+      });
+
+      setVideoResults((current) => ({ ...current, ...nextVideoResults }));
+      setProviderMessages(messages);
+
+      if (successCount === 2) {
+        setSuccessMessage('Both videos are ready to compare side by side.');
+      } else if (successCount === 1) {
+        setSuccessMessage('One provider finished successfully. Review the provider-specific status below.');
       }
-      setSuccessMessage('Both videos are ready to compare side by side.');
-    } catch (error: any) {
-      setVideoError(error.message || 'This video could not be generated yet. Please try again.');
+
+      if (failures.length) {
+        setVideoError(failures.join(' '));
+      }
     } finally {
       setVideoProcessing(null);
     }
@@ -306,6 +360,11 @@ export function SmileTransformationSection() {
               : provider === 'fal' ? 'Generate FAL Video' : 'Generate Veo Video'}
           </Button>
           {!previewImage && renderDisabledHelper('Generate your AI smile preview first to unlock video creation.')}
+          {providerMessages[provider] && (
+            <div className={`rounded-2xl border px-3 py-2 text-xs ${providerMessages[provider]?.type === 'error' ? 'border-red-200 bg-red-50 text-red-700' : 'border-emerald-200 bg-emerald-50 text-emerald-700'}`}>
+              {providerMessages[provider]?.message}
+            </div>
+          )}
           {result?.jobId && <p className="text-xs text-slate-500">Job ID: {result.jobId}</p>}
           {result?.assetUrl && (
             <a href={result.assetUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-xs font-medium text-sky-700 hover:text-sky-800">
