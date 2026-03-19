@@ -10,6 +10,9 @@ const envAliases = {
   GEMINI_API_KEY: ['GOOGLE_GEMINI_API_KEY'],
 };
 
+export const DEFAULT_IMAGE_BUCKET = 'make-c5a5d193-smile-images';
+export const DEFAULT_VIDEO_BUCKET = 'ai Videos';
+
 export function json(statusCode, body, extraHeaders = {}) {
   return {
     statusCode,
@@ -74,7 +77,15 @@ export function parseDataUrl(value = '') {
   return { mimeType: match[1], base64: match[2], bytes: Buffer.from(match[2], 'base64') };
 }
 
-export async function uploadBase64Asset({ bucket = process.env.SMILEVISION_STORAGE_BUCKET || 'smilevision-assets', folder = 'generated', fileName, dataUrl, contentType, cacheControl = '3600' }) {
+export function getImageBucket() {
+  return process.env.SUPABASE_IMAGE_BUCKET || process.env.SMILEVISION_STORAGE_BUCKET || DEFAULT_IMAGE_BUCKET;
+}
+
+export function getVideoBucket() {
+  return process.env.SUPABASE_VIDEO_BUCKET || DEFAULT_VIDEO_BUCKET;
+}
+
+export async function uploadBase64Asset({ bucket = getImageBucket(), folder = 'generated', fileName, dataUrl, contentType, cacheControl = '3600' }) {
   const supabase = getSupabase();
   const parsed = parseDataUrl(dataUrl);
   const assetType = contentType || parsed.mimeType;

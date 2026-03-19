@@ -1,6 +1,6 @@
 import crypto from 'node:crypto';
 import { GoogleGenAI } from '@google/genai';
-import { auditLog, errorLog, getEnv, json, log, parseDataUrl, retry, upsertJob, validateImageUpload, safeParse, setDerivedEnv, uploadBase64Asset } from './_lib.mjs';
+import { auditLog, errorLog, getEnv, getImageBucket, json, log, parseDataUrl, retry, upsertJob, validateImageUpload, safeParse, setDerivedEnv, uploadBase64Asset } from './_lib.mjs';
 
 const PROMPTS = {
   subtle: 'Transform only the teeth into a beautiful, natural smile. Remove any braces, retainers, or dental hardware. Fix crooked teeth to be perfectly straight and evenly aligned. Rebuild any missing or damaged teeth. Whiten teeth to a clean, natural shade with subtle highlights. Fix any gaps, chips, or discoloration. Maintain realistic texture and natural gum line. Do NOT change skin, hair, eyes, face shape, background or lighting. Focus exclusively on creating amazingly beautiful, straight, white teeth.',
@@ -66,6 +66,7 @@ export async function handler(event) {
 
     const previewUrl = `data:${inlineData.mimeType || parsed.mimeType};base64,${inlineData.data}`;
     const uploaded = await uploadBase64Asset({
+      bucket: getImageBucket(),
       folder: 'smile-previews',
       fileName: `${jobId}-${intensity}`,
       dataUrl: previewUrl,
