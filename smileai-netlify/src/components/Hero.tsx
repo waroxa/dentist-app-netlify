@@ -2,6 +2,7 @@ import { ArrowRight, Star, MapPin, Shield, Award } from 'lucide-react';
 import { Button } from './ui/button';
 import { ClinicBranding } from '../App';
 import { useState, useEffect } from 'react';
+import { motion } from 'motion/react';
 
 interface HeroProps {
   clinicBranding: ClinicBranding;
@@ -32,151 +33,213 @@ export function Hero({ clinicBranding }: HeroProps) {
   };
 
   return (
-    <section className="relative bg-gradient-to-br from-teal-50 via-white to-blue-50 overflow-hidden">
+    <section className="relative overflow-hidden bg-white">
+      {/* Decorative Background Elements */}
+      <div className="absolute inset-0 -z-10">
+        <div className="absolute top-0 right-0 h-[500px] w-[500px] rounded-full bg-gradient-to-br from-teal-100/30 to-transparent blur-3xl" />
+        <div className="absolute bottom-0 left-0 h-[500px] w-[500px] rounded-full bg-gradient-to-tr from-cyan-100/20 to-transparent blur-3xl" />
+      </div>
+
       {/* Navigation */}
-      <nav className="relative z-10 px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-2 sm:gap-3">
+      <nav className="relative z-10 border-b border-slate-100/50 px-4 sm:px-6 lg:px-8 py-4 sm:py-5 backdrop-blur-sm">
+        <div className="mx-auto max-w-7xl flex items-center justify-between">
+          <motion.div 
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5 }}
+            className="flex items-center gap-2 sm:gap-3"
+          >
             {clinicBranding.logo ? (
               <img 
                 src={clinicBranding.logo} 
                 alt={clinicBranding.clinicName}
-                className="w-10 h-10 sm:w-12 sm:h-12 object-contain rounded-lg"
+                className="h-10 w-10 sm:h-12 sm:w-12 object-contain rounded-lg"
               />
             ) : (
-              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-teal-600 to-blue-600 rounded-lg flex items-center justify-center">
-                <span className="text-white text-lg sm:text-xl">✨</span>
+              <div className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-lg bg-gradient-to-br from-teal-600 to-cyan-600">
+                <span className="text-lg sm:text-xl">✨</span>
               </div>
             )}
             <div>
-              <h1 className="text-base sm:text-lg lg:text-xl font-semibold text-gray-900">{clinicBranding.clinicName}</h1>
-              <p className="text-xs text-gray-600 hidden sm:block">SmileVisionPro AI Previews</p>
+              <h1 className="text-base sm:text-lg font-bold text-slate-950">{clinicBranding.clinicName}</h1>
+              <p className="text-xs text-slate-500 hidden sm:block">AI Smile Preview Platform</p>
             </div>
-          </div>
-          <div className="flex items-center gap-2 sm:gap-4">
-            <div className="hidden md:flex items-center gap-2 text-sm text-gray-600">
-              <MapPin className="w-4 h-4 text-teal-600" />
-              <span>Online smile preview platform</span>
+          </motion.div>
+          <motion.div 
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5 }}
+            className="flex items-center gap-2 sm:gap-4"
+          >
+            <div className="hidden md:flex items-center gap-2 text-sm text-slate-600">
+              <MapPin className="h-4 w-4 text-teal-600" />
+              <span>Premium AI Smile Preview</span>
             </div>
             <Button 
               onClick={scrollToTransform}
-              className="bg-teal-600 hover:bg-teal-700 text-sm sm:text-base h-9 sm:h-10 px-3 sm:px-6"
+              className="bg-gradient-to-r from-teal-600 to-cyan-600 hover:from-teal-700 hover:to-cyan-700 text-sm sm:text-base h-9 sm:h-10 px-3 sm:px-6 font-semibold shadow-lg shadow-teal-500/20"
             >
-              Try AI Now
+              Try Free
             </Button>
-          </div>
+          </motion.div>
         </div>
       </nav>
 
       {/* Hero Content */}
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-10">
+      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-24">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           {/* Left Column - Text Content */}
-          <div className="text-center lg:text-left order-2 lg:order-1">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-center lg:text-left order-2 lg:order-1"
+          >
             {/* Trust Badge */}
-            <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-2 bg-white rounded-full shadow-sm mb-4 sm:mb-6">
-              <Star className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-500 fill-yellow-500" />
-              <span className="text-xs sm:text-sm font-medium text-gray-700">Trusted by modern dental teams and cosmetic consult workflows</span>
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-full shadow-sm border border-slate-100 mb-6">
+              <Star className="h-4 w-4 sm:h-5 sm:w-5 text-yellow-500 fill-yellow-500" />
+              <span className="text-xs sm:text-sm font-medium text-slate-700">Trusted by 1000+ dental professionals</span>
             </div>
 
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-gray-900 mb-4 sm:mb-6 leading-tight">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-slate-950 mb-6 leading-tight">
               See Your Dream Smile
-              <span className="block bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-transparent mt-2">
+              <span className="block bg-gradient-to-r from-teal-600 via-cyan-500 to-blue-600 bg-clip-text text-transparent mt-2">
                 With AI in 30 Seconds
               </span>
             </h1>
             
-            <p className="text-base sm:text-lg lg:text-xl text-gray-600 mb-6 sm:mb-8 max-w-xl mx-auto lg:mx-0">
-              Upload a clear smile photo and receive an AI-generated cosmetic preview in seconds. Secure, guided, and designed for modern dental consultations.
+            <p className="text-base sm:text-lg lg:text-xl text-slate-600 mb-8 max-w-xl mx-auto lg:mx-0 leading-relaxed">
+              Upload a clear smile photo and instantly visualize your transformation. Powered by advanced AI, designed for modern dental consultations.
             </p>
 
             {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start mb-8 sm:mb-12">
-              <Button 
-                onClick={scrollToTransform}
-                size="lg"
-                className="bg-gradient-to-r from-teal-600 to-blue-600 hover:from-teal-700 hover:to-blue-700 text-white h-12 sm:h-14 px-6 sm:px-8 text-base sm:text-lg shadow-lg font-semibold"
+            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-12">
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
               >
-                Try AI Smile Preview Free
-                <ArrowRight className="w-5 h-5 ml-2" />
-              </Button>
-              <Button 
-                variant="outline"
-                size="lg"
-                className="h-12 sm:h-14 px-6 sm:px-8 text-base sm:text-lg border-2 font-semibold"
-                onClick={() => {
-                  const section = document.getElementById('how-it-works');
-                  section?.scrollIntoView({ behavior: 'smooth' });
-                }}
+                <Button 
+                  onClick={scrollToTransform}
+                  size="lg"
+                  className="bg-gradient-to-r from-teal-600 to-cyan-600 hover:from-teal-700 hover:to-cyan-700 text-white h-12 sm:h-14 px-6 sm:px-8 text-base sm:text-lg shadow-xl shadow-teal-500/30 font-semibold w-full sm:w-auto"
+                >
+                  Try AI Preview Free
+                  <ArrowRight className="h-5 w-5 ml-2" />
+                </Button>
+              </motion.div>
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
               >
-                How AI Works
-              </Button>
+                <Button 
+                  variant="outline"
+                  size="lg"
+                  className="h-12 sm:h-14 px-6 sm:px-8 text-base sm:text-lg border-2 border-slate-300 font-semibold hover:bg-slate-50 w-full sm:w-auto"
+                  onClick={() => {
+                    const section = document.getElementById('examples');
+                    section?.scrollIntoView({ behavior: 'smooth' });
+                  }}
+                >
+                  View Examples
+                </Button>
+              </motion.div>
             </div>
 
             {/* Trust Indicators */}
             <div className="grid grid-cols-3 gap-4 sm:gap-6 max-w-lg mx-auto lg:mx-0">
-              <div className="text-center lg:text-left">
-                <div className="flex items-center justify-center lg:justify-start gap-2 mb-1">
-                  <Shield className="w-5 h-5 sm:w-6 sm:h-6 text-teal-600" />
+              <motion.div 
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+                className="text-center lg:text-left"
+              >
+                <div className="flex items-center justify-center lg:justify-start gap-2 mb-2">
+                  <Shield className="h-5 w-5 sm:h-6 sm:w-6 text-teal-600" />
                 </div>
-                <p className="text-xs sm:text-sm font-semibold text-gray-900">Board Certified</p>
-                <p className="text-xs text-gray-500">Dentists</p>
-              </div>
-              <div className="text-center lg:text-left">
-                <div className="flex items-center justify-center lg:justify-start gap-2 mb-1">
-                  <Award className="w-5 h-5 sm:w-6 sm:h-6 text-teal-600" />
+                <p className="text-xs sm:text-sm font-bold text-slate-950">100% Secure</p>
+                <p className="text-xs text-slate-500">Your privacy protected</p>
+              </motion.div>
+              <motion.div 
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+                className="text-center lg:text-left"
+              >
+                <div className="flex items-center justify-center lg:justify-start gap-2 mb-2">
+                  <Award className="h-5 w-5 sm:h-6 sm:w-6 text-teal-600" />
                 </div>
-                <p className="text-xs sm:text-sm font-semibold text-gray-900">15+ Years</p>
-                <p className="text-xs text-gray-500">Experience</p>
-              </div>
-              <div className="text-center lg:text-left">
-                <div className="flex items-center justify-center lg:justify-start gap-2 mb-1">
-                  <Star className="w-5 h-5 sm:w-6 sm:h-6 text-yellow-500 fill-yellow-500" />
+                <p className="text-xs sm:text-sm font-bold text-slate-950">AI Powered</p>
+                <p className="text-xs text-slate-500">Advanced technology</p>
+              </motion.div>
+              <motion.div 
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4 }}
+                className="text-center lg:text-left"
+              >
+                <div className="flex items-center justify-center lg:justify-start gap-2 mb-2">
+                  <Star className="h-5 w-5 sm:h-6 sm:w-6 text-yellow-500 fill-yellow-500" />
                 </div>
-                <p className="text-xs sm:text-sm font-semibold text-gray-900">4.9/5 Rating</p>
-                <p className="text-xs text-gray-500">{stats.reviews}+ Reviews</p>
-              </div>
+                <p className="text-xs sm:text-sm font-bold text-slate-950">4.9/5 Rating</p>
+                <p className="text-xs text-slate-500">{stats.reviews}+ reviews</p>
+              </motion.div>
             </div>
-          </div>
+          </motion.div>
 
           {/* Right Column - Hero Image */}
-          <div className="relative order-1 lg:order-2">
-            <div className="relative rounded-2xl overflow-hidden shadow-2xl">
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="relative order-1 lg:order-2"
+          >
+            <div className="relative rounded-[32px] overflow-hidden shadow-2xl border border-slate-100">
               <img
                 src={clinicBranding.heroImage || "https://images.unsplash.com/photo-1606811841689-23dfddce3e95?w=800&q=80"}
                 alt="SmileVisionPro AI smile preview"
-                className="w-full h-[250px] sm:h-[350px] lg:h-[450px] xl:h-[500px] object-cover"
+                className="w-full h-[280px] sm:h-[380px] lg:h-[480px] xl:h-[550px] object-cover"
               />
               {/* Overlay Badge */}
-              <div className="absolute bottom-3 left-3 right-3 sm:bottom-6 sm:left-6 sm:right-6 bg-white/95 backdrop-blur-sm rounded-xl p-3 sm:p-4 shadow-lg">
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4 }}
+                className="absolute bottom-4 left-4 right-4 sm:bottom-6 sm:left-6 sm:right-6 bg-white/98 backdrop-blur-md rounded-2xl p-4 sm:p-5 shadow-xl border border-white/50"
+              >
                 <div className="flex items-center gap-3 sm:gap-4">
-                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-teal-600 to-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
-                    <span className="text-white text-lg sm:text-xl">✨</span>
+                  <div className="h-10 w-10 sm:h-12 sm:w-12 bg-gradient-to-br from-teal-600 to-cyan-600 rounded-full flex items-center justify-center flex-shrink-0">
+                    <span className="text-lg sm:text-xl">✨</span>
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-xs sm:text-sm font-semibold text-gray-900 truncate">SmileVisionPro AI Preview</p>
-                    <p className="text-xs text-gray-600">See results in seconds</p>
+                    <p className="text-xs sm:text-sm font-bold text-slate-950 truncate">AI Preview Ready</p>
+                    <p className="text-xs text-slate-600">See results instantly</p>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             </div>
 
             {/* Floating Stats */}
-            <div className="hidden sm:block absolute -top-3 -right-3 lg:-top-4 lg:-right-4 bg-white rounded-xl shadow-lg p-3 sm:p-4">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 }}
+              className="hidden sm:block absolute -top-4 -right-4 lg:-top-6 lg:-right-6 bg-white rounded-2xl shadow-xl p-4 sm:p-5 border border-slate-100"
+            >
               <p className="text-2xl sm:text-3xl font-bold text-teal-600">{stats.previews}+</p>
-              <p className="text-xs sm:text-sm text-gray-600">AI Previews</p>
-            </div>
-            <div className="hidden sm:block absolute -bottom-3 -left-3 lg:-bottom-4 lg:-left-4 bg-white rounded-xl shadow-lg p-3 sm:p-4">
-              <p className="text-2xl sm:text-3xl font-bold text-blue-600">100%</p>
-              <p className="text-xs sm:text-sm text-gray-600">Free Preview</p>
-            </div>
-          </div>
+              <p className="text-xs sm:text-sm text-slate-600">AI Previews</p>
+            </motion.div>
+            <motion.div 
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6 }}
+              className="hidden sm:block absolute -bottom-4 -left-4 lg:-bottom-6 lg:-left-6 bg-white rounded-2xl shadow-xl p-4 sm:p-5 border border-slate-100"
+            >
+              <p className="text-2xl sm:text-3xl font-bold text-cyan-600">100%</p>
+              <p className="text-xs sm:text-sm text-slate-600">Free Preview</p>
+            </motion.div>
+          </motion.div>
         </div>
       </div>
-
-      {/* Decorative Elements */}
-      <div className="absolute top-0 right-0 -z-0 w-1/2 h-1/2 bg-gradient-to-br from-teal-100/30 to-transparent rounded-full blur-3xl"></div>
-      <div className="absolute bottom-0 left-0 -z-0 w-1/2 h-1/2 bg-gradient-to-tr from-blue-100/30 to-transparent rounded-full blur-3xl"></div>
     </section>
   );
 }

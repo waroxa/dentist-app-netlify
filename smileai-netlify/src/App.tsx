@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Hero } from './components/Hero';
 import { SmileTransformationSection } from './components/SmileTransformationSection';
+import { PremiumExamples } from './components/PremiumExamples';
 import { HowItWorks } from './components/HowItWorks';
 import { Testimonials } from './components/Testimonials';
 import { Footer } from './components/Footer';
 import { SocialProofNotifications } from './components/SocialProofNotifications';
-import { RealResultsVideos } from './components/RealResultsVideos';
 import { GettingStarted } from './components/docs/GettingStarted';
 import { SetupGuide } from './components/docs/SetupGuide';
 import { Support } from './components/docs/Support';
@@ -101,7 +101,9 @@ function App() {
     <div className="min-h-screen bg-white">
       <Hero clinicBranding={clinicBranding} />
       <SmileTransformationSection />
-      <RealResultsVideos />
+      <div id="examples">
+        <PremiumExamples />
+      </div>
       <HowItWorks />
       <Testimonials clinicBranding={clinicBranding} />
       <Footer clinicBranding={clinicBranding} />
