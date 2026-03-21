@@ -22,11 +22,7 @@ interface FormErrors {
   uploadedFile?: string;
 }
 
-interface PatientIntakeFormSectionProps {
-  compact?: boolean;
-}
-
-export function PatientIntakeFormSection({ compact = false }: PatientIntakeFormSectionProps) {
+export function PatientIntakeFormSection() {
   const [formData, setFormData] = useState<FormData>({
     fullName: '',
     email: '',
@@ -175,7 +171,7 @@ export function PatientIntakeFormSection({ compact = false }: PatientIntakeFormS
       newErrors.interestedIn = 'Please select what you\'re interested in';
     }
 
-    if (!compact && !formData.uploadedFile) {
+    if (!formData.uploadedFile) {
       newErrors.uploadedFile = 'Please upload a photo or video of your smile';
     }
 
@@ -220,14 +216,13 @@ export function PatientIntakeFormSection({ compact = false }: PatientIntakeFormS
 
   return (
     <div>
-      {!compact && (
-        <div className="mb-6">
-          <h3 className="text-2xl font-semibold text-gray-900 mb-2">Get Your Smile Preview</h3>
-          <p className="text-base text-gray-600">
-            Fill out the form below and upload a photo to receive your personalized smile transformation preview.
-          </p>
-        </div>
-      )}
+      {/* Header */}
+      <div className="mb-6">
+        <h3 className="text-2xl font-semibold text-gray-900 mb-2">Get Your Smile Preview</h3>
+        <p className="text-base text-gray-600">
+          Fill out the form below and upload a photo to receive your personalized smile transformation preview.
+        </p>
+      </div>
 
       {/* Form */}
       <form onSubmit={handleSubmit} className="space-y-5">
@@ -352,100 +347,97 @@ export function PatientIntakeFormSection({ compact = false }: PatientIntakeFormS
           <p className="text-xs text-gray-500 mt-1.5">Share any additional information (optional)</p>
         </div>
 
-        {!compact && (
-          <>
-            <div>
-              <Label className="text-base font-medium text-gray-900 mb-2 block">
-                Photo / Video Upload *
-              </Label>
-              <p className="text-sm text-gray-600 mb-3">
-                Upload a clear photo or video of your smile
-              </p>
+        {/* Photo / Video Upload */}
+        <div>
+          <Label className="text-base font-medium text-gray-900 mb-2 block">
+            Photo / Video Upload *
+          </Label>
+          <p className="text-sm text-gray-600 mb-3">
+            Upload a clear photo or video of your smile
+          </p>
 
-              {!formData.uploadedFile ? (
-                <div
-                  className={`relative border-2 border-dashed rounded-xl transition-all ${
-                    dragActive
-                      ? 'border-blue-500 bg-blue-50'
-                      : errors.uploadedFile
-                      ? 'border-red-500 bg-red-50'
-                      : 'border-gray-300 bg-gray-50 hover:border-gray-400 hover:bg-gray-100'
-                  }`}
-                  onDragEnter={handleDrag}
-                  onDragLeave={handleDrag}
-                  onDragOver={handleDrag}
-                  onDrop={handleDrop}
-                >
-                  <label className="flex flex-col items-center justify-center py-10 cursor-pointer">
-                    <Upload className="w-10 h-10 text-gray-400 mb-3" />
-                    <p className="text-gray-700 font-medium mb-1 text-sm">Drop your file here or click to upload</p>
-                    <p className="text-xs text-gray-500 mb-2">Photos: JPG, PNG, HEIC (max 10MB)</p>
-                    <p className="text-xs text-gray-500">Videos: MP4, MOV (max 50MB)</p>
-                    <div className="mt-3 px-5 py-2.5 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors">
-                      Choose File
-                    </div>
-                    <input
-                      ref={fileInputRef}
-                      type="file"
-                      className="hidden"
-                      accept="image/jpeg,image/jpg,image/png,image/heic,video/mp4,video/quicktime"
-                      onChange={handleFileChange}
-                    />
-                  </label>
+          {!formData.uploadedFile ? (
+            <div
+              className={`relative border-2 border-dashed rounded-xl transition-all ${
+                dragActive
+                  ? 'border-blue-500 bg-blue-50'
+                  : errors.uploadedFile
+                  ? 'border-red-500 bg-red-50'
+                  : 'border-gray-300 bg-gray-50 hover:border-gray-400 hover:bg-gray-100'
+              }`}
+              onDragEnter={handleDrag}
+              onDragLeave={handleDrag}
+              onDragOver={handleDrag}
+              onDrop={handleDrop}
+            >
+              <label className="flex flex-col items-center justify-center py-10 cursor-pointer">
+                <Upload className="w-10 h-10 text-gray-400 mb-3" />
+                <p className="text-gray-700 font-medium mb-1 text-sm">Drop your file here or click to upload</p>
+                <p className="text-xs text-gray-500 mb-2">Photos: JPG, PNG, HEIC (max 10MB)</p>
+                <p className="text-xs text-gray-500">Videos: MP4, MOV (max 50MB)</p>
+                <div className="mt-3 px-5 py-2.5 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors">
+                  Choose File
                 </div>
-              ) : (
-                <div className="border-2 border-green-500 rounded-xl bg-green-50 p-4">
-                  <div className="flex items-start gap-3">
-                    {uploadPreview ? (
-                      <img
-                        src={uploadPreview}
-                        alt="Upload preview"
-                        className="w-16 h-16 object-cover rounded-lg flex-shrink-0"
-                      />
-                    ) : (
-                      <div className="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center flex-shrink-0">
-                        <Camera className="w-6 h-6 text-gray-500" />
-                      </div>
-                    )}
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-1">
-                        <Check className="w-5 h-5 text-green-600 flex-shrink-0" />
-                        <p className="font-medium text-gray-900 truncate text-sm">
-                          {formData.uploadedFile.name}
-                        </p>
-                      </div>
-                      <p className="text-xs text-gray-600">
-                        {(formData.uploadedFile.size / 1024 / 1024).toFixed(2)} MB
-                      </p>
-                    </div>
-                    <Button
-                      type="button"
-                      onClick={removeFile}
-                      variant="outline"
-                      size="sm"
-                      className="border-gray-300 text-red-600 hover:bg-red-50 flex-shrink-0"
-                    >
-                      <X className="w-4 h-4" />
-                    </Button>
-                  </div>
-                </div>
-              )}
-
-              {errors.uploadedFile && (
-                <p className="text-sm text-red-600 mt-2 flex items-center gap-1">
-                  <X className="w-4 h-4" />
-                  {errors.uploadedFile}
-                </p>
-              )}
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  className="hidden"
+                  accept="image/jpeg,image/jpg,image/png,image/heic,video/mp4,video/quicktime"
+                  onChange={handleFileChange}
+                />
+              </label>
             </div>
-          </>
-        )}
+          ) : (
+            <div className="border-2 border-green-500 rounded-xl bg-green-50 p-4">
+              <div className="flex items-start gap-3">
+                {uploadPreview ? (
+                  <img
+                    src={uploadPreview}
+                    alt="Upload preview"
+                    className="w-16 h-16 object-cover rounded-lg flex-shrink-0"
+                  />
+                ) : (
+                  <div className="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <Camera className="w-6 h-6 text-gray-500" />
+                  </div>
+                )}
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 mb-1">
+                    <Check className="w-5 h-5 text-green-600 flex-shrink-0" />
+                    <p className="font-medium text-gray-900 truncate text-sm">
+                      {formData.uploadedFile.name}
+                    </p>
+                  </div>
+                  <p className="text-xs text-gray-600">
+                    {(formData.uploadedFile.size / 1024 / 1024).toFixed(2)} MB
+                  </p>
+                </div>
+                <Button
+                  type="button"
+                  onClick={removeFile}
+                  variant="outline"
+                  size="sm"
+                  className="border-gray-300 text-red-600 hover:bg-red-50 flex-shrink-0"
+                >
+                  <X className="w-4 h-4" />
+                </Button>
+              </div>
+            </div>
+          )}
+
+          {errors.uploadedFile && (
+            <p className="text-sm text-red-600 mt-2 flex items-center gap-1">
+              <X className="w-4 h-4" />
+              {errors.uploadedFile}
+            </p>
+          )}
+        </div>
 
         {/* Submit Button */}
         <Button
           type="submit"
           disabled={isSubmitting}
-          className={`w-full h-12 text-base font-semibold text-white shadow-md hover:shadow-lg transition-all ${compact ? 'bg-gradient-to-r from-teal-600 to-blue-600 hover:opacity-95' : 'bg-blue-600 hover:bg-blue-700'}`}
+          className="w-full h-12 text-base font-semibold bg-blue-600 hover:bg-blue-700 text-white shadow-md hover:shadow-lg transition-all"
         >
           {isSubmitting ? (
             <>
@@ -454,20 +446,19 @@ export function PatientIntakeFormSection({ compact = false }: PatientIntakeFormS
             </>
           ) : (
             <>
-              {compact ? null : <Camera className="w-5 h-5 mr-2" />}
-              {compact ? 'Get Started Free ✨' : 'Get My Smile Preview'}
+              <Camera className="w-5 h-5 mr-2" />
+              Get My Smile Preview
             </>
           )}
         </Button>
 
-        {!compact && (
-          <div className="flex items-start gap-2 px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-lg">
-            <Info className="w-4 h-4 text-gray-500 flex-shrink-0 mt-0.5" />
-            <p className="text-xs text-gray-600 leading-relaxed">
-              AI-generated previews are for visual reference only and do not constitute a dental diagnosis. A licensed dental professional will review all submissions.
-            </p>
-          </div>
-        )}
+        {/* Compliance Disclaimer */}
+        <div className="flex items-start gap-2 px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-lg">
+          <Info className="w-4 h-4 text-gray-500 flex-shrink-0 mt-0.5" />
+          <p className="text-xs text-gray-600 leading-relaxed">
+            AI-generated previews are for visual reference only and do not constitute a dental diagnosis. A licensed dental professional will review all submissions.
+          </p>
+        </div>
 
         {/* Privacy Note */}
         <p className="text-xs text-center text-gray-500 pt-2">
