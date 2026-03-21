@@ -21,7 +21,7 @@ import { Textarea } from './ui/textarea';
 
 type SmileStyle = 'subtle' | 'natural' | 'hollywood';
 type VideoProvider = 'veo';
-type FavoriteResult = 'original' | 'preview' | 'veo' | null;
+type FavoriteResult = 'original' | 'preview' | 'video' | null;
 
 interface VideoResult {
   provider: VideoProvider;
@@ -140,7 +140,6 @@ export function SmileTransformationSection() {
   const [previewAssetUrl, setPreviewAssetUrl] = useState<string | null>(null);
   const [previewJobId, setPreviewJobId] = useState<string | null>(null);
   const [style, setStyle] = useState<SmileStyle>('natural');
-  const [videoProvider, setVideoProvider] = useState<VideoProvider>('veo');
   const [videoResults, setVideoResults] = useState<Partial<Record<VideoProvider, VideoResult>>>({});
   const [pendingVideoJobs, setPendingVideoJobs] = useState<Partial<Record<VideoProvider, PendingVideoJob>>>({});
   const [processingPreview, setProcessingPreview] = useState(false);
@@ -292,7 +291,7 @@ export function SmileTransformationSection() {
     });
     const data = await parseJsonResponse(res);
     if (!res.ok) throw new Error(data.error || `Unable to start AI Video.`);
-    if (!data.jobId) throw new Error(`Veo did not return a job ID.`);
+    if (!data.jobId) throw new Error(`Video API did not return a job ID.`);
 
     setPendingVideoJobs((current) => ({
       ...current,
@@ -765,7 +764,7 @@ export function SmileTransformationSection() {
                     {[
                       { key: 'original', label: 'Original', ready: Boolean(uploadedImage) },
                       { key: 'preview', label: 'AI Preview', ready: Boolean(previewImage) },
-                      { key: 'veo', label: `${videoProvider.toUpperCase()} Video`, ready: Boolean(videoResults.veo?.assetUrl) },
+                      { key: 'video', label: 'AI Video', ready: Boolean(videoResults.veo?.assetUrl) },
                     ].map((item) => (
                       <button
                         type="button"
@@ -782,7 +781,7 @@ export function SmileTransformationSection() {
                     ))}
                   </div>
                   {favoriteResult && (
-                    <Button type="button" onClick={() => setFavoriteMessage(`Saved ${favoriteResult === 'veo' ? `${videoProvider.toUpperCase()} video` : favoriteResult} as your preferred result.`)} className="mt-4 h-11 w-full rounded-xl text-white shadow-lg hover:opacity-90" style={{ backgroundColor: BRAND_BLUE }}>
+                    <Button type="button" onClick={() => setFavoriteMessage(`Saved ${favoriteResult === 'video' ? 'AI video' : favoriteResult} as your preferred result.`)} className="mt-4 h-11 w-full rounded-xl text-white shadow-lg hover:opacity-90" style={{ backgroundColor: BRAND_BLUE }}>
                       <Save className="mr-2 h-4 w-4" /> Save Selection
                     </Button>
                   )}
