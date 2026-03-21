@@ -83,7 +83,10 @@ function getVideoEndpoint(provider: VideoProvider) {
 }
 
 const STEP_LABELS = ['Lead Form', 'Upload Photo', 'Choose Style', 'AI Preview', 'Create Video', 'Compare'] as const;
-const BRAND_BLUE = '#0584fa';
+
+// Tooth logo colors
+const TOOTH_NAVY = '#1a365d';
+const TOOTH_CYAN = '#38b2ac';
 
 const STYLE_OPTIONS: Array<{ value: SmileStyle; label: string; helper: string; accent: string }> = [
   {
@@ -396,16 +399,16 @@ export function SmileTransformationSection() {
   function renderInfoBanner() {
     if (videoProcessing) {
       return (
-        <div className="rounded-2xl border border-[#0584fa]/10 bg-[#0584fa]/5 px-4 py-3 text-sm text-slate-700">
-          <span className="font-semibold text-slate-900">Working on your video:</span> {motivationalMessages[waitingMessageIndex]}
+        <div className="rounded-2xl px-4 py-3 text-sm text-slate-700" style={{ background: `${TOOTH_CYAN}10`, border: `1px solid ${TOOTH_CYAN}20` }}>
+          <span className="font-semibold" style={{ color: TOOTH_NAVY }}>Working on your video:</span> {motivationalMessages[waitingMessageIndex]}
         </div>
       );
     }
 
     if (!isLeadCaptured) {
       return (
-        <div className="rounded-2xl border border-emerald-200 bg-emerald-50/70 px-4 py-3 text-sm text-slate-700">
-          <span className="font-semibold text-slate-900">Step 1 first:</span> enter patient info to unlock photo upload and preview tools.
+        <div className="rounded-2xl px-4 py-3 text-sm text-slate-700" style={{ background: `${TOOTH_CYAN}15`, border: `1px solid ${TOOTH_CYAN}25` }}>
+          <span className="font-semibold" style={{ color: TOOTH_NAVY }}>Step 1 first:</span> enter patient info to unlock photo upload and preview tools.
         </div>
       );
     }
@@ -422,9 +425,9 @@ export function SmileTransformationSection() {
       <div key={provider} className="overflow-hidden rounded-[24px] border border-slate-100 bg-white shadow-sm">
         <div className="flex items-center justify-between border-b border-slate-100 px-4 py-3">
           <div>
-            <p className="text-xs font-bold uppercase tracking-wider text-slate-950">{title}</p>
+            <p className="text-xs font-bold uppercase tracking-wider" style={{ color: TOOTH_NAVY }}>{title}</p>
           </div>
-          {result && <Badge className="bg-[rgba(5,132,250,0.12)] text-[#046fd3] text-[10px] hover:bg-[rgba(5,132,250,0.12)]">Ready</Badge>}
+          {result && <Badge className="text-[10px] text-white" style={{ background: TOOTH_CYAN }}>Ready</Badge>}
           {pending && <Badge className="bg-amber-100 text-[10px] text-amber-700 hover:bg-amber-100">Processing</Badge>}
         </div>
         <div className="aspect-[4/3] bg-slate-50">
@@ -435,7 +438,7 @@ export function SmileTransformationSection() {
             </video>
           ) : pending ? (
             <div className="flex h-full flex-col items-center justify-center gap-3 px-4 text-center">
-              <Loader2 className="h-8 w-8 animate-spin text-[#0584fa]" />
+              <Loader2 className="h-8 w-8 animate-spin" style={{ color: TOOTH_CYAN }} />
               <p className="text-xs font-medium text-slate-700">Creating video...</p>
             </div>
           ) : (
@@ -458,12 +461,12 @@ export function SmileTransformationSection() {
     <section id="smile-transform" className="relative bg-white px-4 py-8 sm:py-12 lg:py-16">
       <div className="mx-auto max-w-7xl">
         <div className="mb-8 sm:mb-10">
-          <div className="mx-auto max-w-5xl rounded-[28px] border border-slate-100 bg-white px-4 py-5 shadow-sm sm:px-6">
+          <div className="mx-auto max-w-5xl rounded-[28px] border bg-white px-4 py-5 shadow-sm sm:px-6" style={{ borderColor: `${TOOTH_CYAN}30` }}>
             <div className="relative">
               <div className="absolute left-0 right-0 top-5 hidden h-0.5 bg-slate-200 sm:block" />
               <motion.div
                 className="absolute left-0 top-5 hidden h-0.5 sm:block"
-                style={{ backgroundColor: BRAND_BLUE }}
+                style={{ background: `linear-gradient(90deg, ${TOOTH_NAVY}, ${TOOTH_CYAN})` }}
                 initial={{ width: '0%' }}
                 animate={{ width: `${((currentStep - 1) / (STEP_LABELS.length - 1)) * 100}%` }}
                 transition={{ duration: 0.5, ease: 'easeInOut' }}
@@ -480,15 +483,15 @@ export function SmileTransformationSection() {
                         initial={false}
                         animate={{
                           scale: isActive ? 1.08 : 1,
-                          backgroundColor: isHighlighted ? BRAND_BLUE : '#ffffff',
-                          borderColor: isHighlighted ? BRAND_BLUE : '#dbe5f0',
+                          backgroundColor: isHighlighted ? (isActive ? TOOTH_CYAN : TOOTH_NAVY) : '#ffffff',
+                          borderColor: isHighlighted ? (isActive ? TOOTH_CYAN : TOOTH_NAVY) : '#dbe5f0',
                         }}
                         className="relative z-10 flex h-10 w-10 items-center justify-center rounded-full border-2 shadow-sm transition-colors duration-300 sm:h-12 sm:w-12"
                       >
                         {isComplete ? (
                           <CheckCircle className="h-5 w-5 text-white sm:h-6 sm:w-6" />
                         ) : (
-                          <span className={`text-sm font-bold sm:text-base ${isActive ? 'text-white' : 'text-slate-900'}`}>
+                          <span className={`text-sm font-bold sm:text-base ${isActive ? 'text-white' : isHighlighted ? 'text-white' : 'text-slate-900'}`}>
                             {stepNumber}
                           </span>
                         )}
@@ -506,10 +509,10 @@ export function SmileTransformationSection() {
 
         <div className="mx-auto max-w-6xl space-y-8">
           <div className="grid gap-6 xl:grid-cols-[1.15fr_0.95fr]">
-            <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="overflow-hidden rounded-[32px] border border-slate-100 bg-white shadow-xl shadow-slate-200/50">
-              <div className="border-b border-slate-100 px-6 py-5">
-                <h3 className="text-2xl font-semibold text-slate-950">Step 1: Enter Your Information</h3>
-                <p className="mt-2 text-base text-slate-600">We&apos;ll save this lead first, then unlock photo upload and video preview below.</p>
+            <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="overflow-hidden rounded-[32px] border bg-white shadow-xl shadow-slate-200/50" style={{ borderColor: `${TOOTH_CYAN}30` }}>
+              <div className="px-6 py-5" style={{ background: `linear-gradient(135deg, ${TOOTH_NAVY} 0%, ${TOOTH_CYAN} 100%)` }}>
+                <h3 className="text-2xl font-semibold text-white">Step 1: Enter Your Information</h3>
+                <p className="mt-2 text-base text-white/80">We&apos;ll create your personalized smile preview in the next step</p>
               </div>
               <form onSubmit={handleLeadSubmit} className="space-y-5 px-6 py-6 sm:px-8">
                 <div>
@@ -601,13 +604,13 @@ export function SmileTransformationSection() {
                   />
                 </div>
 
-                <Button type="submit" className="h-12 w-full rounded-xl text-base font-semibold text-white shadow-lg hover:opacity-95" style={{ background: 'linear-gradient(90deg, #0ea5a6 0%, #2563eb 100%)' }}>
-                  {isLeadCaptured ? 'Update & Continue ✨' : 'Get Started Free ✨'}
+                <Button type="submit" className="h-12 w-full rounded-xl text-base font-semibold text-white shadow-lg hover:opacity-95" style={{ background: `linear-gradient(135deg, ${TOOTH_NAVY} 0%, ${TOOTH_CYAN} 100%)` }}>
+                  {isLeadCaptured ? 'Update & Continue' : 'Get Started Free'}
                 </Button>
 
                 <div className="space-y-4 pt-1 text-center text-sm text-slate-500">
                   <p>By continuing, you agree to be contacted about your smile transformation. Your information is secure and will never be shared.</p>
-                  <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-emerald-600">
+                  <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2" style={{ color: TOOTH_CYAN }}>
                     <span>✓ Secure &amp; Confidential</span>
                     <span>✓ Get Results in 24 Hours</span>
                   </div>
@@ -615,8 +618,8 @@ export function SmileTransformationSection() {
               </form>
             </motion.div>
 
-            <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="rounded-[32px] border border-[#dbeafe] bg-gradient-to-br from-slate-50 via-white to-blue-50 p-6 shadow-xl shadow-slate-200/40 sm:p-8">
-              <h3 className="text-2xl font-semibold text-slate-950">Why Get Your Free Preview?</h3>
+            <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="rounded-[32px] border p-6 shadow-xl shadow-slate-200/40 sm:p-8" style={{ borderColor: `${TOOTH_CYAN}30`, background: `linear-gradient(135deg, ${TOOTH_NAVY}08 0%, ${TOOTH_CYAN}15 100%)` }}>
+              <h3 className="text-2xl font-semibold" style={{ color: TOOTH_NAVY }}>Why Get Your Free Preview?</h3>
               <div className="mt-6 space-y-4">
                 {[
                   ['See Your Potential', 'Visualize your smile transformation before committing to treatment'],
@@ -626,17 +629,17 @@ export function SmileTransformationSection() {
                 ].map(([title, body]) => (
                   <div key={title} className="rounded-[20px] border border-slate-200 bg-white p-5 shadow-sm">
                     <div className="flex items-start gap-3">
-                      <CheckCircle className="mt-0.5 h-6 w-6 text-emerald-500" />
+                      <CheckCircle className="mt-0.5 h-6 w-6" style={{ color: TOOTH_CYAN }} />
                       <div>
-                        <p className="text-xl font-semibold text-slate-950">{title}</p>
+                        <p className="text-xl font-semibold" style={{ color: TOOTH_NAVY }}>{title}</p>
                         <p className="mt-1 text-base leading-relaxed text-slate-600">{body}</p>
                       </div>
                     </div>
                   </div>
                 ))}
               </div>
-              <div className="mt-6 rounded-[20px] border border-cyan-200 bg-cyan-50/70 px-6 py-5 text-center">
-                <p className="text-2xl font-semibold text-slate-900">Over 10,000+ smiles transformed!</p>
+              <div className="mt-6 rounded-[20px] px-6 py-5 text-center" style={{ background: `linear-gradient(135deg, ${TOOTH_CYAN}20 0%, ${TOOTH_NAVY}15 100%)`, border: `1px solid ${TOOTH_CYAN}30` }}>
+                <p className="text-2xl font-semibold" style={{ color: TOOTH_NAVY }}>Over 10,000+ smiles transformed!</p>
                 <p className="mt-1 text-base text-slate-600">Join thousands who&apos;ve discovered their dream smile.</p>
               </div>
             </motion.div>
@@ -648,16 +651,20 @@ export function SmileTransformationSection() {
             <div className="grid gap-6 xl:grid-cols-[minmax(0,1.2fr)_minmax(320px,0.8fr)]">
               <div className="space-y-6">
                 <div className="grid gap-6 lg:grid-cols-2">
-                  <motion.div id="smile-upload-panel" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="overflow-hidden rounded-[32px] border border-slate-100 bg-white shadow-xl shadow-slate-200/50">
+                  <motion.div id="smile-upload-panel" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="overflow-hidden rounded-[32px] border bg-white shadow-xl shadow-slate-200/50" style={{ borderColor: `${TOOTH_CYAN}30` }}>
                     <div className="border-b border-slate-50 px-6 py-4">
                       <div className="flex items-center justify-between">
-                        <h3 className="text-lg font-bold text-slate-950">2. Upload Photo</h3>
-                        <Badge className="bg-slate-950 text-[10px] text-white">Step 2</Badge>
+                        <h3 className="text-lg font-bold" style={{ color: TOOTH_NAVY }}>2. Upload Photo</h3>
+                        <Badge className="text-[10px] text-white" style={{ background: TOOTH_NAVY }}>Step 2</Badge>
                       </div>
                     </div>
                     <div className="p-6">
                       <div
-                        className={`group relative aspect-[4/5] rounded-[24px] border-2 border-dashed transition-all ${dragActive ? 'border-[#0584fa] bg-[rgba(5,132,250,0.08)]' : 'border-slate-100 bg-slate-50/50 hover:border-[#0584fa] hover:bg-[rgba(5,132,250,0.05)]'}`}
+                        className={`group relative aspect-[4/5] rounded-[24px] border-2 border-dashed transition-all ${dragActive ? 'bg-opacity-10' : 'bg-slate-50/50 hover:bg-opacity-5'}`}
+                        style={{ 
+                          borderColor: dragActive ? TOOTH_CYAN : '#e2e8f0',
+                          backgroundColor: dragActive ? `${TOOTH_CYAN}10` : undefined
+                        }}
                         onDragEnter={handleDrag}
                         onDragLeave={handleDrag}
                         onDragOver={handleDrag}
@@ -676,11 +683,11 @@ export function SmileTransformationSection() {
                           </div>
                         ) : (
                           <button type="button" onClick={() => fileInputRef.current?.click()} className="flex h-full w-full flex-col items-center justify-center gap-3 p-4 text-center">
-                            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-[#0584fa] shadow-sm">
+                            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white shadow-sm" style={{ color: TOOTH_CYAN }}>
                               <Upload className="h-6 w-6" />
                             </div>
                             <div>
-                              <p className="text-sm font-bold text-slate-950">Click to upload</p>
+                              <p className="text-sm font-bold" style={{ color: TOOTH_NAVY }}>Click to upload</p>
                               <p className="text-xs text-slate-500">or drag and drop</p>
                             </div>
                           </button>
@@ -690,11 +697,11 @@ export function SmileTransformationSection() {
                     </div>
                   </motion.div>
 
-                  <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="overflow-hidden rounded-[32px] border border-slate-100 bg-white shadow-xl shadow-slate-200/50">
+                  <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="overflow-hidden rounded-[32px] border bg-white shadow-xl shadow-slate-200/50" style={{ borderColor: `${TOOTH_CYAN}30` }}>
                     <div className="border-b border-slate-50 px-6 py-4">
                       <div className="flex items-center justify-between">
-                        <h3 className="text-lg font-bold text-slate-950">4. AI Preview</h3>
-                        <Badge className="bg-[#0584fa] text-[10px] text-white hover:bg-[#0584fa]">Step 4</Badge>
+                        <h3 className="text-lg font-bold" style={{ color: TOOTH_NAVY }}>4. AI Preview</h3>
+                        <Badge className="text-[10px] text-white" style={{ background: TOOTH_CYAN }}>Step 4</Badge>
                       </div>
                     </div>
                     <div className="p-6">
@@ -704,7 +711,7 @@ export function SmileTransformationSection() {
                         ) : (
                           <div className="flex h-full flex-col items-center justify-center gap-3 p-4 text-center">
                             {processingPreview ? (
-                              <Loader2 className="h-10 w-10 animate-spin text-[#0584fa]" />
+                              <Loader2 className="h-10 w-10 animate-spin" style={{ color: TOOTH_CYAN }} />
                             ) : (
                               <Sparkles className="h-10 w-10 text-slate-200" />
                             )}
@@ -718,46 +725,46 @@ export function SmileTransformationSection() {
                   </motion.div>
                 </div>
 
-                <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="rounded-[32px] border border-slate-100 bg-white p-6 shadow-xl shadow-slate-200/50">
+                <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="rounded-[32px] border bg-white p-6 shadow-xl shadow-slate-200/50" style={{ borderColor: `${TOOTH_CYAN}30` }}>
                   <div className="flex flex-col gap-6 xl:flex-row xl:items-center">
                     <div className="grid w-full flex-1 gap-3 sm:grid-cols-3">
                       {STYLE_OPTIONS.map((option) => (
                         <label key={option.value} className="cursor-pointer">
                           <input type="radio" name="previewStyle" value={option.value} checked={style === option.value} onChange={() => setStyle(option.value)} className="peer sr-only" />
-                          <div className={`rounded-2xl border border-slate-100 bg-gradient-to-br p-4 text-center transition-all peer-checked:border-[#0584fa] peer-checked:bg-[rgba(5,132,250,0.08)] ${option.accent}`}>
-                            <p className="text-sm font-bold text-slate-950">{option.label}</p>
+                          <div className={`rounded-2xl border p-4 text-center transition-all bg-gradient-to-br ${option.accent}`} style={{ borderColor: style === option.value ? TOOTH_CYAN : '#e2e8f0', backgroundColor: style === option.value ? `${TOOTH_CYAN}10` : undefined }}>
+                            <p className="text-sm font-bold" style={{ color: TOOTH_NAVY }}>{option.label}</p>
                             <p className="mt-1 text-xs text-slate-500">{option.helper}</p>
                           </div>
                         </label>
                       ))}
                     </div>
-                    <Button onClick={generatePreview} disabled={!canGeneratePreview} className="h-12 w-full rounded-2xl text-white shadow-lg hover:opacity-95 xl:w-auto xl:min-w-[220px]" style={{ backgroundColor: BRAND_BLUE, boxShadow: '0 14px 34px rgba(5, 132, 250, 0.25)' }}>
+                    <Button onClick={generatePreview} disabled={!canGeneratePreview} className="h-12 w-full rounded-2xl text-white shadow-lg hover:opacity-95 xl:w-auto xl:min-w-[220px]" style={{ background: `linear-gradient(135deg, ${TOOTH_NAVY} 0%, ${TOOTH_CYAN} 100%)`, boxShadow: `0 14px 34px ${TOOTH_CYAN}40` }}>
                       {processingPreview ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Generating...</> : 'Generate Preview'}
                     </Button>
                   </div>
-                  <div className="mt-4 flex items-center justify-between rounded-2xl bg-slate-50 px-4 py-3 text-sm text-slate-600">
-                    <span>Selected style: <strong className="text-slate-900">{selectedStyle.label}</strong></span>
+                  <div className="mt-4 flex items-center justify-between rounded-2xl px-4 py-3 text-sm text-slate-600" style={{ background: `${TOOTH_CYAN}08` }}>
+                    <span>Selected style: <strong style={{ color: TOOTH_NAVY }}>{selectedStyle.label}</strong></span>
                     <span className="hidden sm:inline">Step 3 unlocks the preview</span>
                   </div>
                 </motion.div>
               </div>
 
               <div className="space-y-6">
-                <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="rounded-[32px] border border-slate-100 bg-white p-5 shadow-xl shadow-slate-200/50 sm:p-6">
+                <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="rounded-[32px] border bg-white p-5 shadow-xl shadow-slate-200/50 sm:p-6" style={{ borderColor: `${TOOTH_CYAN}30` }}>
                   <div className="mb-4 flex items-center justify-between">
-                    <h3 className="text-lg font-bold text-slate-950">5. Video</h3>
-                    <Badge className="bg-[#0584fa] text-[10px] text-white hover:bg-[#0584fa]">Step 5</Badge>
+                    <h3 className="text-lg font-bold" style={{ color: TOOTH_NAVY }}>5. Video</h3>
+                    <Badge className="text-[10px] text-white" style={{ background: TOOTH_CYAN }}>Step 5</Badge>
                   </div>
-                  <Button onClick={() => generateSingleVideo('veo')} disabled={!canGenerateVideos} className="mb-4 h-11 w-full rounded-xl text-white hover:opacity-95" style={{ backgroundColor: BRAND_BLUE }}>
+                  <Button onClick={() => generateSingleVideo('veo')} disabled={!canGenerateVideos} className="mb-4 h-11 w-full rounded-xl text-white hover:opacity-95" style={{ background: `linear-gradient(135deg, ${TOOTH_NAVY} 0%, ${TOOTH_CYAN} 100%)` }}>
                     {videoProcessing === 'veo' ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Creating...</> : 'Create AI Video'}
                   </Button>
                   {renderVideoCard('veo', 'AI Video Result')}
                 </motion.div>
 
-                <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="rounded-[32px] border border-slate-100 bg-white p-6 shadow-xl shadow-slate-200/50">
+                <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="rounded-[32px] border bg-white p-6 shadow-xl shadow-slate-200/50" style={{ borderColor: `${TOOTH_CYAN}30` }}>
                   <div className="mb-4 flex items-center justify-between">
-                    <h3 className="text-lg font-bold text-slate-950">6. Compare</h3>
-                    <Badge className="bg-[#0584fa] text-[10px] text-white hover:bg-[#0584fa]">Step 6</Badge>
+                    <h3 className="text-lg font-bold" style={{ color: TOOTH_NAVY }}>6. Compare</h3>
+                    <Badge className="text-[10px] text-white" style={{ background: TOOTH_CYAN }}>Step 6</Badge>
                   </div>
                   <div className="space-y-2">
                     {[
@@ -769,26 +776,27 @@ export function SmileTransformationSection() {
                         type="button"
                         key={item.key}
                         onClick={() => setFavoriteResult(item.key as FavoriteResult)}
-                        className={`w-full rounded-xl border p-3 text-left text-xs font-bold transition-all ${
-                          favoriteResult === item.key
-                            ? 'border-[#0584fa] bg-[rgba(5,132,250,0.08)] text-[#046fd3]'
-                            : 'border-slate-100 bg-white text-slate-600 hover:border-slate-200'
-                        } ${!item.ready ? 'cursor-not-allowed opacity-40' : ''}`}
+                        className={`w-full rounded-xl border p-3 text-left text-xs font-bold transition-all ${!item.ready ? 'cursor-not-allowed opacity-40' : ''}`}
+                        style={{
+                          borderColor: favoriteResult === item.key ? TOOTH_CYAN : '#e2e8f0',
+                          backgroundColor: favoriteResult === item.key ? `${TOOTH_CYAN}10` : 'white',
+                          color: favoriteResult === item.key ? TOOTH_NAVY : '#64748b'
+                        }}
                         disabled={!item.ready}
                       >
                         <div className="flex items-center justify-between">
                           <span>{item.label}</span>
-                          {favoriteResult === item.key && <CheckCircle className="h-4 w-4" />}
+                          {favoriteResult === item.key && <CheckCircle className="h-4 w-4" style={{ color: TOOTH_CYAN }} />}
                         </div>
                       </button>
                     ))}
                   </div>
                   {favoriteResult && (
-                    <Button type="button" onClick={() => setFavoriteMessage(`Saved ${favoriteResult === 'veo' ? `${videoProvider.toUpperCase()} video` : favoriteResult} as your preferred result.`)} className="mt-4 h-11 w-full rounded-xl text-white shadow-lg" style={{ backgroundColor: BRAND_BLUE, boxShadow: '0 14px 34px rgba(5, 132, 250, 0.2)' }}>
+                    <Button type="button" onClick={() => setFavoriteMessage(`Saved ${favoriteResult === 'veo' ? `${videoProvider.toUpperCase()} video` : favoriteResult} as your preferred result.`)} className="mt-4 h-11 w-full rounded-xl text-white shadow-lg" style={{ background: `linear-gradient(135deg, ${TOOTH_NAVY} 0%, ${TOOTH_CYAN} 100%)`, boxShadow: `0 14px 34px ${TOOTH_CYAN}30` }}>
                       <Save className="mr-2 h-4 w-4" /> Save Selection
                     </Button>
                   )}
-                  {favoriteMessage && <p className="mt-3 text-sm text-emerald-600">{favoriteMessage}</p>}
+                  {favoriteMessage && <p className="mt-3 text-sm" style={{ color: TOOTH_CYAN }}>{favoriteMessage}</p>}
                 </motion.div>
               </div>
             </div>
@@ -797,9 +805,9 @@ export function SmileTransformationSection() {
 
         <div className="fixed bottom-8 left-1/2 z-50 w-full max-w-md -translate-x-1/2 space-y-2 px-4">
           {successMessage && (
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }} className="rounded-2xl border border-[rgba(5,132,250,0.18)] bg-white/90 p-4 text-sm text-[#046fd3] shadow-2xl backdrop-blur-md">
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }} className="rounded-2xl bg-white/90 p-4 text-sm shadow-2xl backdrop-blur-md" style={{ border: `1px solid ${TOOTH_CYAN}30`, color: TOOTH_NAVY }}>
               <div className="flex items-center gap-3">
-                <CheckCircle className="h-5 w-5 text-[#0584fa]" />
+                <CheckCircle className="h-5 w-5" style={{ color: TOOTH_CYAN }} />
                 <p className="font-medium">{successMessage}</p>
               </div>
             </motion.div>

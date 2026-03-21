@@ -3,6 +3,11 @@ import { useState } from 'react';
 import { ClinicBranding } from '../App';
 import { StaffLoginModal } from './StaffLoginModal';
 
+// Tooth logo colors
+const TOOTH_NAVY = '#1a365d';
+const TOOTH_CYAN = '#38b2ac';
+const TOOTH_LOGO = 'https://customer-assets.emergentagent.com/job_6ddaa510-f452-47bb-9414-8c025b23d77a/artifacts/67lipfsx_Untitled%20design%20%2845%29.png';
+
 // TikTok icon (Lucide doesn't have it, so we'll create a simple SVG)
 function TikTokIcon({ className }: { className?: string }) {
   return (
@@ -36,7 +41,6 @@ export function Footer({ clinicBranding }: FooterProps) {
   };
 
   const clinicName = clinicBranding?.clinicName || 'SmileAI Miami';
-  const logo = clinicBranding?.logo;
   const contactInfo = clinicBranding?.contactInfo || {};
   const socialMedia = clinicBranding?.socialMedia || {};
 
@@ -50,24 +54,18 @@ export function Footer({ clinicBranding }: FooterProps) {
   ].filter(item => item.url && item.url.trim() !== '');
 
   return (
-    <footer className="bg-gradient-to-b from-gray-900 to-gray-950 text-white">
+    <footer style={{ background: `linear-gradient(180deg, ${TOOTH_NAVY} 0%, #0f172a 100%)` }} className="text-white">
       {/* Main Footer */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12 lg:py-16">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
           {/* Brand Column */}
           <div className="sm:col-span-2 lg:col-span-1">
             <div className="flex items-center gap-3 mb-4">
-              {logo ? (
-                <img 
-                  src={logo} 
-                  alt={clinicName}
-                  className="w-10 h-10 object-contain rounded-lg"
-                />
-              ) : (
-                <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-blue-600 rounded-lg flex items-center justify-center shadow-lg">
-                  <span className="text-white text-xl">✨</span>
-                </div>
-              )}
+              <img 
+                src={TOOTH_LOGO} 
+                alt={clinicName}
+                className="w-12 h-12 object-contain rounded-lg bg-white p-1"
+              />
               <div>
                 <h3 className="text-lg font-bold text-white">{clinicName}</h3>
               </div>
@@ -85,7 +83,10 @@ export function Footer({ clinicBranding }: FooterProps) {
                       href={social.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="w-10 h-10 bg-gray-800 hover:bg-gradient-to-r hover:from-blue-600 hover:to-blue-600 rounded-full flex items-center justify-center transition-all duration-300 shadow-md hover:shadow-lg"
+                      className="w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 shadow-md hover:shadow-lg"
+                      style={{ background: 'rgba(255,255,255,0.1)' }}
+                      onMouseOver={(e) => e.currentTarget.style.background = `linear-gradient(135deg, ${TOOTH_NAVY}, ${TOOTH_CYAN})`}
+                      onMouseOut={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
                       aria-label={social.name}
                     >
                       <Icon className="w-5 h-5" />
@@ -101,27 +102,27 @@ export function Footer({ clinicBranding }: FooterProps) {
             <h4 className="text-base sm:text-lg font-bold text-white mb-4">Services</h4>
             <ul className="space-y-2.5 text-sm">
               <li>
-                <a href="#" className="text-gray-300 hover:text-blue-400 transition-colors duration-200">
+                <a href="#" className="text-gray-300 transition-colors duration-200" style={{ }} onMouseOver={(e) => e.currentTarget.style.color = TOOTH_CYAN} onMouseOut={(e) => e.currentTarget.style.color = '#d1d5db'}>
                   Dental Implants
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-300 hover:text-blue-400 transition-colors duration-200">
+                <a href="#" className="text-gray-300 transition-colors duration-200" onMouseOver={(e) => e.currentTarget.style.color = TOOTH_CYAN} onMouseOut={(e) => e.currentTarget.style.color = '#d1d5db'}>
                   Veneers
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-300 hover:text-blue-400 transition-colors duration-200">
+                <a href="#" className="text-gray-300 transition-colors duration-200" onMouseOver={(e) => e.currentTarget.style.color = TOOTH_CYAN} onMouseOut={(e) => e.currentTarget.style.color = '#d1d5db'}>
                   Teeth Whitening
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-300 hover:text-blue-400 transition-colors duration-200">
+                <a href="#" className="text-gray-300 transition-colors duration-200" onMouseOver={(e) => e.currentTarget.style.color = TOOTH_CYAN} onMouseOut={(e) => e.currentTarget.style.color = '#d1d5db'}>
                   Smile Makeover
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-300 hover:text-blue-400 transition-colors duration-200">
+                <a href="#" className="text-gray-300 transition-colors duration-200" onMouseOver={(e) => e.currentTarget.style.color = TOOTH_CYAN} onMouseOut={(e) => e.currentTarget.style.color = '#d1d5db'}>
                   Invisalign
                 </a>
               </li>
@@ -133,27 +134,27 @@ export function Footer({ clinicBranding }: FooterProps) {
             <h4 className="text-base sm:text-lg font-bold text-white mb-4">Quick Links</h4>
             <ul className="space-y-2.5 text-sm">
               <li>
-                <a href="#" className="text-gray-300 hover:text-blue-400 transition-colors duration-200">
+                <a href="#" className="text-gray-300 transition-colors duration-200" onMouseOver={(e) => e.currentTarget.style.color = TOOTH_CYAN} onMouseOut={(e) => e.currentTarget.style.color = '#d1d5db'}>
                   About Us
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-300 hover:text-blue-400 transition-colors duration-200">
+                <a href="#" className="text-gray-300 transition-colors duration-200" onMouseOver={(e) => e.currentTarget.style.color = TOOTH_CYAN} onMouseOut={(e) => e.currentTarget.style.color = '#d1d5db'}>
                   Our Team
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-300 hover:text-blue-400 transition-colors duration-200">
+                <a href="#" className="text-gray-300 transition-colors duration-200" onMouseOver={(e) => e.currentTarget.style.color = TOOTH_CYAN} onMouseOut={(e) => e.currentTarget.style.color = '#d1d5db'}>
                   Before & After
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-300 hover:text-blue-400 transition-colors duration-200">
+                <a href="#" className="text-gray-300 transition-colors duration-200" onMouseOver={(e) => e.currentTarget.style.color = TOOTH_CYAN} onMouseOut={(e) => e.currentTarget.style.color = '#d1d5db'}>
                   Patient Reviews
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-300 hover:text-blue-400 transition-colors duration-200">
+                <a href="#" className="text-gray-300 transition-colors duration-200" onMouseOver={(e) => e.currentTarget.style.color = TOOTH_CYAN} onMouseOut={(e) => e.currentTarget.style.color = '#d1d5db'}>
                   Blog
                 </a>
               </li>
@@ -166,7 +167,7 @@ export function Footer({ clinicBranding }: FooterProps) {
             <ul className="space-y-3 text-sm">
               {contactInfo.address && (
                 <li className="flex items-start gap-3">
-                  <MapPin className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
+                  <MapPin className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: TOOTH_CYAN }} />
                   <span className="text-gray-300" style={{ whiteSpace: 'pre-line' }}>
                     {contactInfo.address}
                   </span>
@@ -174,16 +175,16 @@ export function Footer({ clinicBranding }: FooterProps) {
               )}
               {contactInfo.phone && (
                 <li className="flex items-start gap-3">
-                  <Phone className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
-                  <a href={`tel:${contactInfo.phone.replace(/\D/g, '')}`} className="text-gray-300 hover:text-blue-400 transition-colors duration-200">
+                  <Phone className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: TOOTH_CYAN }} />
+                  <a href={`tel:${contactInfo.phone.replace(/\D/g, '')}`} className="text-gray-300 transition-colors duration-200" onMouseOver={(e) => e.currentTarget.style.color = TOOTH_CYAN} onMouseOut={(e) => e.currentTarget.style.color = '#d1d5db'}>
                     {contactInfo.phone}
                   </a>
                 </li>
               )}
               {contactInfo.email && (
                 <li className="flex items-start gap-3">
-                  <Mail className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
-                  <a href={`mailto:${contactInfo.email}`} className="text-gray-300 hover:text-blue-400 transition-colors duration-200 break-all">
+                  <Mail className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: TOOTH_CYAN }} />
+                  <a href={`mailto:${contactInfo.email}`} className="text-gray-300 transition-colors duration-200 break-all" onMouseOver={(e) => e.currentTarget.style.color = TOOTH_CYAN} onMouseOut={(e) => e.currentTarget.style.color = '#d1d5db'}>
                     {contactInfo.email}
                   </a>
                 </li>
@@ -199,26 +200,28 @@ export function Footer({ clinicBranding }: FooterProps) {
       </div>
 
       {/* Bottom Bar */}
-      <div className="border-t border-gray-800">
+      <div style={{ borderTop: `1px solid ${TOOTH_NAVY}` }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <p className="text-xs sm:text-sm text-gray-400 text-center sm:text-left">
               © 2026 {clinicName}. All rights reserved. HIPAA compliant and regulated by the United States of America.
             </p>
             <div className="flex flex-wrap gap-4 sm:gap-6 text-xs sm:text-sm text-gray-400 justify-center">
-              <a href="#privacy-policy" className="hover:text-blue-400 transition-colors duration-200">
+              <a href="#privacy-policy" className="transition-colors duration-200" onMouseOver={(e) => e.currentTarget.style.color = TOOTH_CYAN} onMouseOut={(e) => e.currentTarget.style.color = '#9ca3af'}>
                 Privacy Policy
               </a>
-              <a href="#terms-of-service" className="hover:text-blue-400 transition-colors duration-200">
+              <a href="#terms-of-service" className="transition-colors duration-200" onMouseOver={(e) => e.currentTarget.style.color = TOOTH_CYAN} onMouseOut={(e) => e.currentTarget.style.color = '#9ca3af'}>
                 Terms of Service
               </a>
-              <a href="#hipaa-notice" className="hover:text-blue-400 transition-colors duration-200">
+              <a href="#hipaa-notice" className="transition-colors duration-200" onMouseOver={(e) => e.currentTarget.style.color = TOOTH_CYAN} onMouseOut={(e) => e.currentTarget.style.color = '#9ca3af'}>
                 HIPAA Notice
               </a>
               {/* Subtle Admin Access Link */}
               <button
                 onClick={handleStaffLogin}
-                className="hover:text-blue-400 transition-colors duration-200 cursor-pointer"
+                className="transition-colors duration-200 cursor-pointer"
+                onMouseOver={(e) => e.currentTarget.style.color = TOOTH_CYAN}
+                onMouseOut={(e) => e.currentTarget.style.color = '#9ca3af'}
               >
                 Staff Login
               </button>
