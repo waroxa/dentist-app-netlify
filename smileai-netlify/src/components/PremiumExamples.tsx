@@ -22,7 +22,6 @@ const STATE_OPTIONS: Array<{ id: SmileState; label: string }> = [
 const EXAMPLES = [
   {
     id: 0,
-    patient: 'Example 01',
     initialState: 'before' as SmileState,
     images: {
       before: beforeImage1,
@@ -32,7 +31,6 @@ const EXAMPLES = [
   },
   {
     id: 1,
-    patient: 'Example 02',
     initialState: 'natural' as SmileState,
     images: {
       before: beforeImage2,
@@ -42,7 +40,6 @@ const EXAMPLES = [
   },
   {
     id: 2,
-    patient: 'Example 03',
     initialState: 'hollywood' as SmileState,
     images: {
       before: beforeImage3,
@@ -97,7 +94,7 @@ export function PremiumExamples() {
           </p>
         </motion.div>
 
-        <div className="grid gap-6 lg:grid-cols-3 lg:gap-8">
+        <div className="grid items-stretch gap-8 md:gap-10 lg:grid-cols-3 lg:gap-12">
           {EXAMPLES.map((example, index) => {
             const selectedState = selectedStates[example.id];
             const selectedImage = example.images[selectedState];
@@ -109,7 +106,7 @@ export function PremiumExamples() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.55, delay: index * 0.08 }}
-                className="overflow-hidden rounded-[28px] border border-slate-200/80 bg-white shadow-[0_24px_80px_rgba(15,23,42,0.08)]"
+                className="flex h-full flex-col overflow-hidden rounded-[28px] border border-slate-200/80 bg-white shadow-[0_24px_80px_rgba(15,23,42,0.08)] transition-transform duration-300 hover:-translate-y-1"
               >
                 <div className="bg-gradient-to-r from-teal-600 via-cyan-600 to-blue-600 px-6 py-4 text-center">
                   <p className="text-xl font-bold text-white">AI Enhanced Smile</p>
@@ -120,28 +117,25 @@ export function PremiumExamples() {
                     <motion.img
                       key={`${example.id}-${selectedState}`}
                       src={selectedImage}
-                      alt={`${example.patient} ${selectedState} smile preview`}
+                      alt={`AI enhanced smile ${example.id + 1} ${selectedState} preview`}
                       initial={{ opacity: 0.15, scale: 0.985 }}
                       animate={{ opacity: 1, scale: 1 }}
                       exit={{ opacity: 0.15, scale: 1.015 }}
                       transition={{ duration: 0.28, ease: 'easeInOut' }}
-                      className="aspect-[4/4.2] w-full object-cover"
+                      className="h-[440px] w-full object-cover object-center sm:h-[500px] lg:h-[480px] xl:h-[500px]"
                     />
                   </AnimatePresence>
                 </div>
 
-                <div className="p-5 sm:p-6">
-                  <div className="mb-4 flex items-center justify-between gap-3">
+                <div className="flex flex-1 flex-col p-6 sm:p-7">
+                  <div className="mb-6">
                     <div>
                       <p className="text-lg font-semibold text-slate-950">Smile Intensity</p>
-                      <p className="text-sm text-slate-500">Select a state to preview the result.</p>
-                    </div>
-                    <div className="rounded-full bg-slate-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
-                      {example.patient}
+                      <p className="mt-1 text-sm text-slate-500">Select a state to preview the result.</p>
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-3 gap-2 sm:gap-3">
+                  <div className="grid grid-cols-3 gap-3 sm:gap-4">
                     {STATE_OPTIONS.map((option) => {
                       const isActive = selectedState === option.id;
                       return (
@@ -162,7 +156,7 @@ export function PremiumExamples() {
                     })}
                   </div>
 
-                  <div className="mt-5 flex items-start gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
+                  <div className="mt-6 flex items-start gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4">
                     <ShieldCheck className="mt-0.5 h-5 w-5 flex-shrink-0 text-teal-600" />
                     <p className="text-sm leading-relaxed text-slate-600">
                       We only adjust teeth and smile — we don&apos;t change the patient&apos;s face.
