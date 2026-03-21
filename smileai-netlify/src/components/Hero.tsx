@@ -4,9 +4,8 @@ import { ClinicBranding } from '../App';
 import { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 
-// Tooth logo colors
-const TOOTH_NAVY = '#1a365d';
-const TOOTH_CYAN = '#38b2ac';
+// Clean blue color scheme
+const BRAND_BLUE = '#2563eb';
 
 interface HeroProps {
   clinicBranding: ClinicBranding;
@@ -40,15 +39,15 @@ export function Hero({ clinicBranding }: HeroProps) {
   };
 
   return (
-    <section className="relative overflow-hidden" style={{ backgroundColor: '#f8fafc' }}>
+    <section className="relative overflow-hidden bg-white">
       {/* Decorative Background Elements */}
       <div className="absolute inset-0 -z-10">
-        <div className="absolute top-0 right-0 h-[500px] w-[500px] rounded-full blur-3xl" style={{ background: `linear-gradient(to bottom right, ${TOOTH_CYAN}20, transparent)` }} />
-        <div className="absolute bottom-0 left-0 h-[500px] w-[500px] rounded-full blur-3xl" style={{ background: `linear-gradient(to top right, ${TOOTH_NAVY}15, transparent)` }} />
+        <div className="absolute top-0 right-0 h-[500px] w-[500px] rounded-full bg-gradient-to-br from-blue-100/40 to-transparent blur-3xl" />
+        <div className="absolute bottom-0 left-0 h-[500px] w-[500px] rounded-full bg-gradient-to-tr from-blue-50/30 to-transparent blur-3xl" />
       </div>
 
-      {/* Navigation - Professional Header */}
-      <nav className="relative z-10 px-4 sm:px-6 lg:px-8 py-4 sm:py-5" style={{ background: `linear-gradient(135deg, ${TOOTH_NAVY} 0%, ${TOOTH_CYAN} 100%)` }}>
+      {/* Navigation - Clean Professional Header */}
+      <nav className="relative z-10 px-4 sm:px-6 lg:px-8 py-4 sm:py-5" style={{ backgroundColor: BRAND_BLUE }}>
         <div className="mx-auto max-w-7xl flex items-center justify-between">
           <motion.div 
             initial={{ opacity: 0, x: -20 }}
@@ -59,7 +58,7 @@ export function Hero({ clinicBranding }: HeroProps) {
             <img 
               src={TOOTH_LOGO} 
               alt={clinicBranding.clinicName}
-              className="h-12 w-12 sm:h-14 sm:w-14 object-contain rounded-lg bg-white p-1"
+              className="h-10 w-10 sm:h-12 sm:w-12 object-contain rounded-lg bg-white p-1"
             />
             <div>
               <h1 className="text-lg sm:text-xl font-bold text-white">{clinicBranding.clinicName}</h1>
@@ -78,12 +77,7 @@ export function Hero({ clinicBranding }: HeroProps) {
             </div>
             <Button 
               onClick={scrollToTransform}
-              className="text-sm sm:text-base h-9 sm:h-11 px-4 sm:px-6 font-semibold shadow-lg border-2 border-white/30 hover:border-white/50"
-              style={{ 
-                background: 'rgba(255,255,255,0.15)', 
-                backdropFilter: 'blur(10px)',
-                color: 'white'
-              }}
+              className="text-sm sm:text-base h-9 sm:h-10 px-4 sm:px-6 font-semibold bg-white text-blue-600 hover:bg-blue-50"
             >
               Try Free
             </Button>
@@ -102,14 +96,14 @@ export function Hero({ clinicBranding }: HeroProps) {
             className="text-center lg:text-left order-2 lg:order-1"
           >
             {/* Trust Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-full shadow-sm border mb-6" style={{ borderColor: `${TOOTH_CYAN}30` }}>
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 rounded-full border border-blue-100 mb-6">
               <Star className="h-4 w-4 sm:h-5 sm:w-5 text-yellow-500 fill-yellow-500" />
-              <span className="text-xs sm:text-sm font-medium" style={{ color: TOOTH_NAVY }}>Trusted by 1000+ dental professionals</span>
+              <span className="text-xs sm:text-sm font-medium text-slate-700">Trusted by 1000+ dental professionals</span>
             </div>
 
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold mb-6 leading-tight" style={{ color: TOOTH_NAVY }}>
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-slate-900 mb-6 leading-tight">
               See Your Dream Smile
-              <span className="block bg-clip-text text-transparent mt-2" style={{ backgroundImage: `linear-gradient(to right, ${TOOTH_NAVY}, ${TOOTH_CYAN}, ${TOOTH_NAVY})` }}>
+              <span className="block text-blue-600 mt-2">
                 With AI in 30 Seconds
               </span>
             </h1>
@@ -127,11 +121,8 @@ export function Hero({ clinicBranding }: HeroProps) {
                 <Button 
                   onClick={scrollToTransform}
                   size="lg"
-                  className="text-white h-12 sm:h-14 px-6 sm:px-8 text-base sm:text-lg shadow-xl font-semibold w-full sm:w-auto"
-                  style={{ 
-                    background: `linear-gradient(135deg, ${TOOTH_NAVY} 0%, ${TOOTH_CYAN} 100%)`,
-                    boxShadow: `0 10px 40px ${TOOTH_CYAN}40`
-                  }}
+                  className="text-white h-12 sm:h-14 px-6 sm:px-8 text-base sm:text-lg shadow-xl font-semibold w-full sm:w-auto hover:opacity-90"
+                  style={{ backgroundColor: BRAND_BLUE }}
                 >
                   Try AI Preview Free
                   <ArrowRight className="h-5 w-5 ml-2" />
@@ -144,8 +135,7 @@ export function Hero({ clinicBranding }: HeroProps) {
                 <Button 
                   variant="outline"
                   size="lg"
-                  className="h-12 sm:h-14 px-6 sm:px-8 text-base sm:text-lg border-2 font-semibold w-full sm:w-auto"
-                  style={{ borderColor: TOOTH_NAVY, color: TOOTH_NAVY }}
+                  className="h-12 sm:h-14 px-6 sm:px-8 text-base sm:text-lg border-2 border-slate-300 font-semibold hover:bg-slate-50 w-full sm:w-auto"
                   onClick={() => {
                     const section = document.getElementById('examples');
                     section?.scrollIntoView({ behavior: 'smooth' });
@@ -165,9 +155,9 @@ export function Hero({ clinicBranding }: HeroProps) {
                 className="text-center lg:text-left"
               >
                 <div className="flex items-center justify-center lg:justify-start gap-2 mb-2">
-                  <Shield className="h-5 w-5 sm:h-6 sm:w-6" style={{ color: TOOTH_CYAN }} />
+                  <Shield className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600" />
                 </div>
-                <p className="text-xs sm:text-sm font-bold" style={{ color: TOOTH_NAVY }}>100% Secure</p>
+                <p className="text-xs sm:text-sm font-bold text-slate-900">100% Secure</p>
                 <p className="text-xs text-slate-500">Your privacy protected</p>
               </motion.div>
               <motion.div 
@@ -177,9 +167,9 @@ export function Hero({ clinicBranding }: HeroProps) {
                 className="text-center lg:text-left"
               >
                 <div className="flex items-center justify-center lg:justify-start gap-2 mb-2">
-                  <Award className="h-5 w-5 sm:h-6 sm:w-6" style={{ color: TOOTH_CYAN }} />
+                  <Award className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600" />
                 </div>
-                <p className="text-xs sm:text-sm font-bold" style={{ color: TOOTH_NAVY }}>AI Powered</p>
+                <p className="text-xs sm:text-sm font-bold text-slate-900">AI Powered</p>
                 <p className="text-xs text-slate-500">Advanced technology</p>
               </motion.div>
               <motion.div 
@@ -191,7 +181,7 @@ export function Hero({ clinicBranding }: HeroProps) {
                 <div className="flex items-center justify-center lg:justify-start gap-2 mb-2">
                   <Star className="h-5 w-5 sm:h-6 sm:w-6 text-yellow-500 fill-yellow-500" />
                 </div>
-                <p className="text-xs sm:text-sm font-bold" style={{ color: TOOTH_NAVY }}>4.9/5 Rating</p>
+                <p className="text-xs sm:text-sm font-bold text-slate-900">4.9/5 Rating</p>
                 <p className="text-xs text-slate-500">{stats.reviews}+ reviews</p>
               </motion.div>
             </div>
@@ -204,7 +194,7 @@ export function Hero({ clinicBranding }: HeroProps) {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="relative order-1 lg:order-2"
           >
-            <div className="relative rounded-[32px] overflow-hidden shadow-2xl" style={{ border: `2px solid ${TOOTH_CYAN}30` }}>
+            <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-slate-200">
               <img
                 src={clinicBranding.heroImage || "https://images.unsplash.com/photo-1606811841689-23dfddce3e95?w=800&q=80"}
                 alt="SmileVisionPro AI smile preview"
@@ -215,14 +205,14 @@ export function Hero({ clinicBranding }: HeroProps) {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
-                className="absolute bottom-4 left-4 right-4 sm:bottom-6 sm:left-6 sm:right-6 bg-white/98 backdrop-blur-md rounded-2xl p-4 sm:p-5 shadow-xl border border-white/50"
+                className="absolute bottom-4 left-4 right-4 sm:bottom-6 sm:left-6 sm:right-6 bg-white/98 backdrop-blur-md rounded-xl p-4 sm:p-5 shadow-xl border border-slate-100"
               >
                 <div className="flex items-center gap-3 sm:gap-4">
-                  <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: `linear-gradient(135deg, ${TOOTH_NAVY} 0%, ${TOOTH_CYAN} 100%)` }}>
+                  <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: BRAND_BLUE }}>
                     <span className="text-lg sm:text-xl">✨</span>
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-xs sm:text-sm font-bold truncate" style={{ color: TOOTH_NAVY }}>AI Preview Ready</p>
+                    <p className="text-xs sm:text-sm font-bold text-slate-900 truncate">AI Preview Ready</p>
                     <p className="text-xs text-slate-600">See results instantly</p>
                   </div>
                 </div>
@@ -234,20 +224,18 @@ export function Hero({ clinicBranding }: HeroProps) {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
-              className="hidden sm:block absolute -top-4 -right-4 lg:-top-6 lg:-right-6 bg-white rounded-2xl shadow-xl p-4 sm:p-5"
-              style={{ border: `2px solid ${TOOTH_CYAN}30` }}
+              className="hidden sm:block absolute -top-4 -right-4 lg:-top-6 lg:-right-6 bg-white rounded-xl shadow-xl p-4 sm:p-5 border border-slate-200"
             >
-              <p className="text-2xl sm:text-3xl font-bold" style={{ color: TOOTH_CYAN }}>{stats.previews}+</p>
+              <p className="text-2xl sm:text-3xl font-bold text-blue-600">{stats.previews}+</p>
               <p className="text-xs sm:text-sm text-slate-600">AI Previews</p>
             </motion.div>
             <motion.div 
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6 }}
-              className="hidden sm:block absolute -bottom-4 -left-4 lg:-bottom-6 lg:-left-6 bg-white rounded-2xl shadow-xl p-4 sm:p-5"
-              style={{ border: `2px solid ${TOOTH_NAVY}20` }}
+              className="hidden sm:block absolute -bottom-4 -left-4 lg:-bottom-6 lg:-left-6 bg-white rounded-xl shadow-xl p-4 sm:p-5 border border-slate-200"
             >
-              <p className="text-2xl sm:text-3xl font-bold" style={{ color: TOOTH_NAVY }}>100%</p>
+              <p className="text-2xl sm:text-3xl font-bold text-green-600">100%</p>
               <p className="text-xs sm:text-sm text-slate-600">Free Preview</p>
             </motion.div>
           </motion.div>
