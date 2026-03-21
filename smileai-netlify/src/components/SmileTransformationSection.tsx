@@ -459,18 +459,21 @@ export function SmileTransformationSection() {
   return (
     <section id="smile-transform" className="relative bg-slate-50 px-4 py-8 sm:py-12 lg:py-16">
       <div className="mx-auto max-w-7xl">
-        <div className="mb-8 sm:mb-10">
-          <div className="mx-auto max-w-5xl rounded-2xl border border-slate-200 bg-white px-4 py-5 shadow-sm sm:px-6">
+        {/* Professional 6-Step Progress Section */}
+        <div className="mb-10 sm:mb-14">
+          <div className="mx-auto max-w-6xl bg-white rounded-2xl shadow-lg border border-slate-200 p-6 sm:p-8">
+            <h2 className="text-center text-xl sm:text-2xl font-bold text-slate-900 mb-8">Your Smile Transformation Journey</h2>
             <div className="relative">
-              <div className="absolute left-0 right-0 top-5 hidden h-0.5 bg-slate-200 sm:block" />
+              {/* Progress Line */}
+              <div className="absolute left-0 right-0 top-6 hidden h-1 bg-slate-200 lg:block" style={{ marginLeft: '8.33%', marginRight: '8.33%', width: '83.33%' }} />
               <motion.div
-                className="absolute left-0 top-5 hidden h-0.5 sm:block"
-                style={{ backgroundColor: BRAND_BLUE }}
+                className="absolute top-6 hidden h-1 lg:block"
+                style={{ backgroundColor: BRAND_BLUE, marginLeft: '8.33%' }}
                 initial={{ width: '0%' }}
-                animate={{ width: `${((currentStep - 1) / (STEP_LABELS.length - 1)) * 100}%` }}
+                animate={{ width: `${((currentStep - 1) / (STEP_LABELS.length - 1)) * 83.33}%` }}
                 transition={{ duration: 0.5, ease: 'easeInOut' }}
               />
-              <div className="grid grid-cols-2 gap-x-3 gap-y-6 sm:grid-cols-3 lg:grid-cols-6">
+              <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-6">
                 {STEP_LABELS.map((label, index) => {
                   const stepNumber = index + 1;
                   const isComplete = stepNumber < currentStep;
@@ -481,21 +484,21 @@ export function SmileTransformationSection() {
                       <motion.div
                         initial={false}
                         animate={{
-                          scale: isActive ? 1.05 : 1,
+                          scale: isActive ? 1.1 : 1,
                           backgroundColor: isHighlighted ? BRAND_BLUE : '#ffffff',
                           borderColor: isHighlighted ? BRAND_BLUE : '#e2e8f0',
                         }}
-                        className="relative z-10 flex h-10 w-10 items-center justify-center rounded-full border-2 shadow-sm transition-colors duration-300 sm:h-11 sm:w-11"
+                        className="relative z-10 flex h-12 w-12 items-center justify-center rounded-full border-2 shadow-md transition-all duration-300"
                       >
                         {isComplete ? (
-                          <CheckCircle className="h-5 w-5 text-white sm:h-5 sm:w-5" />
+                          <CheckCircle className="h-6 w-6 text-white" />
                         ) : (
-                          <span className={`text-sm font-semibold ${isHighlighted ? 'text-white' : 'text-slate-700'}`}>
+                          <span className={`text-lg font-bold ${isHighlighted ? 'text-white' : 'text-slate-600'}`}>
                             {stepNumber}
                           </span>
                         )}
                       </motion.div>
-                      <p className={`mt-2.5 text-[10px] font-semibold uppercase tracking-wider sm:text-xs ${isHighlighted ? 'text-slate-900' : 'text-slate-500'}`}>
+                      <p className={`mt-3 text-xs sm:text-sm font-semibold uppercase tracking-wide ${isHighlighted ? 'text-slate-900' : 'text-slate-500'}`}>
                         {label}
                       </p>
                     </div>

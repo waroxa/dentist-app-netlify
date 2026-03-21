@@ -1,7 +1,6 @@
 import { ArrowRight, Star, MapPin, Shield, Award } from 'lucide-react';
 import { Button } from './ui/button';
 import { ClinicBranding } from '../App';
-import { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 
 // Clean blue color scheme
@@ -11,26 +10,10 @@ interface HeroProps {
   clinicBranding: ClinicBranding;
 }
 
-// Generate random but realistic numbers on component mount
-const generateRandomStats = () => {
-  return {
-    patients: Math.floor(Math.random() * (2500 - 850) + 850), // 850-2500
-    previews: Math.floor(Math.random() * (8900 - 3200) + 3200), // 3200-8900
-    reviews: Math.floor(Math.random() * (950 - 380) + 380), // 380-950
-  };
-};
-
 // Tooth logo URL
 const TOOTH_LOGO = 'https://customer-assets.emergentagent.com/job_6ddaa510-f452-47bb-9414-8c025b23d77a/artifacts/67lipfsx_Untitled%20design%20%2845%29.png';
 
 export function Hero({ clinicBranding }: HeroProps) {
-  const [stats, setStats] = useState(generateRandomStats());
-
-  // Regenerate stats on mount to ensure different numbers each session
-  useEffect(() => {
-    setStats(generateRandomStats());
-  }, []);
-
   const scrollToTransform = () => {
     const section = document.getElementById('smile-transform');
     if (section) {
@@ -182,7 +165,7 @@ export function Hero({ clinicBranding }: HeroProps) {
                   <Star className="h-5 w-5 sm:h-6 sm:w-6 text-yellow-500 fill-yellow-500" />
                 </div>
                 <p className="text-xs sm:text-sm font-bold text-slate-900">4.9/5 Rating</p>
-                <p className="text-xs text-slate-500">{stats.reviews}+ reviews</p>
+                <p className="text-xs text-slate-500">500+ reviews</p>
               </motion.div>
             </div>
           </motion.div>
@@ -200,44 +183,24 @@ export function Hero({ clinicBranding }: HeroProps) {
                 alt="SmileVisionPro AI smile preview"
                 className="w-full h-[280px] sm:h-[380px] lg:h-[480px] xl:h-[550px] object-cover"
               />
-              {/* Overlay Badge */}
+              {/* Overlay Badge - with solid white background for readability */}
               <motion.div 
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
-                className="absolute bottom-4 left-4 right-4 sm:bottom-6 sm:left-6 sm:right-6 bg-white/98 backdrop-blur-md rounded-xl p-4 sm:p-5 shadow-xl border border-slate-100"
+                className="absolute bottom-4 left-4 right-4 sm:bottom-6 sm:left-6 sm:right-6 bg-white rounded-xl p-4 sm:p-5 shadow-xl"
               >
                 <div className="flex items-center gap-3 sm:gap-4">
                   <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: BRAND_BLUE }}>
-                    <span className="text-lg sm:text-xl">✨</span>
+                    <span className="text-lg sm:text-xl text-white">✨</span>
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-xs sm:text-sm font-bold text-slate-900 truncate">AI Preview Ready</p>
-                    <p className="text-xs text-slate-600">See results instantly</p>
+                    <p className="text-sm sm:text-base font-bold text-slate-900">100% Free AI Preview</p>
+                    <p className="text-xs sm:text-sm text-slate-600">See your new smile instantly</p>
                   </div>
                 </div>
               </motion.div>
             </div>
-
-            {/* Floating Stats */}
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
-              className="hidden sm:block absolute -top-4 -right-4 lg:-top-6 lg:-right-6 bg-white rounded-xl shadow-xl p-4 sm:p-5 border border-slate-200"
-            >
-              <p className="text-2xl sm:text-3xl font-bold text-blue-600">{stats.previews}+</p>
-              <p className="text-xs sm:text-sm text-slate-600">AI Previews</p>
-            </motion.div>
-            <motion.div 
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6 }}
-              className="hidden sm:block absolute -bottom-4 -left-4 lg:-bottom-6 lg:-left-6 bg-white rounded-xl shadow-xl p-4 sm:p-5 border border-slate-200"
-            >
-              <p className="text-2xl sm:text-3xl font-bold text-green-600">100%</p>
-              <p className="text-xs sm:text-sm text-slate-600">Free Preview</p>
-            </motion.div>
           </motion.div>
         </div>
       </div>
