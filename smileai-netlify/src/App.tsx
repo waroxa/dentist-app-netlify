@@ -7,6 +7,8 @@ import { Terms } from './components/docs/Terms';
 import { StaffLoginModal } from './components/StaffLoginModal';
 import { Button } from './components/ui/button';
 import { LandingPage } from './components/LandingPage';
+import { GHLMarketplaceConnect } from './components/marketplace/GHLMarketplaceConnect';
+import { SmileVisionMarketplaceApp } from './components/marketplace/SmileVisionMarketplaceApp';
 
 function AdminArea({ onLogout }: { onLogout: () => void }) {
   const [connections, setConnections] = useState<any[]>([]);
@@ -72,6 +74,15 @@ function App() {
   if (path === '/support') return <Support />;
   if (path === '/privacy') return <Privacy />;
   if (path === '/terms') return <Terms />;
+
+  // Keep the public marketing site on / and isolate marketplace UI to explicit marketplace routes.
+  if (path === '/marketplace' || path === '/marketplace/') {
+    return <SmileVisionMarketplaceApp />;
+  }
+  if (path === '/marketplace/connect') {
+    return <GHLMarketplaceConnect />;
+  }
+
   if (path.startsWith('/admin')) {
     return isAdmin ? (
       <AdminArea onLogout={async () => {
