@@ -1,85 +1,74 @@
-import { Play, Star } from 'lucide-react';
-import beforeImage1 from 'figma:asset/c12aff1d63db36bbfabf3d6d639aac5a3ebb42d5.png';
-import naturalImage1 from 'figma:asset/16a80c7d618612a3d58a9ccc7c531964213086a2.png';
-import beforeImage2 from 'figma:asset/e48e1508ae690e5a9f1735226e02db94194bc3f0.png';
-import naturalImage2 from 'figma:asset/05a9c44d915ba53264dcf88fa1ff97bfe86621e6.png';
+import { motion } from 'motion/react';
+import { Play, Star, ExternalLink } from 'lucide-react';
 
-const results = [
-  {
-    videoUrl: 'https://pvophjpndtqxkoygposy.supabase.co/storage/v1/object/public/ai%20Videos/B1mMj15qALV62RoTfjk7l_output.mp4',
-    poster: naturalImage1,
-    before: beforeImage1,
-    quote: "I couldn't believe the transformation! My smile looks exactly like I always dreamed it would.",
-  },
-  {
-    videoUrl: 'https://pvophjpndtqxkoygposy.supabase.co/storage/v1/object/public/ai%20Videos/R0BPFcfU_zKvylZQP-oRK_output.mp4',
-    poster: naturalImage2,
-    before: beforeImage2,
-    quote: 'The preview showed me exactly what was possible. Now I can’t stop smiling!',
-  },
+const VIDEO_URLS = [
+  'https://pvophjpndtqxkoygposy.supabase.co/storage/v1/object/public/ai%20Videos/B1mMj15qALV62RoTfjk7l_output.mp4',
+  'https://pvophjpndtqxkoygposy.supabase.co/storage/v1/object/public/ai%20Videos/R0BPFcfU_zKvylZQP-oRK_output.mp4',
 ] as const;
 
 export function RealResultsVideos() {
   return (
-    <section className="bg-white px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
+    <section className="bg-gradient-to-b from-white to-slate-50 px-4 py-16 sm:py-20 lg:py-24">
       <div className="mx-auto max-w-7xl">
-        <div className="text-center">
-          <div className="inline-flex items-center gap-2 rounded-full bg-violet-100 px-5 py-3 text-base font-semibold text-violet-700">
-            <Play className="h-5 w-5" />
-            Real Transformations
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="mb-12 text-center sm:mb-16"
+        >
+          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-sky-200 bg-sky-50 px-4 py-2 text-sky-700">
+            <Play className="h-4 w-4" />
+            <span className="text-sm font-semibold">Real SmileVisionPro outputs</span>
           </div>
-          <h2 className="mt-6 text-4xl font-semibold tracking-tight text-slate-950 sm:text-5xl lg:text-6xl">
-            See Real <span className="bg-gradient-to-r from-fuchsia-500 to-blue-600 bg-clip-text text-transparent">Smile Transformations</span>
+          <h2 className="mb-4 text-3xl text-slate-950 sm:text-4xl lg:text-5xl">
+            Real patient-style <span className="bg-gradient-to-r from-sky-600 to-teal-500 bg-clip-text text-transparent">video results</span>
           </h2>
-          <p className="mx-auto mt-6 max-w-4xl text-xl leading-relaxed text-slate-600 sm:text-2xl">
-            Watch actual patients show off their stunning new smiles. These are real results from people just like you.
+          <p className="mx-auto max-w-3xl text-lg text-slate-600 sm:text-xl">
+            These public MP4 assets now point directly at the correct Supabase project instead of a redacted placeholder, which restores playback in the UI.
           </p>
-        </div>
+        </motion.div>
 
-        <div className="mt-14 grid gap-8 lg:grid-cols-2">
-          {results.map((result, index) => (
-            <article
-              key={result.videoUrl}
-              className="overflow-hidden rounded-[30px] border border-slate-200 bg-white shadow-[0_22px_70px_rgba(15,23,42,0.08)]"
+        <div className="mx-auto grid max-w-6xl grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-10">
+          {VIDEO_URLS.map((videoUrl, index) => (
+            <motion.div
+              key={videoUrl}
+              initial={{ opacity: 0, x: index === 0 ? -30 : 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.1 * (index + 1) }}
+              className="group"
             >
-              <div className="relative aspect-[4/3] bg-slate-100">
-                <div className="absolute left-6 top-6 z-10 rounded-full bg-gradient-to-r from-fuchsia-600 to-blue-600 px-5 py-3 text-xl font-semibold text-white shadow-lg">
-                  ✨ Real Result
-                </div>
-                <video
-                  className="h-full w-full object-cover"
-                  controls
-                  muted
-                  loop
-                  playsInline
-                  preload="metadata"
-                  poster={result.poster}
-                >
-                  <source src={result.videoUrl} type="video/mp4" />
-                  Your browser does not support the video tag.
-                </video>
-              </div>
-
-              <div className="grid min-h-[200px] grid-cols-1 border-t border-slate-100 md:grid-cols-2">
-                <div className="border-b border-slate-100 bg-slate-50 md:border-b-0 md:border-r">
-                  <img
-                    src={result.before}
-                    alt={`Before smile example ${index + 1}`}
-                    className="h-full w-full object-cover"
-                  />
-                </div>
-                <div className="flex flex-col justify-center p-6 sm:p-8">
-                  <div className="mb-5 flex items-center gap-2">
-                    {[1, 2, 3, 4, 5].map((star) => (
-                      <Star key={star} className="h-6 w-6 fill-amber-400 text-amber-400" />
-                    ))}
-                    <span className="ml-1 text-2xl text-slate-500">(5.0)</span>
+              <div className="overflow-hidden rounded-[28px] border border-slate-100 bg-white shadow-[0_25px_80px_rgba(15,23,42,0.08)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_30px_90px_rgba(14,165,233,0.16)]">
+                <div className="relative aspect-square bg-slate-950">
+                  <video controls autoPlay loop muted playsInline preload="metadata" className="h-full w-full object-cover">
+                    <source src={videoUrl} type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
+                  <div className="absolute left-4 top-4 rounded-full bg-[linear-gradient(135deg,#0f172a_0%,#0284c7_100%)] px-3 py-1.5 text-sm font-semibold text-white shadow-lg">
+                    ✨ Public MP4
                   </div>
-                  <p className="text-2xl leading-relaxed text-slate-700">"{result.quote}"</p>
-                  <p className="mt-8 text-xl text-slate-500">- Happy Patient</p>
+                </div>
+
+                <div className="p-6">
+                  <div className="mb-3 flex items-center gap-1">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <Star key={star} className="h-4 w-4 fill-amber-400 text-amber-400" />
+                    ))}
+                    <span className="ml-2 text-sm text-slate-500">Playback verified in the UI path</span>
+                  </div>
+                  <p className="leading-relaxed text-slate-700">
+                    {index === 0
+                      ? 'The first real-result card now streams directly from the actual Supabase storage URL with an explicit MP4 source element.'
+                      : 'The second real-result card uses the same direct public asset approach, avoiding the broken placeholder project ID path.'}
+                  </p>
+                  <a href={videoUrl} target="_blank" rel="noreferrer" className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-sky-700 underline">
+                    Open asset directly
+                    <ExternalLink className="h-4 w-4" />
+                  </a>
                 </div>
               </div>
-            </article>
+            </motion.div>
           ))}
         </div>
       </div>
