@@ -78,8 +78,8 @@ function App() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [clinicBranding] = useState<ClinicBranding>({
     clinicName: 'SmileVisionPro AI',
-    primaryColor: '#0EA5E9',
-    accentColor: '#06B6D4',
+    primaryColor: '#0584fa',
+    accentColor: '#3b82f6',
     contactInfo: { email: 'support@smilevisionpro.ai' },
   });
 

@@ -6,7 +6,7 @@ export function HowItWorks() {
       icon: Upload,
       title: 'Upload Your Photo',
       description: 'Take a quick selfie or upload an existing photo showing your current smile.',
-      color: 'from-teal-500 to-teal-600',
+      color: 'from-blue-500 to-blue-600',
     },
     {
       icon: Sparkles,
@@ -33,9 +33,9 @@ export function HowItWorks() {
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
         <div className="text-center mb-10 sm:mb-16">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-teal-50 border border-teal-200 rounded-full mb-4">
-            <Sparkles className="w-4 h-4 text-teal-600" />
-            <span className="text-sm font-medium text-teal-700">AI-Powered Process</span>
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 border border-blue-200 rounded-full mb-4">
+            <Sparkles className="w-4 h-4 text-blue-600" />
+            <span className="text-sm font-medium text-blue-700">AI-Powered Process</span>
           </div>
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">
             How It Works
@@ -55,9 +55,9 @@ export function HowItWorks() {
               )}
               
               {/* Step Card */}
-              <div className="relative bg-white border-2 border-gray-100 rounded-2xl p-6 hover:shadow-xl hover:border-teal-200 transition-all duration-300">
+              <div className="relative bg-white border-2 border-gray-100 rounded-2xl p-6 hover:shadow-xl hover:border-blue-200 transition-all duration-300">
                 {/* Step Number */}
-                <div className="absolute -top-3 -left-3 w-9 h-9 bg-gradient-to-br from-teal-600 to-blue-600 rounded-full flex items-center justify-center text-white text-base font-bold shadow-lg">
+                <div className="absolute -top-3 -left-3 w-9 h-9 bg-gradient-to-br from-blue-600 to-blue-600 rounded-full flex items-center justify-center text-white text-base font-bold shadow-lg">
                   {index + 1}
                 </div>
                 
@@ -86,7 +86,7 @@ export function HowItWorks() {
               const section = document.getElementById('smile-transform');
               section?.scrollIntoView({ behavior: 'smooth' });
             }}
-            className="inline-flex items-center gap-2 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold bg-gradient-to-r from-teal-600 to-blue-600 text-white rounded-xl hover:shadow-xl transition-all duration-300 hover:scale-105"
+            className="inline-flex items-center gap-2 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold bg-gradient-to-r from-blue-600 to-blue-600 text-white rounded-xl hover:shadow-xl transition-all duration-300 hover:scale-105"
           >
             <span>Try AI Smile Preview Free</span>
             <Sparkles className="w-5 h-5" />

@@ -289,7 +289,7 @@ export function SmileTransformationSection() {
       body: JSON.stringify({ imageUrl: previewImage, provider }),
     });
     const data = await parseJsonResponse(res);
-    if (!res.ok) throw new Error(data.error || `Unable to start Veo video.`);
+    if (!res.ok) throw new Error(data.error || `Unable to start AI Video.`);
     if (!data.jobId) throw new Error(`Veo did not return a job ID.`);
 
     setPendingVideoJobs((current) => ({
@@ -298,14 +298,14 @@ export function SmileTransformationSection() {
         provider,
         jobId: data.jobId,
         model: data.model || null,
-        note: data.note || 'Veo video generation started.',
+        note: data.note || 'AI video generation started.',
       },
     }));
     setProviderMessages((current) => ({
       ...current,
       [provider]: {
         type: 'info',
-        message: data.note || 'Veo video started. We will keep checking until it finishes.',
+        message: data.note || 'AI video started. We will keep checking until it finishes.',
       },
     }));
   }
@@ -321,7 +321,7 @@ export function SmileTransformationSection() {
 
     try {
       await startVideoJob(provider);
-      setSuccessMessage('Veo video started. You can stay on this page while we wait for the final result.');
+      setSuccessMessage('AI video started. You can stay on this page while we wait for the final result.');
     } catch (error: any) {
       const message = error.message || 'This video could not be generated yet. Please try again.';
       setProviderMessages((current) => ({
@@ -749,9 +749,9 @@ export function SmileTransformationSection() {
                     <Badge className="bg-[#0584fa] text-[10px] text-white hover:bg-[#0584fa]">Step 5</Badge>
                   </div>
                   <Button onClick={() => generateSingleVideo('veo')} disabled={!canGenerateVideos} className="mb-4 h-11 w-full rounded-xl text-white hover:opacity-95" style={{ backgroundColor: BRAND_BLUE }}>
-                    {videoProcessing === 'veo' ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Creating...</> : 'Create Veo Video'}
+                    {videoProcessing === 'veo' ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Creating...</> : 'Create AI Video'}
                   </Button>
-                  {renderVideoCard('veo', 'Veo Result')}
+                  {renderVideoCard('veo', 'AI Video Result')}
                 </motion.div>
 
                 <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="rounded-[32px] border border-slate-100 bg-white p-6 shadow-xl shadow-slate-200/50">

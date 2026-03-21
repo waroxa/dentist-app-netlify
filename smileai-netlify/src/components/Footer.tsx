@@ -64,7 +64,7 @@ export function Footer({ clinicBranding }: FooterProps) {
                   className="w-10 h-10 object-contain rounded-lg"
                 />
               ) : (
-                <div className="w-10 h-10 bg-gradient-to-br from-teal-600 to-blue-600 rounded-lg flex items-center justify-center shadow-lg">
+                <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-blue-600 rounded-lg flex items-center justify-center shadow-lg">
                   <span className="text-white text-xl">✨</span>
                 </div>
               )}
@@ -85,7 +85,7 @@ export function Footer({ clinicBranding }: FooterProps) {
                       href={social.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="w-10 h-10 bg-gray-800 hover:bg-gradient-to-r hover:from-teal-600 hover:to-blue-600 rounded-full flex items-center justify-center transition-all duration-300 shadow-md hover:shadow-lg"
+                      className="w-10 h-10 bg-gray-800 hover:bg-gradient-to-r hover:from-blue-600 hover:to-blue-600 rounded-full flex items-center justify-center transition-all duration-300 shadow-md hover:shadow-lg"
                       aria-label={social.name}
                     >
                       <Icon className="w-5 h-5" />
@@ -101,27 +101,27 @@ export function Footer({ clinicBranding }: FooterProps) {
             <h4 className="text-base sm:text-lg font-bold text-white mb-4">Services</h4>
             <ul className="space-y-2.5 text-sm">
               <li>
-                <a href="#" className="text-gray-300 hover:text-teal-400 transition-colors duration-200">
+                <a href="#" className="text-gray-300 hover:text-blue-400 transition-colors duration-200">
                   Dental Implants
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-300 hover:text-teal-400 transition-colors duration-200">
+                <a href="#" className="text-gray-300 hover:text-blue-400 transition-colors duration-200">
                   Veneers
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-300 hover:text-teal-400 transition-colors duration-200">
+                <a href="#" className="text-gray-300 hover:text-blue-400 transition-colors duration-200">
                   Teeth Whitening
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-300 hover:text-teal-400 transition-colors duration-200">
+                <a href="#" className="text-gray-300 hover:text-blue-400 transition-colors duration-200">
                   Smile Makeover
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-300 hover:text-teal-400 transition-colors duration-200">
+                <a href="#" className="text-gray-300 hover:text-blue-400 transition-colors duration-200">
                   Invisalign
                 </a>
               </li>
@@ -133,27 +133,27 @@ export function Footer({ clinicBranding }: FooterProps) {
             <h4 className="text-base sm:text-lg font-bold text-white mb-4">Quick Links</h4>
             <ul className="space-y-2.5 text-sm">
               <li>
-                <a href="#" className="text-gray-300 hover:text-teal-400 transition-colors duration-200">
+                <a href="#" className="text-gray-300 hover:text-blue-400 transition-colors duration-200">
                   About Us
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-300 hover:text-teal-400 transition-colors duration-200">
+                <a href="#" className="text-gray-300 hover:text-blue-400 transition-colors duration-200">
                   Our Team
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-300 hover:text-teal-400 transition-colors duration-200">
+                <a href="#" className="text-gray-300 hover:text-blue-400 transition-colors duration-200">
                   Before & After
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-300 hover:text-teal-400 transition-colors duration-200">
+                <a href="#" className="text-gray-300 hover:text-blue-400 transition-colors duration-200">
                   Patient Reviews
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-300 hover:text-teal-400 transition-colors duration-200">
+                <a href="#" className="text-gray-300 hover:text-blue-400 transition-colors duration-200">
                   Blog
                 </a>
               </li>
@@ -166,7 +166,7 @@ export function Footer({ clinicBranding }: FooterProps) {
             <ul className="space-y-3 text-sm">
               {contactInfo.address && (
                 <li className="flex items-start gap-3">
-                  <MapPin className="w-5 h-5 text-teal-400 flex-shrink-0 mt-0.5" />
+                  <MapPin className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
                   <span className="text-gray-300" style={{ whiteSpace: 'pre-line' }}>
                     {contactInfo.address}
                   </span>
@@ -174,16 +174,16 @@ export function Footer({ clinicBranding }: FooterProps) {
               )}
               {contactInfo.phone && (
                 <li className="flex items-start gap-3">
-                  <Phone className="w-5 h-5 text-teal-400 flex-shrink-0 mt-0.5" />
-                  <a href={`tel:${contactInfo.phone.replace(/\D/g, '')}`} className="text-gray-300 hover:text-teal-400 transition-colors duration-200">
+                  <Phone className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
+                  <a href={`tel:${contactInfo.phone.replace(/\D/g, '')}`} className="text-gray-300 hover:text-blue-400 transition-colors duration-200">
                     {contactInfo.phone}
                   </a>
                 </li>
               )}
               {contactInfo.email && (
                 <li className="flex items-start gap-3">
-                  <Mail className="w-5 h-5 text-teal-400 flex-shrink-0 mt-0.5" />
-                  <a href={`mailto:${contactInfo.email}`} className="text-gray-300 hover:text-teal-400 transition-colors duration-200 break-all">
+                  <Mail className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
+                  <a href={`mailto:${contactInfo.email}`} className="text-gray-300 hover:text-blue-400 transition-colors duration-200 break-all">
                     {contactInfo.email}
                   </a>
                 </li>
@@ -206,19 +206,19 @@ export function Footer({ clinicBranding }: FooterProps) {
               © 2026 {clinicName}. All rights reserved. HIPAA compliant and regulated by the United States of America.
             </p>
             <div className="flex flex-wrap gap-4 sm:gap-6 text-xs sm:text-sm text-gray-400 justify-center">
-              <a href="#privacy-policy" className="hover:text-teal-400 transition-colors duration-200">
+              <a href="#privacy-policy" className="hover:text-blue-400 transition-colors duration-200">
                 Privacy Policy
               </a>
-              <a href="#terms-of-service" className="hover:text-teal-400 transition-colors duration-200">
+              <a href="#terms-of-service" className="hover:text-blue-400 transition-colors duration-200">
                 Terms of Service
               </a>
-              <a href="#hipaa-notice" className="hover:text-teal-400 transition-colors duration-200">
+              <a href="#hipaa-notice" className="hover:text-blue-400 transition-colors duration-200">
                 HIPAA Notice
               </a>
               {/* Subtle Admin Access Link */}
               <button
                 onClick={handleStaffLogin}
-                className="hover:text-teal-400 transition-colors duration-200 cursor-pointer"
+                className="hover:text-blue-400 transition-colors duration-200 cursor-pointer"
               >
                 Staff Login
               </button>

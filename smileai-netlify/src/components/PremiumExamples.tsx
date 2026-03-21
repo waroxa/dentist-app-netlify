@@ -67,7 +67,7 @@ export function PremiumExamples() {
   return (
     <section className="relative overflow-hidden bg-gradient-to-b from-white via-slate-50/70 to-white px-4 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
       <div className="absolute inset-0 -z-10">
-        <div className="absolute left-1/2 top-0 h-72 w-72 -translate-x-1/2 rounded-full bg-teal-100/40 blur-3xl" />
+        <div className="absolute left-1/2 top-0 h-72 w-72 -translate-x-1/2 rounded-full bg-blue-100/40 blur-3xl" />
         <div className="absolute bottom-10 right-10 h-64 w-64 rounded-full bg-blue-100/30 blur-3xl" />
       </div>
 
@@ -79,13 +79,13 @@ export function PremiumExamples() {
           transition={{ duration: 0.6 }}
           className="mx-auto mb-12 max-w-4xl text-center sm:mb-16"
         >
-          <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-teal-200 bg-white/90 px-4 py-2 text-teal-700 shadow-sm backdrop-blur-sm">
+          <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-blue-200 bg-white/90 px-4 py-2 text-blue-700 shadow-sm backdrop-blur-sm">
             <Sparkles className="h-4 w-4" />
             <span className="text-sm font-semibold">Real Transformations Gallery</span>
           </div>
           <h2 className="text-4xl font-bold tracking-tight text-slate-950 sm:text-5xl lg:text-6xl">
             See What&apos;s Possible{' '}
-            <span className="bg-gradient-to-r from-teal-600 via-cyan-500 to-blue-600 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-blue-600 via-sky-500 to-blue-600 bg-clip-text text-transparent">
               In Under 30 Seconds
             </span>
           </h2>
@@ -108,11 +108,11 @@ export function PremiumExamples() {
                 transition={{ duration: 0.55, delay: index * 0.08 }}
                 className="flex h-full flex-col overflow-hidden rounded-[28px] border border-slate-200/80 bg-white shadow-[0_24px_80px_rgba(15,23,42,0.08)] transition-transform duration-300 hover:-translate-y-1"
               >
-                <div className="bg-gradient-to-r from-teal-600 via-cyan-600 to-blue-600 px-6 py-4 text-center">
+                <div className="bg-gradient-to-r from-blue-600 via-sky-600 to-blue-600 px-6 py-4 text-center">
                   <p className="text-xl font-bold text-white">AI Enhanced Smile</p>
                 </div>
 
-                <div className="border-x-2 border-b-2 border-teal-500/90 bg-slate-100">
+                <div className="border-x-2 border-b-2 border-blue-500/90 bg-slate-100">
                   <AnimatePresence mode="wait">
                     <motion.img
                       key={`${example.id}-${selectedState}`}
@@ -145,8 +145,8 @@ export function PremiumExamples() {
                           onClick={() => handleSelectState(example.id, option.id)}
                           className={`rounded-2xl border-2 px-3 py-4 text-sm font-semibold transition-all duration-200 sm:text-base ${
                             isActive
-                              ? 'border-transparent bg-gradient-to-r from-teal-600 to-blue-600 text-white shadow-lg shadow-cyan-500/20'
-                              : 'border-slate-200 bg-white text-slate-700 hover:border-teal-300 hover:text-slate-950'
+                              ? 'border-transparent bg-gradient-to-r from-blue-600 to-blue-600 text-white shadow-lg shadow-sky-500/20'
+                              : 'border-slate-200 bg-white text-slate-700 hover:border-blue-300 hover:text-slate-950'
                           }`}
                           aria-pressed={isActive}
                         >
@@ -157,7 +157,7 @@ export function PremiumExamples() {
                   </div>
 
                   <div className="mt-6 flex items-start gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4">
-                    <ShieldCheck className="mt-0.5 h-5 w-5 flex-shrink-0 text-teal-600" />
+                    <ShieldCheck className="mt-0.5 h-5 w-5 flex-shrink-0 text-blue-600" />
                     <p className="text-sm leading-relaxed text-slate-600">
                       We only adjust teeth and smile — we don&apos;t change the patient&apos;s face.
                     </p>

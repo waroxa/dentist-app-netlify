@@ -36,8 +36,8 @@ export function Hero({ clinicBranding }: HeroProps) {
     <section className="relative overflow-hidden bg-white">
       {/* Decorative Background Elements */}
       <div className="absolute inset-0 -z-10">
-        <div className="absolute top-0 right-0 h-[500px] w-[500px] rounded-full bg-gradient-to-br from-teal-100/30 to-transparent blur-3xl" />
-        <div className="absolute bottom-0 left-0 h-[500px] w-[500px] rounded-full bg-gradient-to-tr from-cyan-100/20 to-transparent blur-3xl" />
+        <div className="absolute top-0 right-0 h-[500px] w-[500px] rounded-full bg-gradient-to-br from-blue-100/30 to-transparent blur-3xl" />
+        <div className="absolute bottom-0 left-0 h-[500px] w-[500px] rounded-full bg-gradient-to-tr from-sky-100/20 to-transparent blur-3xl" />
       </div>
 
       {/* Navigation */}
@@ -56,7 +56,7 @@ export function Hero({ clinicBranding }: HeroProps) {
                 className="h-10 w-10 sm:h-12 sm:w-12 object-contain rounded-lg"
               />
             ) : (
-              <div className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-lg bg-gradient-to-br from-teal-600 to-cyan-600">
+              <div className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-lg bg-gradient-to-br from-blue-600 to-sky-600">
                 <span className="text-lg sm:text-xl">✨</span>
               </div>
             )}
@@ -72,12 +72,12 @@ export function Hero({ clinicBranding }: HeroProps) {
             className="flex items-center gap-2 sm:gap-4"
           >
             <div className="hidden md:flex items-center gap-2 text-sm text-slate-600">
-              <MapPin className="h-4 w-4 text-teal-600" />
+              <MapPin className="h-4 w-4 text-blue-600" />
               <span>Premium AI Smile Preview</span>
             </div>
             <Button 
               onClick={scrollToTransform}
-              className="bg-gradient-to-r from-teal-600 to-cyan-600 hover:from-teal-700 hover:to-cyan-700 text-sm sm:text-base h-9 sm:h-10 px-3 sm:px-6 font-semibold shadow-lg shadow-teal-500/20"
+              className="bg-gradient-to-r from-blue-600 to-sky-600 hover:from-blue-700 hover:to-sky-700 text-sm sm:text-base h-9 sm:h-10 px-3 sm:px-6 font-semibold shadow-lg shadow-blue-500/20"
             >
               Try Free
             </Button>
@@ -103,7 +103,7 @@ export function Hero({ clinicBranding }: HeroProps) {
 
             <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-slate-950 mb-6 leading-tight">
               See Your Dream Smile
-              <span className="block bg-gradient-to-r from-teal-600 via-cyan-500 to-blue-600 bg-clip-text text-transparent mt-2">
+              <span className="block bg-gradient-to-r from-blue-600 via-sky-500 to-blue-600 bg-clip-text text-transparent mt-2">
                 With AI in 30 Seconds
               </span>
             </h1>
@@ -121,7 +121,7 @@ export function Hero({ clinicBranding }: HeroProps) {
                 <Button 
                   onClick={scrollToTransform}
                   size="lg"
-                  className="bg-gradient-to-r from-teal-600 to-cyan-600 hover:from-teal-700 hover:to-cyan-700 text-white h-12 sm:h-14 px-6 sm:px-8 text-base sm:text-lg shadow-xl shadow-teal-500/30 font-semibold w-full sm:w-auto"
+                  className="bg-gradient-to-r from-blue-600 to-sky-600 hover:from-blue-700 hover:to-sky-700 text-white h-12 sm:h-14 px-6 sm:px-8 text-base sm:text-lg shadow-xl shadow-blue-500/30 font-semibold w-full sm:w-auto"
                 >
                   Try AI Preview Free
                   <ArrowRight className="h-5 w-5 ml-2" />
@@ -154,7 +154,7 @@ export function Hero({ clinicBranding }: HeroProps) {
                 className="text-center lg:text-left"
               >
                 <div className="flex items-center justify-center lg:justify-start gap-2 mb-2">
-                  <Shield className="h-5 w-5 sm:h-6 sm:w-6 text-teal-600" />
+                  <Shield className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600" />
                 </div>
                 <p className="text-xs sm:text-sm font-bold text-slate-950">100% Secure</p>
                 <p className="text-xs text-slate-500">Your privacy protected</p>
@@ -166,7 +166,7 @@ export function Hero({ clinicBranding }: HeroProps) {
                 className="text-center lg:text-left"
               >
                 <div className="flex items-center justify-center lg:justify-start gap-2 mb-2">
-                  <Award className="h-5 w-5 sm:h-6 sm:w-6 text-teal-600" />
+                  <Award className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600" />
                 </div>
                 <p className="text-xs sm:text-sm font-bold text-slate-950">AI Powered</p>
                 <p className="text-xs text-slate-500">Advanced technology</p>
@@ -207,7 +207,7 @@ export function Hero({ clinicBranding }: HeroProps) {
                 className="absolute bottom-4 left-4 right-4 sm:bottom-6 sm:left-6 sm:right-6 bg-white/98 backdrop-blur-md rounded-2xl p-4 sm:p-5 shadow-xl border border-white/50"
               >
                 <div className="flex items-center gap-3 sm:gap-4">
-                  <div className="h-10 w-10 sm:h-12 sm:w-12 bg-gradient-to-br from-teal-600 to-cyan-600 rounded-full flex items-center justify-center flex-shrink-0">
+                  <div className="h-10 w-10 sm:h-12 sm:w-12 bg-gradient-to-br from-blue-600 to-sky-600 rounded-full flex items-center justify-center flex-shrink-0">
                     <span className="text-lg sm:text-xl">✨</span>
                   </div>
                   <div className="flex-1 min-w-0">
@@ -225,7 +225,7 @@ export function Hero({ clinicBranding }: HeroProps) {
               transition={{ delay: 0.5 }}
               className="hidden sm:block absolute -top-4 -right-4 lg:-top-6 lg:-right-6 bg-white rounded-2xl shadow-xl p-4 sm:p-5 border border-slate-100"
             >
-              <p className="text-2xl sm:text-3xl font-bold text-teal-600">{stats.previews}+</p>
+              <p className="text-2xl sm:text-3xl font-bold text-blue-600">{stats.previews}+</p>
               <p className="text-xs sm:text-sm text-slate-600">AI Previews</p>
             </motion.div>
             <motion.div 
@@ -234,7 +234,7 @@ export function Hero({ clinicBranding }: HeroProps) {
               transition={{ delay: 0.6 }}
               className="hidden sm:block absolute -bottom-4 -left-4 lg:-bottom-6 lg:-left-6 bg-white rounded-2xl shadow-xl p-4 sm:p-5 border border-slate-100"
             >
-              <p className="text-2xl sm:text-3xl font-bold text-cyan-600">100%</p>
+              <p className="text-2xl sm:text-3xl font-bold text-sky-600">100%</p>
               <p className="text-xs sm:text-sm text-slate-600">Free Preview</p>
             </motion.div>
           </motion.div>

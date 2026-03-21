@@ -272,7 +272,7 @@ async function startVeoVideoJob({ imageUrl, prompt, leadId, jobId }) {
       submittedAt: new Date().toISOString(),
       promptLength: requestPayload.instances[0].prompt.length,
     },
-    note: 'Veo video generation started. This can take several minutes.',
+    note: 'AI video generation started. This can take several minutes.',
   };
 }
 
@@ -405,7 +405,7 @@ async function pollVeoJob(job) {
   if (!response.ok) throw new Error(`Veo polling failed: ${body?.error?.message || text || response.status}`);
 
   if (!body?.done) {
-    const queueNote = body?.metadata?.state || body?.metadata?.progressMessage || 'Veo is still generating your video.';
+    const queueNote = body?.metadata?.state || body?.metadata?.progressMessage || 'AI Video is still generating your video.';
     await upsertJob({ ...job, metadata: { ...metadata, operationName, projectId, location, queueStatus: 'PROCESSING', queueNote }, updated_at: new Date().toISOString() });
     return json(200, buildPendingJobResponse(job, { queueStatus: 'PROCESSING', queueNote, note: String(queueNote) }));
   }
@@ -420,7 +420,7 @@ async function pollVeoJob(job) {
     assetUrl: normalized.assetUrl,
     providerJobId: operationName,
     metadata: { ...metadata, operationName, projectId, location, queueStatus: 'COMPLETED', storagePath: normalized.storagePath, completedAt: new Date().toISOString() },
-    note: 'Your Veo smile video is ready.',
+    note: 'Your AI smile video is ready.',
   });
 }
 
