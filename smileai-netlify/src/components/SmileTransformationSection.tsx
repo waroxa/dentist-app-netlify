@@ -65,10 +65,10 @@ function getVideoEndpoint(provider: VideoProvider) {
 
 const STEP_LABELS = [
   'Upload Photo',
-  'Choose Preview Style',
-  'Generate AI Preview',
-  'Create Smile Video',
-  'Compare Results',
+  'Choose Style',
+  'AI Preview',
+  'Create Video',
+  'Compare',
 ] as const;
 
 const STYLE_OPTIONS: Array<{ value: SmileStyle; label: string; helper: string; accent: string }> = [
@@ -385,34 +385,66 @@ export function SmileTransformationSection() {
   return (
     <section id="smile-transform" className="relative bg-white px-4 py-8 sm:py-12 lg:py-16">
       <div className="mx-auto max-w-7xl">
-        {/* Step Indicator */}
-        <div className="mb-8 grid gap-3 sm:mb-12 sm:grid-cols-5">
-          {STEP_LABELS.map((label, stepNumber) => {
-            const complete = stepNumber < currentStep;
-            const active = stepNumber === currentStep;
-            return (
-              <div
-                key={label}
-                className={`rounded-[20px] border px-4 py-4 transition-all ${
-                  active
-                    ? 'border-sky-300 bg-sky-50 shadow-[0_12px_32px_rgba(56,189,248,0.12)]'
-                    : complete
-                      ? 'border-teal-200 bg-teal-50'
-                      : 'border-slate-100 bg-white'
-                }`}
-              >
-                <div className="mb-3 flex items-center justify-between">
-                  <span className={`flex h-10 w-10 items-center justify-center rounded-full text-sm font-semibold ${active ? 'bg-sky-600 text-white' : complete ? 'bg-teal-600 text-white' : 'bg-slate-100 text-slate-500'}`}>{stepNumber + 1}</span>
-                  {complete && <CheckCircle className="h-4 w-4 text-teal-600" />}
-                </div>
-                <p className="text-sm font-semibold text-slate-900">{stepNumber + 1}. {label}</p>
-                <p className="mt-1 text-xs text-slate-500">{stepNumber === currentStep ? 'Current step' : complete ? 'Completed' : 'Up next'}</p>
-              </div>
-            );
-          })}
+        {/* Sleek Horizontal Step Indicator */}
+        <div className="mb-12">
+          <div className="relative mx-auto max-w-4xl">
+            {/* Background Line */}
+            <div className="absolute left-0 top-1/2 h-0.5 w-full -translate-y-1/2 bg-slate-100" />
+            
+            {/* Active Progress Line */}
+            <motion.div 
+              className="absolute left-0 top-1/2 h-0.5 -translate-y-1/2 bg-gradient-to-r from-teal-500 to-cyan-500"
+              initial={{ width: '0%' }}
+              animate={{ width: `${((currentStep - 1) / (STEP_LABELS.length - 1)) * 100}%` }}
+              transition={{ duration: 0.5, ease: "easeInOut" }}
+            />
+
+            <div className="relative flex justify-between">
+              {STEP_LABELS.map((label, index) => {
+                const stepNumber = index + 1;
+                const isComplete = stepNumber < currentStep;
+                const isActive = stepNumber === currentStep;
+                
+                return (
+                  <div key={label} className="flex flex-col items-center">
+                    <motion.div
+                      initial={false}
+                      animate={{
+                        scale: isActive ? 1.1 : 1,
+                        backgroundColor: isActive || isComplete ? '#0d9488' : '#f8fafc',
+                        borderColor: isActive || isComplete ? '#0d9488' : '#e2e8f0',
+                      }}
+                      className={`relative z-10 flex h-10 w-10 items-center justify-center rounded-full border-2 transition-colors duration-300 sm:h-12 sm:w-12`}
+                    >
+                      {isComplete ? (
+                        <CheckCircle className="h-5 w-5 text-white sm:h-6 sm:w-6" />
+                      ) : (
+                        <span className={`text-sm font-bold sm:text-base ${isActive ? 'text-white' : 'text-slate-400'}`}>
+                          {stepNumber}
+                        </span>
+                      )}
+                      
+                      {isActive && (
+                        <motion.div
+                          layoutId="active-glow"
+                          className="absolute -inset-2 rounded-full bg-teal-500/20 blur-md"
+                          transition={{ duration: 0.3 }}
+                        />
+                      )}
+                    </motion.div>
+                    <div className="absolute mt-12 sm:mt-14">
+                      <p className={`whitespace-nowrap text-[10px] font-bold uppercase tracking-wider sm:text-xs ${isActive ? 'text-teal-600' : isComplete ? 'text-slate-600' : 'text-slate-400'}`}>
+                        {label}
+                      </p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
         </div>
 
-        <div className="grid gap-6 xl:grid-cols-[1.05fr_0.95fr]">
+        <div className="mt-20 grid gap-6 xl:grid-cols-[1.05fr_0.95fr]">
           <div className="space-y-6">
             {/* Step 1: Upload */}
             <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="overflow-hidden rounded-[32px] border border-white/80 bg-white/85 shadow-[0_28px_100px_rgba(15,23,42,0.08)] backdrop-blur-xl">
