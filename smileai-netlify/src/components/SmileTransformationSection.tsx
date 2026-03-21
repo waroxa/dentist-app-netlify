@@ -342,14 +342,13 @@ export function SmileTransformationSection() {
     const message = providerMessages[provider];
 
     return (
-      <div key={provider} className="overflow-hidden rounded-[28px] border border-slate-100 bg-white shadow-sm">
-        <div className="flex items-center justify-between border-b border-slate-100 px-5 py-4">
+      <div key={provider} className="overflow-hidden rounded-[24px] border border-slate-100 bg-white shadow-sm">
+        <div className="flex items-center justify-between border-b border-slate-100 px-4 py-3">
           <div>
-            <p className="text-sm font-semibold text-slate-900">{title}</p>
-            <p className="text-xs text-slate-500">Veo-generated result</p>
+            <p className="text-xs font-bold text-slate-950 uppercase tracking-wider">{title}</p>
           </div>
-          {result && <Badge className="bg-teal-100 text-teal-700 hover:bg-teal-100">Ready</Badge>}
-          {pending && <Badge className="bg-amber-100 text-amber-700 hover:bg-amber-100">Processing</Badge>}
+          {result && <Badge className="bg-teal-100 text-teal-700 hover:bg-teal-100 text-[10px]">Ready</Badge>}
+          {pending && <Badge className="bg-amber-100 text-amber-700 hover:bg-amber-100 text-[10px]">Processing</Badge>}
         </div>
         <div className="aspect-square bg-slate-50">
           {result?.assetUrl ? (
@@ -358,26 +357,17 @@ export function SmileTransformationSection() {
               Your browser does not support the video tag.
             </video>
           ) : pending ? (
-            <div className="flex h-full flex-col items-center justify-center gap-4 px-6 text-center">
-              <Loader2 className="h-10 w-10 animate-spin text-teal-600" />
-              <p className="text-sm font-medium text-slate-700">Creating your smile video...</p>
-              <p className="max-w-xs text-xs text-slate-500">{motivationalMessages[waitingMessageIndex]}</p>
+            <div className="flex h-full flex-col items-center justify-center gap-3 px-4 text-center">
+              <Loader2 className="h-8 w-8 animate-spin text-teal-600" />
+              <p className="text-xs font-medium text-slate-700">Creating video...</p>
             </div>
           ) : (
-            <div className="flex h-full flex-col items-center justify-center gap-3 px-6 text-center">
-              <Video className="h-10 w-10 text-slate-300" />
-              <p className="text-sm font-medium text-slate-700">Video will appear here</p>
-              <p className="max-w-xs text-xs text-slate-500">Generate your preview first, then create the video.</p>
+            <div className="flex h-full flex-col items-center justify-center gap-2 px-4 text-center">
+              <Video className="h-8 w-8 text-slate-300" />
+              <p className="text-xs font-medium text-slate-700">Video will appear here</p>
             </div>
           )}
         </div>
-        {result && (
-          <div className="space-y-2 border-t border-slate-100 px-5 py-4 text-xs text-slate-500">
-            <a href={result.assetUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 font-medium text-teal-700 hover:text-teal-800">
-              <Download className="h-3.5 w-3.5" /> Download video
-            </a>
-          </div>
-        )}
       </div>
     );
   }
@@ -386,25 +376,20 @@ export function SmileTransformationSection() {
     <section id="smile-transform" className="relative bg-white px-4 py-8 sm:py-12 lg:py-16">
       <div className="mx-auto max-w-7xl">
         {/* Sleek Horizontal Step Indicator */}
-        <div className="mb-12">
+        <div className="mb-16">
           <div className="relative mx-auto max-w-4xl">
-            {/* Background Line */}
             <div className="absolute left-0 top-1/2 h-0.5 w-full -translate-y-1/2 bg-slate-100" />
-            
-            {/* Active Progress Line */}
             <motion.div 
               className="absolute left-0 top-1/2 h-0.5 -translate-y-1/2 bg-gradient-to-r from-teal-500 to-cyan-500"
               initial={{ width: '0%' }}
               animate={{ width: `${((currentStep - 1) / (STEP_LABELS.length - 1)) * 100}%` }}
               transition={{ duration: 0.5, ease: "easeInOut" }}
             />
-
             <div className="relative flex justify-between">
               {STEP_LABELS.map((label, index) => {
                 const stepNumber = index + 1;
                 const isComplete = stepNumber < currentStep;
                 const isActive = stepNumber === currentStep;
-                
                 return (
                   <div key={label} className="flex flex-col items-center">
                     <motion.div
@@ -423,7 +408,6 @@ export function SmileTransformationSection() {
                           {stepNumber}
                         </span>
                       )}
-                      
                       {isActive && (
                         <motion.div
                           layoutId="active-glow"
@@ -444,220 +428,179 @@ export function SmileTransformationSection() {
           </div>
         </div>
 
-        <div className="mt-20 grid gap-6 xl:grid-cols-[1.05fr_0.95fr]">
-          <div className="space-y-6">
-            {/* Step 1: Upload */}
-            <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="overflow-hidden rounded-[32px] border border-white/80 bg-white/85 shadow-[0_28px_100px_rgba(15,23,42,0.08)] backdrop-blur-xl">
-              <div className="border-b border-slate-100 px-6 py-6 sm:px-8">
-                <div className="flex flex-wrap items-start justify-between gap-4">
-                  <div>
-                    <Badge className="mb-3 bg-slate-950 text-white hover:bg-slate-950">Step 1</Badge>
-                    <h3 className="text-2xl font-semibold text-slate-950">Your Original Photo</h3>
-                    <p className="mt-2 text-sm text-slate-600">Use a clear front-facing photo with your teeth visible.</p>
+        <div className="mt-24 grid gap-8 lg:grid-cols-12">
+          {/* Left Side: Upload & Preview (Compact Side-by-Side) */}
+          <div className="lg:col-span-8 space-y-8">
+            <div className="grid gap-6 md:grid-cols-2">
+              {/* Step 1: Upload */}
+              <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="overflow-hidden rounded-[32px] border border-slate-100 bg-white shadow-xl shadow-slate-200/50">
+                <div className="border-b border-slate-50 px-6 py-4">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-lg font-bold text-slate-950">1. Upload Photo</h3>
+                    <Badge className="bg-slate-950 text-white text-[10px]">Step 1</Badge>
                   </div>
                 </div>
-              </div>
-
-              <div className="grid gap-6 p-6 sm:p-8 lg:grid-cols-[0.9fr_1.1fr]">
-                <div
-                  className={`group rounded-[28px] border-2 border-dashed p-5 transition-all ${dragActive ? 'border-sky-400 bg-sky-50' : 'border-sky-100 bg-[linear-gradient(180deg,#ffffff_0%,#f3fbff_100%)] hover:border-sky-300 hover:bg-sky-50/60'}`}
-                  onDragEnter={handleDrag}
-                  onDragLeave={handleDrag}
-                  onDragOver={handleDrag}
-                  onDrop={handleDrop}
-                >
-                  <input ref={fileInputRef} type="file" className="hidden" accept="image/jpeg,image/png,image/webp" onChange={onFileChange} />
-                  <button type="button" onClick={() => fileInputRef.current?.click()} className="flex w-full flex-col items-center justify-center gap-4 py-10 text-center">
-                    <div className="flex h-18 w-18 items-center justify-center rounded-[24px] bg-[linear-gradient(135deg,#e0f2fe_0%,#ccfbf1_100%)] text-sky-700 shadow-inner">
-                      <Upload className="h-8 w-8" />
-                    </div>
-                    <div className="space-y-2">
-                      <p className="text-lg font-semibold text-slate-950">Drag and drop a photo here</p>
-                      <p className="text-sm text-slate-500">or click to upload from your device</p>
-                    </div>
-                    <span className="rounded-full border border-slate-200 bg-white px-4 py-2 text-xs font-medium text-slate-600 shadow-sm">JPG, PNG, WEBP up to 10MB</span>
-                  </button>
-                </div>
-
-                <div className="overflow-hidden rounded-[28px] border border-slate-100 bg-[linear-gradient(180deg,#ffffff_0%,#f8fcff_100%)] shadow-sm">
-                  <div className="flex items-center justify-between border-b border-slate-100 px-5 py-4">
-                    <div>
-                      <p className="text-sm font-semibold text-slate-900">Original</p>
-                      <p className="text-xs text-slate-500">Upload preview</p>
-                    </div>
-                    <Badge variant="secondary">Before</Badge>
-                  </div>
-                  <div className="aspect-[4/5] bg-slate-50">
+                <div className="p-6">
+                  <div
+                    className={`group relative aspect-[4/5] rounded-[24px] border-2 border-dashed transition-all ${dragActive ? 'border-teal-400 bg-teal-50' : 'border-slate-100 bg-slate-50/50 hover:border-teal-300 hover:bg-teal-50/30'}`}
+                    onDragEnter={handleDrag}
+                    onDragLeave={handleDrag}
+                    onDragOver={handleDrag}
+                    onDrop={handleDrop}
+                  >
                     {uploadedImage ? (
-                      <img src={uploadedImage} alt="Original upload" className="h-full w-full object-cover" />
-                    ) : (
-                      <div className="flex h-full flex-col items-center justify-center gap-3 px-6 text-center">
-                        <ImagePlus className="h-10 w-10 text-slate-300" />
-                        <p className="text-sm font-medium text-slate-700">Your uploaded photo will appear here.</p>
-                        <p className="max-w-xs text-xs text-slate-500">This intentional empty state keeps the workflow clear before generation begins.</p>
+                      <div className="relative h-full w-full overflow-hidden rounded-[22px]">
+                        <img src={uploadedImage} alt="Original" className="h-full w-full object-cover" />
+                        <button 
+                          onClick={() => fileInputRef.current?.click()}
+                          className="absolute bottom-3 right-3 rounded-full bg-white/90 p-2 text-slate-900 shadow-lg backdrop-blur-sm hover:bg-white"
+                        >
+                          <Upload className="h-4 w-4" />
+                        </button>
                       </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-
-            {/* Step 2-3: Preview */}
-            <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="rounded-[32px] border border-white/80 bg-white/85 p-6 shadow-[0_28px_100px_rgba(15,23,42,0.08)] backdrop-blur-xl sm:p-8">
-              <div className="mb-6 flex flex-wrap items-start justify-between gap-4">
-                <div>
-                  <Badge className="mb-3 bg-sky-100 text-sky-700 hover:bg-sky-100">Steps 2–3</Badge>
-                  <h3 className="text-2xl font-semibold text-slate-950">AI Smile Preview</h3>
-                  <p className="mt-2 text-sm text-slate-600">Your transformed smile will appear here.</p>
-                </div>
-              </div>
-
-              <div className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
-                <div className="space-y-5 rounded-[28px] border border-slate-100 bg-[linear-gradient(180deg,#fbfeff_0%,#f7fbff_100%)] p-5">
-                  <div>
-                    <div className="mb-2 flex items-center gap-2 text-sm font-semibold text-slate-900"><Wand2 className="h-4 w-4 text-sky-600" /> Preview Style</div>
-                    <p className="text-sm text-slate-500">Subtle: Gentle cosmetic refinement<br />Natural: Balanced, realistic enhancement<br />Hollywood: Bright, high-impact smile makeover</p>
-                  </div>
-
-                  <div className="grid gap-3">
-                    {STYLE_OPTIONS.map((option) => (
-                      <label key={option.value} className="cursor-pointer">
-                        <input type="radio" name="previewStyle" value={option.value} checked={style === option.value} onChange={() => setStyle(option.value)} className="peer sr-only" />
-                        <div className={`rounded-[22px] border border-slate-200 bg-gradient-to-r p-4 transition-all peer-checked:border-sky-400 peer-checked:shadow-[0_12px_32px_rgba(56,189,248,0.16)] ${option.accent}`}>
-                          <div className="flex items-start justify-between gap-4">
-                            <div>
-                              <p className="text-base font-semibold text-slate-950">{option.label}</p>
-                              <p className="mt-1 text-xs text-slate-600">{option.helper}</p>
-                            </div>
-                            {style === option.value && <CheckCircle className="mt-0.5 h-5 w-5 text-sky-600" />}
-                          </div>
+                    ) : (
+                      <button type="button" onClick={() => fileInputRef.current?.click()} className="flex h-full w-full flex-col items-center justify-center gap-3 p-4 text-center">
+                        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-teal-600 shadow-sm">
+                          <Upload className="h-6 w-6" />
                         </div>
-                      </label>
-                    ))}
-                  </div>
-
-                  <div>
-                    <Button onClick={generatePreview} disabled={!canGeneratePreview} className="h-12 w-full rounded-2xl bg-[linear-gradient(135deg,#0284c7_0%,#0ea5a5_100%)] text-white shadow-lg shadow-sky-500/20 hover:opacity-95">
-                      {processingPreview ? <><Loader2 className="mr-2 h-5 w-5 animate-spin" />Generating Preview...</> : 'Generate Smile Preview'}
-                    </Button>
-                    {!uploadedImage && renderDisabledHelper('Upload a photo to enable Generate Smile Preview.')}
+                        <div>
+                          <p className="text-sm font-bold text-slate-950">Click to upload</p>
+                          <p className="text-xs text-slate-500">or drag and drop</p>
+                        </div>
+                      </button>
+                    )}
+                    <input ref={fileInputRef} type="file" className="hidden" accept="image/jpeg,image/png,image/webp" onChange={onFileChange} />
                   </div>
                 </div>
+              </motion.div>
 
-                <div className="overflow-hidden rounded-[28px] border border-slate-100 bg-white shadow-sm">
-                  <div className="flex items-center justify-between border-b border-slate-100 px-5 py-4">
-                    <div>
-                      <p className="text-sm font-semibold text-slate-900">AI Smile Preview</p>
-                      <p className="text-xs text-slate-500">Gemini-generated result</p>
-                    </div>
-                    <Badge className="bg-cyan-100 text-cyan-700 hover:bg-cyan-100">Gemini Preview</Badge>
+              {/* Step 2-3: AI Preview */}
+              <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="overflow-hidden rounded-[32px] border border-slate-100 bg-white shadow-xl shadow-slate-200/50">
+                <div className="border-b border-slate-50 px-6 py-4">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-lg font-bold text-slate-950">2. AI Preview</h3>
+                    <Badge className="bg-teal-600 text-white text-[10px]">Step 2-3</Badge>
                   </div>
-                  <div className="aspect-[4/5] bg-[linear-gradient(180deg,#fbfdff_0%,#f2faff_100%)]">
+                </div>
+                <div className="p-6">
+                  <div className="relative aspect-[4/5] rounded-[24px] bg-slate-50 overflow-hidden border border-slate-100">
                     {previewImage ? (
-                      <img src={previewImage} alt="AI smile preview" className="h-full w-full object-cover" />
+                      <img src={previewImage} alt="AI Preview" className="h-full w-full object-cover" />
                     ) : (
-                      <div className="flex h-full flex-col items-center justify-center gap-3 px-6 text-center">
-                        {processingPreview ? <Loader2 className="h-10 w-10 animate-spin text-sky-600" /> : <Sparkles className="h-10 w-10 text-sky-300" />}
-                        <p className="text-sm font-medium text-slate-700">{processingPreview ? 'Creating your AI smile preview...' : 'Choose a style and generate your preview to continue.'}</p>
-                        <p className="max-w-xs text-xs text-slate-500">{processingPreview ? 'Your AI smile preview is being prepared.' : 'The preview area stays active so the next step is always obvious.'}</p>
+                      <div className="flex h-full flex-col items-center justify-center gap-3 p-4 text-center">
+                        {processingPreview ? (
+                          <Loader2 className="h-10 w-10 animate-spin text-teal-600" />
+                        ) : (
+                          <Sparkles className="h-10 w-10 text-slate-200" />
+                        )}
+                        <p className="text-sm font-medium text-slate-700">
+                          {processingPreview ? 'Creating preview...' : 'AI preview will appear here'}
+                        </p>
                       </div>
                     )}
                   </div>
-                  <div className="space-y-2 border-t border-slate-100 px-5 py-4 text-xs text-slate-500">
-                    <p>{previewImage ? 'Preview ready. You can now create your smile video.' : 'Your transformed smile will appear here.'}</p>
-                    {previewAssetUrl && <a href={previewAssetUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 font-medium text-sky-700 hover:text-sky-800"><Download className="h-3.5 w-3.5" /> Open stored preview asset</a>}
-                    {previewJobId && <p>Preview job ID: {previewJobId}</p>}
-                  </div>
                 </div>
-              </div>
-            </motion.div>
+              </motion.div>
+            </div>
 
-            {/* Step 4: Video */}
-            <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="rounded-[32px] border border-white/80 bg-[linear-gradient(145deg,rgba(255,255,255,0.95)_0%,rgba(240,249,255,0.95)_55%,rgba(236,254,255,0.95)_100%)] p-6 shadow-[0_28px_100px_rgba(14,116,144,0.1)] backdrop-blur-xl sm:p-8">
-              <div className="mb-6 flex flex-wrap items-start justify-between gap-4">
-                <div>
-                  <Badge className="mb-3 bg-teal-100 text-teal-700 hover:bg-teal-100">Step 4</Badge>
-                  <h3 className="text-2xl font-semibold text-slate-950">Create Smile Video</h3>
-                  <p className="mt-2 text-sm text-slate-600">Generate a premium video from your AI preview.</p>
+            {/* Style Selection & Generate Button (Compact) */}
+            <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="rounded-[32px] border border-slate-100 bg-white p-6 shadow-xl shadow-slate-200/50">
+              <div className="flex flex-col md:flex-row items-center gap-6">
+                <div className="flex-1 grid grid-cols-3 gap-3 w-full">
+                  {STYLE_OPTIONS.map((option) => (
+                    <label key={option.value} className="cursor-pointer">
+                      <input type="radio" name="previewStyle" value={option.value} checked={style === option.value} onChange={() => setStyle(option.value)} className="peer sr-only" />
+                      <div className={`rounded-2xl border border-slate-100 p-3 text-center transition-all peer-checked:border-teal-500 peer-checked:bg-teal-50/50 ${option.accent}`}>
+                        <p className="text-xs font-bold text-slate-950">{option.label}</p>
+                      </div>
+                    </label>
+                  ))}
                 </div>
-              </div>
-
-              <div className="mb-5">
-                <Button onClick={() => generateSingleVideo('veo')} disabled={!canGenerateVideos} className="h-12 w-full rounded-2xl bg-gradient-to-r from-teal-600 to-cyan-600 text-white shadow-lg shadow-teal-500/20 hover:opacity-95">
-                  {videoProcessing === 'veo' ? <><Loader2 className="mr-2 h-5 w-5 animate-spin" />Generating Veo Video...</> : 'Generate Veo Video'}
+                <Button 
+                  onClick={generatePreview} 
+                  disabled={!canGeneratePreview} 
+                  className="h-12 px-8 rounded-2xl bg-gradient-to-r from-teal-600 to-cyan-600 text-white shadow-lg shadow-teal-500/20 hover:opacity-95 w-full md:w-auto"
+                >
+                  {processingPreview ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Generating...</> : 'Generate Preview'}
                 </Button>
-                {!previewImage && renderDisabledHelper('Generate your preview first to enable video creation.')}
               </div>
-
-              {renderVideoCard('veo', 'Veo Video Result')}
             </motion.div>
           </div>
 
-          {/* Right Column: Results */}
-          <div className="space-y-6">
-            {/* Messages */}
-            {successMessage && (
-              <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="rounded-[20px] border border-teal-200 bg-teal-50 p-4 text-sm text-teal-800">
-                <div className="flex items-start gap-3">
-                  <CheckCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-teal-600" />
-                  <p>{successMessage}</p>
-                </div>
-              </motion.div>
-            )}
-            {previewError && (
-              <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="rounded-[20px] border border-red-200 bg-red-50 p-4 text-sm text-red-800">
-                <div className="flex items-start gap-3">
-                  <AlertCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-red-600" />
-                  <p>{previewError}</p>
-                </div>
-              </motion.div>
-            )}
-            {videoError && (
-              <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="rounded-[20px] border border-red-200 bg-red-50 p-4 text-sm text-red-800">
-                <div className="flex items-start gap-3">
-                  <AlertCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-red-600" />
-                  <p>{videoError}</p>
-                </div>
-              </motion.div>
-            )}
+          {/* Right Side: Video & Compare (Compact) */}
+          <div className="lg:col-span-4 space-y-6">
+            {/* Step 4: Video */}
+            <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="rounded-[32px] border border-slate-100 bg-white p-6 shadow-xl shadow-slate-200/50">
+              <div className="mb-4 flex items-center justify-between">
+                <h3 className="text-lg font-bold text-slate-950">4. Video</h3>
+                <Badge className="bg-cyan-600 text-white text-[10px]">Step 4</Badge>
+              </div>
+              <Button 
+                onClick={() => generateSingleVideo('veo')} 
+                disabled={!canGenerateVideos} 
+                className="mb-4 h-11 w-full rounded-xl bg-slate-950 text-white hover:bg-slate-800"
+              >
+                {videoProcessing === 'veo' ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Creating...</> : 'Create Veo Video'}
+              </Button>
+              {renderVideoCard('veo', 'Veo Result')}
+            </motion.div>
 
-            {/* Step 5: Compare */}
-            <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="rounded-[32px] border border-white/80 bg-white/85 p-6 shadow-[0_28px_100px_rgba(15,23,42,0.08)] backdrop-blur-xl sm:p-8">
-              <Badge className="mb-3 bg-purple-100 text-purple-700 hover:bg-purple-100">Step 5</Badge>
-              <h3 className="text-2xl font-semibold text-slate-950">Compare Results</h3>
-              <p className="mt-2 text-sm text-slate-600">Review your results and save your favorite.</p>
-
-              <div className="mt-6 space-y-3">
+            {/* Step 5: Compare & Save */}
+            <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="rounded-[32px] border border-slate-100 bg-white p-6 shadow-xl shadow-slate-200/50">
+              <div className="mb-4 flex items-center justify-between">
+                <h3 className="text-lg font-bold text-slate-950">5. Compare</h3>
+                <Badge className="bg-purple-600 text-white text-[10px]">Step 5</Badge>
+              </div>
+              <div className="space-y-2">
                 {[
-                  { key: 'original', label: 'Original Photo', ready: Boolean(uploadedImage), type: 'image', src: uploadedImage },
-                  { key: 'preview', label: 'Gemini Preview', ready: Boolean(previewImage), type: 'image', src: previewImage },
-                  { key: 'veo', label: 'Veo Video', ready: Boolean(videoResults.veo?.assetUrl), type: 'video', src: videoResults.veo?.assetUrl ?? null },
+                  { key: 'original', label: 'Original', ready: Boolean(uploadedImage) },
+                  { key: 'preview', label: 'AI Preview', ready: Boolean(previewImage) },
+                  { key: 'veo', label: 'Veo Video', ready: Boolean(videoResults.veo?.assetUrl) },
                 ].map((item) => (
                   <button
                     key={item.key}
                     onClick={() => setFavoriteResult(item.key as FavoriteResult)}
-                    className={`w-full rounded-[18px] border-2 p-4 text-left transition-all ${
+                    className={`w-full rounded-xl border p-3 text-left text-xs font-bold transition-all ${
                       favoriteResult === item.key
-                        ? 'border-teal-400 bg-teal-50 shadow-[0_12px_32px_rgba(20,184,166,0.12)]'
-                        : 'border-slate-200 bg-white hover:border-slate-300'
-                    } ${!item.ready ? 'opacity-50' : ''}`}
+                        ? 'border-teal-500 bg-teal-50 text-teal-700'
+                        : 'border-slate-100 bg-white text-slate-600 hover:border-slate-200'
+                    } ${!item.ready ? 'opacity-40 cursor-not-allowed' : ''}`}
                     disabled={!item.ready}
                   >
                     <div className="flex items-center justify-between">
-                      <span className="font-semibold text-slate-900">{item.label}</span>
-                      {favoriteResult === item.key && <CheckCircle className="h-5 w-5 text-teal-600" />}
+                      <span>{item.label}</span>
+                      {favoriteResult === item.key && <CheckCircle className="h-4 w-4" />}
                     </div>
                   </button>
                 ))}
               </div>
-
               {favoriteResult && (
-                <Button className="mt-6 h-11 w-full rounded-2xl bg-gradient-to-r from-teal-600 to-cyan-600 text-white hover:opacity-95">
-                  <Save className="mr-2 h-4 w-4" /> Save {favoriteResult === 'original' ? 'Original' : favoriteResult === 'preview' ? 'Preview' : 'Video'}
+                <Button className="mt-4 h-11 w-full rounded-xl bg-gradient-to-r from-teal-600 to-cyan-600 text-white shadow-lg shadow-teal-500/20">
+                  <Save className="mr-2 h-4 w-4" /> Save Selection
                 </Button>
               )}
             </motion.div>
           </div>
+        </div>
+
+        {/* Error/Success Messages (Floating) */}
+        <div className="fixed bottom-8 left-1/2 z-50 w-full max-w-md -translate-x-1/2 px-4 space-y-2">
+          {successMessage && (
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }} className="rounded-2xl border border-teal-100 bg-white/90 p-4 text-sm text-teal-800 shadow-2xl backdrop-blur-md">
+              <div className="flex items-center gap-3">
+                <CheckCircle className="h-5 w-5 text-teal-600" />
+                <p className="font-medium">{successMessage}</p>
+              </div>
+            </motion.div>
+          )}
+          {(previewError || videoError) && (
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }} className="rounded-2xl border border-red-100 bg-white/90 p-4 text-sm text-red-800 shadow-2xl backdrop-blur-md">
+              <div className="flex items-center gap-3">
+                <AlertCircle className="h-5 w-5 text-red-600" />
+                <p className="font-medium">{previewError || videoError}</p>
+              </div>
+            </motion.div>
+          )}
         </div>
       </div>
     </section>
