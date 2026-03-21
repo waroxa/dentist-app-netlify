@@ -2,20 +2,22 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { motion } from 'motion/react';
 import {
   AlertCircle,
-  ArrowRight,
   CheckCircle,
-  Download,
-  ImagePlus,
+  ChevronDown,
   Loader2,
-  PlayCircle,
+  Mail,
+  Phone,
   Save,
   Sparkles,
   Upload,
+  User,
   Video,
-  Wand2,
 } from 'lucide-react';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
+import { Input } from './ui/input';
+import { Label } from './ui/label';
+import { Textarea } from './ui/textarea';
 
 type SmileStyle = 'subtle' | 'natural' | 'hollywood';
 type VideoProvider = 'veo';
@@ -41,6 +43,21 @@ interface PendingVideoJob {
   note?: string;
 }
 
+interface LeadFormData {
+  fullName: string;
+  email: string;
+  phone: string;
+  interestedIn: string;
+  notes: string;
+}
+
+interface LeadFormErrors {
+  fullName?: string;
+  email?: string;
+  phone?: string;
+  interestedIn?: string;
+}
+
 const motivationalMessages = [
   '✨ Imagine waking up every day loving your smile...',
   '💫 A confident smile can transform your entire life',
@@ -49,6 +66,8 @@ const motivationalMessages = [
   '🎯 Confidence starts with a smile you are proud of',
   '🚀 Picture yourself smiling without hesitation',
 ] as const;
+
+const INTEREST_OPTIONS = ['Veneers', 'Invisalign', 'Whitening', 'Smile Makeover', 'Other'] as const;
 
 async function parseJsonResponse(response: Response) {
   const contentType = response.headers.get('content-type') || '';
@@ -63,14 +82,7 @@ function getVideoEndpoint(provider: VideoProvider) {
   return '/api/video/veo';
 }
 
-const STEP_LABELS = [
-  'Upload Photo',
-  'Choose Style',
-  'AI Preview',
-  'Create Video',
-  'Compare',
-] as const;
-
+const STEP_LABELS = ['Lead Form', 'Upload Photo', 'Choose Style', 'AI Preview', 'Create Video', 'Compare'] as const;
 const BRAND_BLUE = '#0584fa';
 
 const STYLE_OPTIONS: Array<{ value: SmileStyle; label: string; helper: string; accent: string }> = [
@@ -103,14 +115,24 @@ function fileToDataUrl(file: File) {
   });
 }
 
-function getStepIndex(uploadedImage: string | null, previewImage: string | null, videoResults: Partial<Record<VideoProvider, VideoResult>>) {
-  if (Object.keys(videoResults).length > 0) return 5;
-  if (previewImage) return 4;
+function getStepIndex(isLeadCaptured: boolean, uploadedImage: string | null, previewImage: string | null, videoResults: Partial<Record<VideoProvider, VideoResult>>) {
+  if (!isLeadCaptured) return 1;
+  if (Object.keys(videoResults).length > 0) return 6;
+  if (previewImage) return 5;
   if (uploadedImage) return 3;
-  return 1;
+  return 2;
 }
 
 export function SmileTransformationSection() {
+  const [leadForm, setLeadForm] = useState<LeadFormData>({
+    fullName: '',
+    email: '',
+    phone: '',
+    interestedIn: '',
+    notes: '',
+  });
+  const [leadErrors, setLeadErrors] = useState<LeadFormErrors>({});
+  const [isLeadCaptured, setIsLeadCaptured] = useState(false);
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [previewAssetUrl, setPreviewAssetUrl] = useState<string | null>(null);
@@ -131,10 +153,49 @@ export function SmileTransformationSection() {
   const [favoriteMessage, setFavoriteMessage] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  const currentStep = getStepIndex(uploadedImage, previewImage, videoResults);
+  const currentStep = getStepIndex(isLeadCaptured, uploadedImage, previewImage, videoResults);
   const selectedStyle = useMemo(() => STYLE_OPTIONS.find((option) => option.value === style) ?? STYLE_OPTIONS[1], [style]);
-  const canGeneratePreview = Boolean(uploadedImage) && !processingPreview;
-  const canGenerateVideos = Boolean(previewImage) && !videoProcessing;
+  const canGeneratePreview = isLeadCaptured && Boolean(uploadedImage) && !processingPreview;
+  const canGenerateVideos = isLeadCaptured && Boolean(previewImage) && !videoProcessing;
+
+  function formatPhoneNumber(value: string) {
+    const digits = value.replace(/\D/g, '').slice(0, 10);
+    if (digits.length <= 3) return digits;
+    if (digits.length <= 6) return `(${digits.slice(0, 3)}) ${digits.slice(3)}`;
+    return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6, 10)}`;
+  }
+
+  function validateEmail(email: string) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  }
+
+  function validatePhone(phone: string) {
+    return phone.replace(/\D/g, '').length === 10;
+  }
+
+  function validateLeadForm() {
+    const nextErrors: LeadFormErrors = {};
+
+    if (!leadForm.fullName.trim()) nextErrors.fullName = 'Full name is required';
+    if (!leadForm.email.trim()) nextErrors.email = 'Email is required';
+    else if (!validateEmail(leadForm.email)) nextErrors.email = 'Please enter a valid email';
+    if (!leadForm.phone.trim()) nextErrors.phone = 'Phone number is required';
+    else if (!validatePhone(leadForm.phone)) nextErrors.phone = 'Please enter a valid 10-digit phone number';
+    if (!leadForm.interestedIn) nextErrors.interestedIn = 'Please select a service';
+
+    setLeadErrors(nextErrors);
+    return Object.keys(nextErrors).length === 0;
+  }
+
+  function handleLeadSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!validateLeadForm()) return;
+    setIsLeadCaptured(true);
+    setSuccessMessage('Thanks! Your preview form is saved — now upload a photo to continue.');
+    requestAnimationFrame(() => {
+      document.getElementById('smile-upload-panel')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  }
 
   function resetGeneratedAssets() {
     setPreviewImage(null);
@@ -273,7 +334,6 @@ export function SmileTransformationSection() {
     }
   }
 
-  // Polling for video completion
   useEffect(() => {
     if (Object.keys(pendingVideoJobs).length === 0) return;
 
@@ -324,7 +384,6 @@ export function SmileTransformationSection() {
     return () => clearInterval(pollInterval);
   }, [pendingVideoJobs]);
 
-  // Rotating motivational messages
   useEffect(() => {
     if (videoProcessing) {
       const messageInterval = setInterval(() => {
@@ -334,8 +393,24 @@ export function SmileTransformationSection() {
     }
   }, [videoProcessing]);
 
-  function renderDisabledHelper(message: string) {
-    return <p className="mt-3 text-xs text-slate-500">{message}</p>;
+  function renderInfoBanner() {
+    if (videoProcessing) {
+      return (
+        <div className="rounded-2xl border border-[#0584fa]/10 bg-[#0584fa]/5 px-4 py-3 text-sm text-slate-700">
+          <span className="font-semibold text-slate-900">Working on your video:</span> {motivationalMessages[waitingMessageIndex]}
+        </div>
+      );
+    }
+
+    if (!isLeadCaptured) {
+      return (
+        <div className="rounded-2xl border border-emerald-200 bg-emerald-50/70 px-4 py-3 text-sm text-slate-700">
+          <span className="font-semibold text-slate-900">Step 1 first:</span> enter patient info to unlock photo upload and preview tools.
+        </div>
+      );
+    }
+
+    return null;
   }
 
   function renderVideoCard(provider: VideoProvider, title: string) {
@@ -347,14 +422,14 @@ export function SmileTransformationSection() {
       <div key={provider} className="overflow-hidden rounded-[24px] border border-slate-100 bg-white shadow-sm">
         <div className="flex items-center justify-between border-b border-slate-100 px-4 py-3">
           <div>
-            <p className="text-xs font-bold text-slate-950 uppercase tracking-wider">{title}</p>
+            <p className="text-xs font-bold uppercase tracking-wider text-slate-950">{title}</p>
           </div>
-          {result && <Badge className="bg-[rgba(5,132,250,0.12)] text-[#046fd3] hover:bg-[rgba(5,132,250,0.12)] text-[10px]">Ready</Badge>}
-          {pending && <Badge className="bg-amber-100 text-amber-700 hover:bg-amber-100 text-[10px]">Processing</Badge>}
+          {result && <Badge className="bg-[rgba(5,132,250,0.12)] text-[#046fd3] text-[10px] hover:bg-[rgba(5,132,250,0.12)]">Ready</Badge>}
+          {pending && <Badge className="bg-amber-100 text-[10px] text-amber-700 hover:bg-amber-100">Processing</Badge>}
         </div>
-        <div className="aspect-square bg-slate-50">
+        <div className="aspect-[4/3] bg-slate-50">
           {result?.assetUrl ? (
-            <video controls autoPlay loop muted playsInline preload="metadata" className="h-full w-full object-cover">
+            <video controls autoPlay loop muted playsInline preload="metadata" className="h-full w-full object-contain bg-slate-950">
               <source src={result.assetUrl} type="video/mp4" />
               Your browser does not support the video tag.
             </video>
@@ -370,6 +445,11 @@ export function SmileTransformationSection() {
             </div>
           )}
         </div>
+        {message && (
+          <div className={`border-t px-4 py-3 text-xs ${message.type === 'error' ? 'border-red-100 bg-red-50 text-red-700' : message.type === 'success' ? 'border-emerald-100 bg-emerald-50 text-emerald-700' : 'border-blue-100 bg-blue-50 text-blue-700'}`}>
+            {message.message}
+          </div>
+        )}
       </div>
     );
   }
@@ -377,8 +457,7 @@ export function SmileTransformationSection() {
   return (
     <section id="smile-transform" className="relative bg-white px-4 py-8 sm:py-12 lg:py-16">
       <div className="mx-auto max-w-7xl">
-        {/* Sleek Horizontal Step Indicator */}
-        <div className="mb-12">
+        <div className="mb-8 sm:mb-10">
           <div className="mx-auto max-w-5xl rounded-[28px] border border-slate-100 bg-white px-4 py-5 shadow-sm sm:px-6">
             <div className="relative">
               <div className="absolute left-0 right-0 top-5 hidden h-0.5 bg-slate-200 sm:block" />
@@ -389,7 +468,7 @@ export function SmileTransformationSection() {
                 animate={{ width: `${((currentStep - 1) / (STEP_LABELS.length - 1)) * 100}%` }}
                 transition={{ duration: 0.5, ease: 'easeInOut' }}
               />
-              <div className="grid grid-cols-2 gap-x-3 gap-y-6 sm:grid-cols-5">
+              <div className="grid grid-cols-2 gap-x-3 gap-y-6 sm:grid-cols-3 lg:grid-cols-6">
                 {STEP_LABELS.map((label, index) => {
                   const stepNumber = index + 1;
                   const isComplete = stepNumber < currentStep;
@@ -413,14 +492,6 @@ export function SmileTransformationSection() {
                             {stepNumber}
                           </span>
                         )}
-                        {isActive && (
-                          <motion.div
-                            layoutId="active-glow"
-                            className="absolute -inset-2 rounded-full blur-md"
-                            style={{ backgroundColor: 'rgba(5, 132, 250, 0.18)' }}
-                            transition={{ duration: 0.3 }}
-                          />
-                        )}
                       </motion.div>
                       <p className={`mt-3 text-[10px] font-bold uppercase tracking-[0.18em] sm:text-xs ${isHighlighted ? 'text-slate-900' : 'text-slate-500'}`}>
                         {label}
@@ -433,163 +504,298 @@ export function SmileTransformationSection() {
           </div>
         </div>
 
-        <div className="grid gap-8 lg:grid-cols-12">
-          {/* Left Side: Upload & Preview (Compact Side-by-Side) */}
-          <div className="lg:col-span-8 space-y-8">
-            <div className="grid gap-6 md:grid-cols-2">
-              {/* Step 1: Upload */}
-              <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="overflow-hidden rounded-[32px] border border-slate-100 bg-white shadow-xl shadow-slate-200/50">
-                <div className="border-b border-slate-50 px-6 py-4">
-                  <div className="flex items-center justify-between">
-                    <h3 className="text-lg font-bold text-slate-950">1. Upload Photo</h3>
-                    <Badge className="bg-slate-950 text-white text-[10px]">Step 1</Badge>
-                  </div>
+        <div className="mx-auto max-w-6xl space-y-8">
+          <div className="grid gap-6 xl:grid-cols-[1.15fr_0.95fr]">
+            <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="overflow-hidden rounded-[32px] border border-slate-100 bg-white shadow-xl shadow-slate-200/50">
+              <div className="border-b border-slate-100 px-6 py-5">
+                <h3 className="text-2xl font-semibold text-slate-950">Step 1: Enter Your Information</h3>
+                <p className="mt-2 text-base text-slate-600">We&apos;ll save this lead first, then unlock photo upload and video preview below.</p>
+              </div>
+              <form onSubmit={handleLeadSubmit} className="space-y-5 px-6 py-6 sm:px-8">
+                <div>
+                  <Label htmlFor="lead-fullName" className="mb-2 flex items-center gap-2 text-base font-medium text-slate-900">
+                    <User className="h-4 w-4 text-slate-500" />
+                    Full Name *
+                  </Label>
+                  <Input
+                    id="lead-fullName"
+                    value={leadForm.fullName}
+                    onChange={(e) => {
+                      setLeadForm((current) => ({ ...current, fullName: e.target.value }));
+                      if (leadErrors.fullName) setLeadErrors((current) => ({ ...current, fullName: undefined }));
+                    }}
+                    placeholder="John Smith"
+                    className={`h-12 text-base ${leadErrors.fullName ? 'border-red-500' : ''}`}
+                  />
+                  {leadErrors.fullName && <p className="mt-1.5 text-sm text-red-600">{leadErrors.fullName}</p>}
                 </div>
-                <div className="p-6">
-                  <div
-                    className={`group relative aspect-[4/5] rounded-[24px] border-2 border-dashed transition-all ${dragActive ? 'border-[#0584fa] bg-[rgba(5,132,250,0.08)]' : 'border-slate-100 bg-slate-50/50 hover:border-[#0584fa] hover:bg-[rgba(5,132,250,0.05)]'}`}
-                    onDragEnter={handleDrag}
-                    onDragLeave={handleDrag}
-                    onDragOver={handleDrag}
-                    onDrop={handleDrop}
-                  >
-                    {uploadedImage ? (
-                      <div className="relative h-full w-full overflow-hidden rounded-[22px]">
-                        <img src={uploadedImage} alt="Original" className="h-full w-full object-cover" />
-                        <button 
-                          onClick={() => fileInputRef.current?.click()}
-                          className="absolute bottom-3 right-3 rounded-full bg-white/90 p-2 text-slate-900 shadow-lg backdrop-blur-sm hover:bg-white"
-                        >
-                          <Upload className="h-4 w-4" />
-                        </button>
-                      </div>
-                    ) : (
-                      <button type="button" onClick={() => fileInputRef.current?.click()} className="flex h-full w-full flex-col items-center justify-center gap-3 p-4 text-center">
-                        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-[#0584fa] shadow-sm">
-                          <Upload className="h-6 w-6" />
-                        </div>
-                        <div>
-                          <p className="text-sm font-bold text-slate-950">Click to upload</p>
-                          <p className="text-xs text-slate-500">or drag and drop</p>
-                        </div>
-                      </button>
-                    )}
-                    <input ref={fileInputRef} type="file" className="hidden" accept="image/jpeg,image/png,image/webp" onChange={onFileChange} />
-                  </div>
-                </div>
-              </motion.div>
 
-              {/* Step 2-3: AI Preview */}
-              <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="overflow-hidden rounded-[32px] border border-slate-100 bg-white shadow-xl shadow-slate-200/50">
-                <div className="border-b border-slate-50 px-6 py-4">
-                  <div className="flex items-center justify-between">
-                    <h3 className="text-lg font-bold text-slate-950">2. AI Preview</h3>
-                    <Badge className="bg-[#0584fa] text-white text-[10px] hover:bg-[#0584fa]">Step 2-3</Badge>
-                  </div>
+                <div>
+                  <Label htmlFor="lead-email" className="mb-2 flex items-center gap-2 text-base font-medium text-slate-900">
+                    <Mail className="h-4 w-4 text-slate-500" />
+                    Email *
+                  </Label>
+                  <Input
+                    id="lead-email"
+                    type="email"
+                    value={leadForm.email}
+                    onChange={(e) => {
+                      setLeadForm((current) => ({ ...current, email: e.target.value }));
+                      if (leadErrors.email) setLeadErrors((current) => ({ ...current, email: undefined }));
+                    }}
+                    placeholder="john@example.com"
+                    className={`h-12 text-base ${leadErrors.email ? 'border-red-500' : ''}`}
+                  />
+                  {leadErrors.email && <p className="mt-1.5 text-sm text-red-600">{leadErrors.email}</p>}
                 </div>
-                <div className="p-6">
-                  <div className="relative aspect-[4/5] rounded-[24px] bg-slate-50 overflow-hidden border border-slate-100">
-                    {previewImage ? (
-                      <img src={previewImage} alt="AI Preview" className="h-full w-full object-cover" />
-                    ) : (
-                      <div className="flex h-full flex-col items-center justify-center gap-3 p-4 text-center">
-                        {processingPreview ? (
-                          <Loader2 className="h-10 w-10 animate-spin text-[#0584fa]" />
-                        ) : (
-                          <Sparkles className="h-10 w-10 text-slate-200" />
-                        )}
-                        <p className="text-sm font-medium text-slate-700">
-                          {processingPreview ? 'Creating preview...' : 'AI preview will appear here'}
-                        </p>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </motion.div>
-            </div>
 
-            {/* Style Selection & Generate Button (Compact) */}
-            <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="rounded-[32px] border border-slate-100 bg-white p-6 shadow-xl shadow-slate-200/50">
-              <div className="flex flex-col gap-6 xl:flex-row xl:items-center">
-                <div className="grid w-full flex-1 gap-3 sm:grid-cols-3">
-                  {STYLE_OPTIONS.map((option) => (
-                    <label key={option.value} className="cursor-pointer">
-                      <input type="radio" name="previewStyle" value={option.value} checked={style === option.value} onChange={() => setStyle(option.value)} className="peer sr-only" />
-                      <div className={`rounded-2xl border border-slate-100 p-3 text-center transition-all peer-checked:border-[#0584fa] peer-checked:bg-[rgba(5,132,250,0.08)] ${option.accent}`}>
-                        <p className="text-xs font-bold text-slate-950">{option.label}</p>
-                      </div>
-                    </label>
-                  ))}
+                <div>
+                  <Label htmlFor="lead-phone" className="mb-2 flex items-center gap-2 text-base font-medium text-slate-900">
+                    <Phone className="h-4 w-4 text-slate-500" />
+                    Phone Number *
+                  </Label>
+                  <Input
+                    id="lead-phone"
+                    type="tel"
+                    value={leadForm.phone}
+                    onChange={(e) => {
+                      setLeadForm((current) => ({ ...current, phone: formatPhoneNumber(e.target.value) }));
+                      if (leadErrors.phone) setLeadErrors((current) => ({ ...current, phone: undefined }));
+                    }}
+                    placeholder="(555) 123-4567"
+                    className={`h-12 text-base ${leadErrors.phone ? 'border-red-500' : ''}`}
+                  />
+                  {leadErrors.phone && <p className="mt-1.5 text-sm text-red-600">{leadErrors.phone}</p>}
                 </div>
-                <Button 
-                  onClick={generatePreview} 
-                  disabled={!canGeneratePreview} 
-                  className="h-12 w-full rounded-2xl text-white shadow-lg hover:opacity-95 xl:w-auto xl:min-w-[220px]" style={{ backgroundColor: BRAND_BLUE, boxShadow: '0 14px 34px rgba(5, 132, 250, 0.25)' }}
-                >
-                  {processingPreview ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Generating...</> : 'Generate Preview'}
+
+                <div>
+                  <Label htmlFor="lead-interest" className="mb-2 block text-base font-medium text-slate-900">Interested In *</Label>
+                  <div className="relative">
+                    <select
+                      id="lead-interest"
+                      value={leadForm.interestedIn}
+                      onChange={(e) => {
+                        setLeadForm((current) => ({ ...current, interestedIn: e.target.value }));
+                        if (leadErrors.interestedIn) setLeadErrors((current) => ({ ...current, interestedIn: undefined }));
+                      }}
+                      className={`h-12 w-full appearance-none rounded-md border bg-background px-3 py-2 pr-10 text-base ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${leadErrors.interestedIn ? 'border-red-500' : 'border-input'}`}
+                    >
+                      <option value="">Select a service...</option>
+                      {INTEREST_OPTIONS.map((option) => (
+                        <option key={option} value={option}>{option}</option>
+                      ))}
+                    </select>
+                    <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
+                  </div>
+                  {leadErrors.interestedIn && <p className="mt-1.5 text-sm text-red-600">{leadErrors.interestedIn}</p>}
+                </div>
+
+                <div>
+                  <Label htmlFor="lead-notes" className="mb-2 block text-base font-medium text-slate-900">Optional Notes</Label>
+                  <Textarea
+                    id="lead-notes"
+                    value={leadForm.notes}
+                    onChange={(e) => setLeadForm((current) => ({ ...current, notes: e.target.value }))}
+                    placeholder="Tell us about your smile goals or any specific concerns..."
+                    className="min-h-[120px] text-base"
+                  />
+                </div>
+
+                <Button type="submit" className="h-12 w-full rounded-xl text-base font-semibold text-white shadow-lg hover:opacity-95" style={{ background: 'linear-gradient(90deg, #0ea5a6 0%, #2563eb 100%)' }}>
+                  {isLeadCaptured ? 'Update & Continue ✨' : 'Get Started Free ✨'}
                 </Button>
+
+                <div className="space-y-4 pt-1 text-center text-sm text-slate-500">
+                  <p>By continuing, you agree to be contacted about your smile transformation. Your information is secure and will never be shared.</p>
+                  <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-emerald-600">
+                    <span>✓ Secure &amp; Confidential</span>
+                    <span>✓ Get Results in 24 Hours</span>
+                  </div>
+                </div>
+              </form>
+            </motion.div>
+
+            <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="rounded-[32px] border border-[#dbeafe] bg-gradient-to-br from-slate-50 via-white to-blue-50 p-6 shadow-xl shadow-slate-200/40 sm:p-8">
+              <h3 className="text-2xl font-semibold text-slate-950">Why Get Your Free Preview?</h3>
+              <div className="mt-6 space-y-4">
+                {[
+                  ['See Your Potential', 'Visualize your smile transformation before committing to treatment'],
+                  ['100% Free & No Obligation', 'Get your AI smile preview instantly - no payment required'],
+                  ['Personalized Consultation', 'Our team will review your preview and provide expert recommendations'],
+                  ['Fast Results', 'Get your AI-generated smile transformation in under 30 seconds'],
+                ].map(([title, body]) => (
+                  <div key={title} className="rounded-[20px] border border-slate-200 bg-white p-5 shadow-sm">
+                    <div className="flex items-start gap-3">
+                      <CheckCircle className="mt-0.5 h-6 w-6 text-emerald-500" />
+                      <div>
+                        <p className="text-xl font-semibold text-slate-950">{title}</p>
+                        <p className="mt-1 text-base leading-relaxed text-slate-600">{body}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-6 rounded-[20px] border border-cyan-200 bg-cyan-50/70 px-6 py-5 text-center">
+                <p className="text-2xl font-semibold text-slate-900">Over 10,000+ smiles transformed!</p>
+                <p className="mt-1 text-base text-slate-600">Join thousands who&apos;ve discovered their dream smile.</p>
               </div>
             </motion.div>
           </div>
 
-          {/* Right Side: Video & Compare (Compact) */}
-          <div className="lg:col-span-4 space-y-6">
-            {/* Step 4: Video */}
-            <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="rounded-[32px] border border-slate-100 bg-white p-6 shadow-xl shadow-slate-200/50">
-              <div className="mb-4 flex items-center justify-between">
-                <h3 className="text-lg font-bold text-slate-950">4. Video</h3>
-                <Badge className="bg-[#0584fa] text-white text-[10px] hover:bg-[#0584fa]">Step 4</Badge>
-              </div>
-              <Button 
-                onClick={() => generateSingleVideo('veo')} 
-                disabled={!canGenerateVideos} 
-                className="mb-4 h-11 w-full rounded-xl text-white hover:opacity-95" style={{ backgroundColor: BRAND_BLUE }}
-              >
-                {videoProcessing === 'veo' ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Creating...</> : 'Create Veo Video'}
-              </Button>
-              {renderVideoCard('veo', 'Veo Result')}
-            </motion.div>
+          {renderInfoBanner()}
 
-            {/* Step 5: Compare & Save */}
-            <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="rounded-[32px] border border-slate-100 bg-white p-6 shadow-xl shadow-slate-200/50">
-              <div className="mb-4 flex items-center justify-between">
-                <h3 className="text-lg font-bold text-slate-950">5. Compare</h3>
-                <Badge className="bg-[#0584fa] text-white text-[10px] hover:bg-[#0584fa]">Step 5</Badge>
-              </div>
-              <div className="space-y-2">
-                {[
-                  { key: 'original', label: 'Original', ready: Boolean(uploadedImage) },
-                  { key: 'preview', label: 'AI Preview', ready: Boolean(previewImage) },
-                  { key: 'veo', label: 'Veo Video', ready: Boolean(videoResults.veo?.assetUrl) },
-                ].map((item) => (
-                  <button
-                    key={item.key}
-                    onClick={() => setFavoriteResult(item.key as FavoriteResult)}
-                    className={`w-full rounded-xl border p-3 text-left text-xs font-bold transition-all ${
-                      favoriteResult === item.key
-                        ? 'border-[#0584fa] bg-[rgba(5,132,250,0.08)] text-[#046fd3]'
-                        : 'border-slate-100 bg-white text-slate-600 hover:border-slate-200'
-                    } ${!item.ready ? 'opacity-40 cursor-not-allowed' : ''}`}
-                    disabled={!item.ready}
-                  >
-                    <div className="flex items-center justify-between">
-                      <span>{item.label}</span>
-                      {favoriteResult === item.key && <CheckCircle className="h-4 w-4" />}
+          <div className={`transition-all duration-300 ${isLeadCaptured ? 'opacity-100' : 'pointer-events-none opacity-40'}`}>
+            <div className="grid gap-6 xl:grid-cols-[minmax(0,1.2fr)_minmax(320px,0.8fr)]">
+              <div className="space-y-6">
+                <div className="grid gap-6 lg:grid-cols-2">
+                  <motion.div id="smile-upload-panel" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="overflow-hidden rounded-[32px] border border-slate-100 bg-white shadow-xl shadow-slate-200/50">
+                    <div className="border-b border-slate-50 px-6 py-4">
+                      <div className="flex items-center justify-between">
+                        <h3 className="text-lg font-bold text-slate-950">2. Upload Photo</h3>
+                        <Badge className="bg-slate-950 text-[10px] text-white">Step 2</Badge>
+                      </div>
                     </div>
-                  </button>
-                ))}
+                    <div className="p-6">
+                      <div
+                        className={`group relative aspect-[4/5] rounded-[24px] border-2 border-dashed transition-all ${dragActive ? 'border-[#0584fa] bg-[rgba(5,132,250,0.08)]' : 'border-slate-100 bg-slate-50/50 hover:border-[#0584fa] hover:bg-[rgba(5,132,250,0.05)]'}`}
+                        onDragEnter={handleDrag}
+                        onDragLeave={handleDrag}
+                        onDragOver={handleDrag}
+                        onDrop={handleDrop}
+                      >
+                        {uploadedImage ? (
+                          <div className="relative h-full w-full overflow-hidden rounded-[22px]">
+                            <img src={uploadedImage} alt="Original" className="h-full w-full object-cover" />
+                            <button
+                              type="button"
+                              onClick={() => fileInputRef.current?.click()}
+                              className="absolute bottom-3 right-3 rounded-full bg-white/90 p-2 text-slate-900 shadow-lg backdrop-blur-sm hover:bg-white"
+                            >
+                              <Upload className="h-4 w-4" />
+                            </button>
+                          </div>
+                        ) : (
+                          <button type="button" onClick={() => fileInputRef.current?.click()} className="flex h-full w-full flex-col items-center justify-center gap-3 p-4 text-center">
+                            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-[#0584fa] shadow-sm">
+                              <Upload className="h-6 w-6" />
+                            </div>
+                            <div>
+                              <p className="text-sm font-bold text-slate-950">Click to upload</p>
+                              <p className="text-xs text-slate-500">or drag and drop</p>
+                            </div>
+                          </button>
+                        )}
+                        <input ref={fileInputRef} type="file" className="hidden" accept="image/jpeg,image/png,image/webp" onChange={onFileChange} />
+                      </div>
+                    </div>
+                  </motion.div>
+
+                  <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="overflow-hidden rounded-[32px] border border-slate-100 bg-white shadow-xl shadow-slate-200/50">
+                    <div className="border-b border-slate-50 px-6 py-4">
+                      <div className="flex items-center justify-between">
+                        <h3 className="text-lg font-bold text-slate-950">4. AI Preview</h3>
+                        <Badge className="bg-[#0584fa] text-[10px] text-white hover:bg-[#0584fa]">Step 4</Badge>
+                      </div>
+                    </div>
+                    <div className="p-6">
+                      <div className="relative aspect-[4/5] overflow-hidden rounded-[24px] border border-slate-100 bg-slate-50">
+                        {previewImage ? (
+                          <img src={previewImage} alt="AI Preview" className="h-full w-full object-cover" />
+                        ) : (
+                          <div className="flex h-full flex-col items-center justify-center gap-3 p-4 text-center">
+                            {processingPreview ? (
+                              <Loader2 className="h-10 w-10 animate-spin text-[#0584fa]" />
+                            ) : (
+                              <Sparkles className="h-10 w-10 text-slate-200" />
+                            )}
+                            <p className="text-sm font-medium text-slate-700">
+                              {processingPreview ? 'Creating preview...' : 'AI preview will appear here'}
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </motion.div>
+                </div>
+
+                <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="rounded-[32px] border border-slate-100 bg-white p-6 shadow-xl shadow-slate-200/50">
+                  <div className="flex flex-col gap-6 xl:flex-row xl:items-center">
+                    <div className="grid w-full flex-1 gap-3 sm:grid-cols-3">
+                      {STYLE_OPTIONS.map((option) => (
+                        <label key={option.value} className="cursor-pointer">
+                          <input type="radio" name="previewStyle" value={option.value} checked={style === option.value} onChange={() => setStyle(option.value)} className="peer sr-only" />
+                          <div className={`rounded-2xl border border-slate-100 bg-gradient-to-br p-4 text-center transition-all peer-checked:border-[#0584fa] peer-checked:bg-[rgba(5,132,250,0.08)] ${option.accent}`}>
+                            <p className="text-sm font-bold text-slate-950">{option.label}</p>
+                            <p className="mt-1 text-xs text-slate-500">{option.helper}</p>
+                          </div>
+                        </label>
+                      ))}
+                    </div>
+                    <Button onClick={generatePreview} disabled={!canGeneratePreview} className="h-12 w-full rounded-2xl text-white shadow-lg hover:opacity-95 xl:w-auto xl:min-w-[220px]" style={{ backgroundColor: BRAND_BLUE, boxShadow: '0 14px 34px rgba(5, 132, 250, 0.25)' }}>
+                      {processingPreview ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Generating...</> : 'Generate Preview'}
+                    </Button>
+                  </div>
+                  <div className="mt-4 flex items-center justify-between rounded-2xl bg-slate-50 px-4 py-3 text-sm text-slate-600">
+                    <span>Selected style: <strong className="text-slate-900">{selectedStyle.label}</strong></span>
+                    <span className="hidden sm:inline">Step 3 unlocks the preview</span>
+                  </div>
+                </motion.div>
               </div>
-              {favoriteResult && (
-                <Button className="mt-4 h-11 w-full rounded-xl text-white shadow-lg" style={{ backgroundColor: BRAND_BLUE, boxShadow: '0 14px 34px rgba(5, 132, 250, 0.2)' }}>
-                  <Save className="mr-2 h-4 w-4" /> Save Selection
-                </Button>
-              )}
-            </motion.div>
+
+              <div className="space-y-6">
+                <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="rounded-[32px] border border-slate-100 bg-white p-5 shadow-xl shadow-slate-200/50 sm:p-6">
+                  <div className="mb-4 flex items-center justify-between">
+                    <h3 className="text-lg font-bold text-slate-950">5. Video</h3>
+                    <Badge className="bg-[#0584fa] text-[10px] text-white hover:bg-[#0584fa]">Step 5</Badge>
+                  </div>
+                  <Button onClick={() => generateSingleVideo('veo')} disabled={!canGenerateVideos} className="mb-4 h-11 w-full rounded-xl text-white hover:opacity-95" style={{ backgroundColor: BRAND_BLUE }}>
+                    {videoProcessing === 'veo' ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Creating...</> : 'Create Veo Video'}
+                  </Button>
+                  {renderVideoCard('veo', 'Veo Result')}
+                </motion.div>
+
+                <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="rounded-[32px] border border-slate-100 bg-white p-6 shadow-xl shadow-slate-200/50">
+                  <div className="mb-4 flex items-center justify-between">
+                    <h3 className="text-lg font-bold text-slate-950">6. Compare</h3>
+                    <Badge className="bg-[#0584fa] text-[10px] text-white hover:bg-[#0584fa]">Step 6</Badge>
+                  </div>
+                  <div className="space-y-2">
+                    {[
+                      { key: 'original', label: 'Original', ready: Boolean(uploadedImage) },
+                      { key: 'preview', label: 'AI Preview', ready: Boolean(previewImage) },
+                      { key: 'veo', label: `${videoProvider.toUpperCase()} Video`, ready: Boolean(videoResults.veo?.assetUrl) },
+                    ].map((item) => (
+                      <button
+                        type="button"
+                        key={item.key}
+                        onClick={() => setFavoriteResult(item.key as FavoriteResult)}
+                        className={`w-full rounded-xl border p-3 text-left text-xs font-bold transition-all ${
+                          favoriteResult === item.key
+                            ? 'border-[#0584fa] bg-[rgba(5,132,250,0.08)] text-[#046fd3]'
+                            : 'border-slate-100 bg-white text-slate-600 hover:border-slate-200'
+                        } ${!item.ready ? 'cursor-not-allowed opacity-40' : ''}`}
+                        disabled={!item.ready}
+                      >
+                        <div className="flex items-center justify-between">
+                          <span>{item.label}</span>
+                          {favoriteResult === item.key && <CheckCircle className="h-4 w-4" />}
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                  {favoriteResult && (
+                    <Button type="button" onClick={() => setFavoriteMessage(`Saved ${favoriteResult === 'veo' ? `${videoProvider.toUpperCase()} video` : favoriteResult} as your preferred result.`)} className="mt-4 h-11 w-full rounded-xl text-white shadow-lg" style={{ backgroundColor: BRAND_BLUE, boxShadow: '0 14px 34px rgba(5, 132, 250, 0.2)' }}>
+                      <Save className="mr-2 h-4 w-4" /> Save Selection
+                    </Button>
+                  )}
+                  {favoriteMessage && <p className="mt-3 text-sm text-emerald-600">{favoriteMessage}</p>}
+                </motion.div>
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* Error/Success Messages (Floating) */}
-        <div className="fixed bottom-8 left-1/2 z-50 w-full max-w-md -translate-x-1/2 px-4 space-y-2">
+        <div className="fixed bottom-8 left-1/2 z-50 w-full max-w-md -translate-x-1/2 space-y-2 px-4">
           {successMessage && (
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }} className="rounded-2xl border border-[rgba(5,132,250,0.18)] bg-white/90 p-4 text-sm text-[#046fd3] shadow-2xl backdrop-blur-md">
               <div className="flex items-center gap-3">
