@@ -1,17 +1,17 @@
 import crypto from 'node:crypto';
 import { auditLog, errorLog, json, upsertJob, safeParse } from './_lib.mjs';
 import {
-  createVideoWithProvider,
   getDefaultVideoPrompt,
   providerEnabled,
   providerSetupError,
   resolveVideoModel,
   resolveVideoProvider,
+  startVideoJob,
   validateVideoProviderConfig,
 } from './_video-providers.mjs';
 
 export async function processVideoCreate(event, forcedProvider = null) {
-  if (event.httpMethod != 'POST') return json(405, { success: false, error: 'Method not allowed' });
+  if (event.httpMethod !== 'POST') return json(405, { success: false, error: 'Method not allowed' });
   const body = safeParse(event.body);
   if (!body) return json(400, { success: false, error: 'Invalid JSON request body.' });
   if (!body.imageUrl) return json(400, { success: false, error: 'A generated preview is required before video creation.' });
@@ -25,9 +25,7 @@ export async function processVideoCreate(event, forcedProvider = null) {
   }
 
   const configError = validateVideoProviderConfig(provider);
-  if (configError) {
-    return providerSetupError(provider, configError);
-  }
+  if (configError) return providerSetupError(provider, configError);
 
   const model = resolveVideoModel(provider);
   const prompt = body.prompt || getDefaultVideoPrompt();
@@ -44,7 +42,7 @@ export async function processVideoCreate(event, forcedProvider = null) {
     error_message: null,
     provider,
     model,
-    metadata: { provider, promptLength: prompt.length },
+    metadata: { provider, promptLength: prompt.length, startedAt: now },
     created_at: now,
     updated_at: now,
   });
@@ -72,34 +70,33 @@ export async function processVideoCreate(event, forcedProvider = null) {
   }
 
   try {
-    const result = await createVideoWithProvider({ provider, imageUrl: body.imageUrl, prompt, leadId: body.leadId || null, jobId });
+    const started = await startVideoJob({ provider, imageUrl: body.imageUrl, prompt, leadId: body.leadId || null, jobId });
     await upsertJob({
       id: jobId,
       type: 'smile_video',
-      status: 'completed',
+      status: 'processing',
       lead_id: body.leadId || null,
       input_image_data_url: body.imageUrl,
-      output_asset_url: result.assetUrl,
-      provider_job_id: result.providerJobId,
+      output_asset_url: null,
+      provider_job_id: started.providerJobId,
       error_message: null,
-      provider: result.provider,
-      model: result.model,
-      metadata: { provider: result.provider, model: result.model, storagePath: result.storagePath || null },
+      provider: started.provider,
+      model: started.model,
+      metadata: started.metadata,
       created_at: now,
       updated_at: new Date().toISOString(),
     });
-    await auditLog('smile_video_completed', { jobId, leadId: body.leadId || null, provider: result.provider, model: result.model, assetUrl: result.assetUrl });
+    await auditLog('smile_video_started', { jobId, leadId: body.leadId || null, provider: started.provider, model: started.model, providerJobId: started.providerJobId });
 
-    return json(200, {
+    return json(202, {
       success: true,
-      error: null,
       jobId,
-      status: 'completed',
-      assetUrl: result.assetUrl,
-      provider: result.provider,
-      model: result.model,
-      providerJobId: result.providerJobId,
-      note: `Your smile video is ready from ${result.provider.toUpperCase()}.`,
+      status: 'processing',
+      assetUrl: null,
+      provider: started.provider,
+      model: started.model,
+      providerJobId: started.providerJobId,
+      note: started.note,
     });
   } catch (error) {
     const message = error?.message || 'Video generation failed.';

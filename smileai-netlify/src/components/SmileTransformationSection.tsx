@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { motion } from 'motion/react';
 import {
   AlertCircle,
@@ -30,9 +30,25 @@ interface VideoResult {
 }
 
 interface ProviderUiMessage {
-  type: 'error' | 'success';
+  type: 'error' | 'success' | 'info';
   message: string;
 }
+
+interface PendingVideoJob {
+  provider: VideoProvider;
+  jobId: string;
+  model?: string | null;
+  note?: string;
+}
+
+const motivationalMessages = [
+  '✨ Imagine waking up every day loving your smile...',
+  '💫 A confident smile can transform your entire life',
+  '🌟 Your dream smile is closer than you think',
+  '💎 Invest in yourself - you deserve to feel amazing',
+  '🎯 Confidence starts with a smile you are proud of',
+  '🚀 Picture yourself smiling without hesitation',
+] as const;
 
 async function parseJsonResponse(response: Response) {
   const contentType = response.headers.get('content-type') || '';
@@ -105,8 +121,10 @@ export function SmileTransformationSection() {
   const [style, setStyle] = useState<SmileStyle>('natural');
   const [videoProvider, setVideoProvider] = useState<VideoProvider>('fal');
   const [videoResults, setVideoResults] = useState<Partial<Record<VideoProvider, VideoResult>>>({});
+  const [pendingVideoJobs, setPendingVideoJobs] = useState<Partial<Record<VideoProvider, PendingVideoJob>>>({});
   const [processingPreview, setProcessingPreview] = useState(false);
   const [videoProcessing, setVideoProcessing] = useState<VideoProvider | 'both' | null>(null);
+  const [waitingMessageIndex, setWaitingMessageIndex] = useState(0);
   const [dragActive, setDragActive] = useState(false);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [previewError, setPreviewError] = useState<string | null>(null);
@@ -132,6 +150,7 @@ export function SmileTransformationSection() {
     setFavoriteResult(null);
     setFavoriteMessage(null);
     setProviderMessages({});
+    setPendingVideoJobs({});
   }
 
   async function handleFile(file: File) {
@@ -203,6 +222,36 @@ export function SmileTransformationSection() {
     }
   }
 
+  async function startVideoJob(provider: VideoProvider) {
+    if (!previewImage) return;
+
+    const res = await fetch(getVideoEndpoint(provider), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ imageUrl: previewImage, provider }),
+    });
+    const data = await parseJsonResponse(res);
+    if (!res.ok) throw new Error(data.error || `Unable to start ${provider.toUpperCase()} video.`);
+    if (!data.jobId) throw new Error(`${provider.toUpperCase()} did not return a job ID.`);
+
+    setPendingVideoJobs((current) => ({
+      ...current,
+      [provider]: {
+        provider,
+        jobId: data.jobId,
+        model: data.model || null,
+        note: data.note || `${provider.toUpperCase()} video generation started.`,
+      },
+    }));
+    setProviderMessages((current) => ({
+      ...current,
+      [provider]: {
+        type: 'info',
+        message: data.note || `${provider.toUpperCase()} video started. We will keep checking until it finishes.`,
+      },
+    }));
+  }
+
   async function generateSingleVideo(provider: VideoProvider) {
     if (!previewImage) return;
 
@@ -213,32 +262,8 @@ export function SmileTransformationSection() {
     setProviderMessages((current) => ({ ...current, [provider]: undefined }));
 
     try {
-      const res = await fetch(getVideoEndpoint(provider), {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ imageUrl: previewImage, provider }),
-      });
-      const data = await parseJsonResponse(res);
-      if (!res.ok) throw new Error(data.error || 'This video could not be generated yet. Please try again.');
-
-      setVideoResults((current) => ({
-        ...current,
-        [provider]: {
-          provider,
-          assetUrl: data.assetUrl,
-          jobId: data.jobId || null,
-          model: data.model || null,
-          note: data.note || 'Generated from your AI smile preview',
-        },
-      }));
-      setProviderMessages((current) => ({
-        ...current,
-        [provider]: {
-          type: 'success',
-          message: `${provider === 'fal' ? 'FAL' : 'Veo'} video ready.`,
-        },
-      }));
-      setSuccessMessage(`${provider === 'fal' ? 'FAL' : 'Veo'} video ready. Continue generating more results or compare what you have.`);
+      await startVideoJob(provider);
+      setSuccessMessage(`${provider === 'fal' ? 'FAL' : 'Veo'} video started. You can stay on this page while we wait for the final result.`);
     } catch (error: any) {
       const message = error.message || 'This video could not be generated yet. Please try again.';
       setProviderMessages((current) => ({
@@ -261,63 +286,124 @@ export function SmileTransformationSection() {
 
     try {
       const providers: VideoProvider[] = ['fal', 'veo'];
-      const results = await Promise.allSettled(providers.map(async (provider) => {
-        const res = await fetch(getVideoEndpoint(provider), {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ imageUrl: previewImage, provider }),
-        });
-        const data = await parseJsonResponse(res);
-        if (!res.ok) {
-          throw new Error(data.error || `Unable to generate ${provider.toUpperCase()} video.`);
-        }
-        return { provider, data };
-      }));
-
-      const messages: Partial<Record<VideoProvider, ProviderUiMessage>> = {};
+      const results = await Promise.allSettled(providers.map((provider) => startVideoJob(provider)));
       const failures: string[] = [];
-      let successCount = 0;
-      const nextVideoResults: Partial<Record<VideoProvider, VideoResult>> = {};
 
       results.forEach((result, index) => {
         const provider = providers[index];
-        if (result.status === 'fulfilled') {
-          const { data } = result.value;
-          successCount += 1;
-          nextVideoResults[provider] = {
-            provider,
-            assetUrl: data.assetUrl,
-            jobId: data.jobId || null,
-            model: data.model || null,
-            note: data.note || 'Generated from your AI smile preview',
-          };
-          messages[provider] = {
-            type: 'success',
-            message: `${provider === 'fal' ? 'FAL' : 'Veo'} video ready.`,
-          };
-        } else {
-          const message = result.reason?.message || `Unable to generate ${provider.toUpperCase()} video.`;
-          messages[provider] = { type: 'error', message };
+        if (result.status === 'rejected') {
+          const message = result.reason?.message || `Unable to start ${provider.toUpperCase()} video.`;
+          setProviderMessages((current) => ({
+            ...current,
+            [provider]: { type: 'error', message },
+          }));
           failures.push(`${provider === 'fal' ? 'FAL' : 'Veo'}: ${message}`);
         }
       });
 
-      setVideoResults((current) => ({ ...current, ...nextVideoResults }));
-      setProviderMessages(messages);
-
-      if (successCount === 2) {
-        setSuccessMessage('Both videos are ready to compare side by side.');
-      } else if (successCount === 1) {
-        setSuccessMessage('One provider finished successfully. Review the provider-specific status below.');
-      }
-
-      if (failures.length) {
+      if (failures.length === 0) {
+        setSuccessMessage('Both videos started. Keep this page open while we wait for the final renders.');
+      } else if (failures.length === 1) {
+        setSuccessMessage('One provider started successfully. Review the provider-specific status below.');
+        setVideoError(failures.join(' '));
+      } else {
         setVideoError(failures.join(' '));
       }
     } finally {
       setVideoProcessing(null);
     }
   }
+
+  useEffect(() => {
+    const activeJobs = Object.values(pendingVideoJobs).filter(Boolean) as PendingVideoJob[];
+    if (!activeJobs.length) return undefined;
+
+    const interval = window.setInterval(() => {
+      setWaitingMessageIndex((index) => (index + 1) % motivationalMessages.length);
+    }, 3000);
+
+    let cancelled = false;
+
+    const poll = async () => {
+      const results = await Promise.allSettled(activeJobs.map(async (job) => {
+        const res = await fetch(`/api/video-status?jobId=${encodeURIComponent(job.jobId)}`);
+        const data = await parseJsonResponse(res);
+        if (!res.ok) throw new Error(data.error || `Unable to check ${job.provider.toUpperCase()} status.`);
+        return { job, data };
+      }));
+
+      if (cancelled) return;
+
+      results.forEach((result) => {
+        if (result.status === 'rejected') {
+          const message = result.reason?.message || 'Unable to check video status.';
+          setVideoError(message);
+          return;
+        }
+
+        const { job, data } = result.value;
+        const providerLabel = job.provider === 'fal' ? 'FAL' : 'Veo';
+
+        if (data.status === 'completed' && data.assetUrl) {
+          setPendingVideoJobs((current) => {
+            const next = { ...current };
+            delete next[job.provider];
+            return next;
+          });
+          setVideoResults((current) => ({
+            ...current,
+            [job.provider]: {
+              provider: job.provider,
+              assetUrl: data.assetUrl,
+              jobId: data.jobId || job.jobId,
+              model: data.model || job.model || null,
+              note: data.note || `${providerLabel} video ready.`,
+            },
+          }));
+          setProviderMessages((current) => ({
+            ...current,
+            [job.provider]: { type: 'success', message: `${providerLabel} video ready.` },
+          }));
+          setSuccessMessage(`${providerLabel} video ready. Continue comparing results or start the other provider.`);
+          return;
+        }
+
+        if (data.status === 'failed') {
+          setPendingVideoJobs((current) => {
+            const next = { ...current };
+            delete next[job.provider];
+            return next;
+          });
+          const message = data.error || `${providerLabel} video failed.`;
+          setProviderMessages((current) => ({
+            ...current,
+            [job.provider]: { type: 'error', message },
+          }));
+          setVideoError(message);
+          return;
+        }
+
+        setProviderMessages((current) => ({
+          ...current,
+          [job.provider]: {
+            type: 'info',
+            message: data.queueNote || data.note || `${providerLabel} is still processing.`,
+          },
+        }));
+      });
+    };
+
+    void poll();
+    const pollInterval = window.setInterval(() => {
+      void poll();
+    }, 5000);
+
+    return () => {
+      cancelled = true;
+      window.clearInterval(interval);
+      window.clearInterval(pollInterval);
+    };
+  }, [pendingVideoJobs]);
 
   function saveFavorite() {
     if (!favoriteResult) {
@@ -333,7 +419,8 @@ export function SmileTransformationSection() {
 
   function renderVideoCard(provider: VideoProvider, title: string) {
     const result = videoResults[provider];
-    const isLoading = videoProcessing === provider || videoProcessing === 'both';
+    const pendingJob = pendingVideoJobs[provider];
+    const isLoading = videoProcessing === provider || videoProcessing === 'both' || Boolean(pendingJob);
 
     return (
       <div className="overflow-hidden rounded-[28px] border border-white/80 bg-white/90 shadow-[0_24px_70px_rgba(14,116,144,0.12)] backdrop-blur-xl">
@@ -356,8 +443,8 @@ export function SmileTransformationSection() {
           ) : (
             <div className="flex h-full flex-col items-center justify-center gap-3 px-6 text-center">
               {isLoading ? <Loader2 className="h-10 w-10 animate-spin text-sky-600" /> : <Video className="h-10 w-10 text-sky-300" />}
-              <p className="text-sm font-medium text-slate-700">{isLoading ? 'Rendering video result...' : 'Generate a video to compare movement, realism, and polish.'}</p>
-              <p className="max-w-xs text-xs text-slate-500">{result ? result.note : 'This result card stays visible so the next action is always obvious.'}</p>
+              <p className="text-sm font-medium text-slate-700">{isLoading ? 'Waiting for the final rendered video...' : 'Generate a video to compare movement, realism, and polish.'}</p>
+              <p className="max-w-xs text-xs text-slate-500">{pendingJob?.note || result?.note || 'This result card stays visible so the next action is always obvious.'}</p>
             </div>
           )}
         </div>
@@ -365,7 +452,7 @@ export function SmileTransformationSection() {
         <div className="space-y-3 px-6 py-5">
           <Button
             onClick={() => generateSingleVideo(provider)}
-            disabled={!previewImage || Boolean(videoProcessing)}
+            disabled={!previewImage || Boolean(videoProcessing) || Boolean(pendingJob)}
             className="h-11 w-full rounded-2xl bg-slate-950 text-white hover:bg-slate-800"
           >
             {videoProcessing === provider
@@ -374,11 +461,11 @@ export function SmileTransformationSection() {
           </Button>
           {!previewImage && renderDisabledHelper('Generate your AI smile preview first to unlock video creation.')}
           {providerMessages[provider] && (
-            <div className={`rounded-2xl border px-3 py-2 text-xs ${providerMessages[provider]?.type === 'error' ? 'border-red-200 bg-red-50 text-red-700' : 'border-emerald-200 bg-emerald-50 text-emerald-700'}`}>
+            <div className={`rounded-2xl border px-3 py-2 text-xs ${providerMessages[provider]?.type === 'error' ? 'border-red-200 bg-red-50 text-red-700' : providerMessages[provider]?.type === 'info' ? 'border-sky-200 bg-sky-50 text-sky-700' : 'border-emerald-200 bg-emerald-50 text-emerald-700'}`}>
               {providerMessages[provider]?.message}
             </div>
           )}
-          {result?.jobId && <p className="text-xs text-slate-500">Job ID: {result.jobId}</p>}
+          {(pendingJob?.jobId || result?.jobId) && <p className="text-xs text-slate-500">Job ID: {pendingJob?.jobId || result?.jobId}</p>}
           {result?.assetUrl && (
             <a href={result.assetUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-xs font-medium text-sky-700 hover:text-sky-800">
               <Download className="h-3.5 w-3.5" /> Open video asset
@@ -567,7 +654,7 @@ export function SmileTransformationSection() {
                 </div>
                 <div className="max-w-sm rounded-2xl border border-white/80 bg-white/80 px-4 py-3 text-sm text-slate-600 shadow-sm">
                   <p className="font-semibold text-slate-900">Choose Video Provider</p>
-                  <p>Generate both to compare movement, realism, and polish.</p>
+                  <p>Start FAL or Veo, wait while it renders, then review the finished video here.</p>
                 </div>
               </div>
 
@@ -602,6 +689,17 @@ export function SmileTransformationSection() {
                 </Button>
               </div>
               {!previewImage && renderDisabledHelper('Generate your AI smile preview first to unlock video creation.')}
+              {Object.keys(pendingVideoJobs).length > 0 && (
+                <div className="mb-6 rounded-[28px] border border-sky-100 bg-[linear-gradient(135deg,rgba(240,249,255,0.92),rgba(236,254,255,0.92))] px-5 py-4">
+                  <div className="flex items-center gap-3">
+                    <Loader2 className="h-5 w-5 animate-spin text-sky-600" />
+                    <div>
+                      <p className="text-sm font-semibold text-slate-950">Video generation in progress</p>
+                      <p className="text-sm text-slate-600">{motivationalMessages[waitingMessageIndex]}</p>
+                    </div>
+                  </div>
+                </div>
+              )}
 
               <div className="grid gap-5 lg:grid-cols-2">
                 {renderVideoCard('fal', 'FAL Video Result')}
