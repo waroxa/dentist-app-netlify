@@ -140,6 +140,7 @@ export function SmileTransformationSection() {
   const [previewAssetUrl, setPreviewAssetUrl] = useState<string | null>(null);
   const [previewJobId, setPreviewJobId] = useState<string | null>(null);
   const [style, setStyle] = useState<SmileStyle>('natural');
+  const [_videoProvider, setVideoProvider] = useState<VideoProvider>('veo');
   const [videoResults, setVideoResults] = useState<Partial<Record<VideoProvider, VideoResult>>>({});
   const [pendingVideoJobs, setPendingVideoJobs] = useState<Partial<Record<VideoProvider, PendingVideoJob>>>({});
   const [processingPreview, setProcessingPreview] = useState(false);
@@ -506,7 +507,7 @@ export function SmileTransformationSection() {
         </div>
 
         <div className="mx-auto max-w-6xl space-y-8">
-          <div className="grid gap-6 xl:grid-cols-[1.15fr_0.95fr]">
+          <div className="grid gap-6 lg:grid-cols-2">
             <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-lg">
               <div className="px-6 py-5" style={{ backgroundColor: BRAND_BLUE }}>
                 <h3 className="text-xl font-semibold text-white">Step 1: Enter Your Information</h3>
@@ -749,10 +750,11 @@ export function SmileTransformationSection() {
                     <h3 className="text-lg font-semibold text-slate-900">5. Video</h3>
                     <Badge className="text-[10px] text-white" style={{ backgroundColor: BRAND_BLUE }}>Step 5</Badge>
                   </div>
+                  <p className="mb-3 text-sm text-slate-600">This video may take 2-5 minutes to generate.</p>
                   <Button onClick={() => generateSingleVideo('veo')} disabled={!canGenerateVideos} className="mb-4 h-11 w-full rounded-xl text-white hover:opacity-90" style={{ backgroundColor: BRAND_BLUE }}>
                     {videoProcessing === 'veo' ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Creating...</> : 'Create AI Video'}
                   </Button>
-                  {renderVideoCard('veo', 'AI Video Result')}
+                  {renderVideoCard('veo', 'AI VIDEO RESULT')}
                 </motion.div>
 
                 <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-lg">
