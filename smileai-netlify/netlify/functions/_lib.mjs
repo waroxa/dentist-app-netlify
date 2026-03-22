@@ -102,6 +102,7 @@ export async function uploadBase64Asset({ bucket = getImageBucket(), folder = 'g
 }
 
 export function adminCookieName() { return 'svpro_admin'; }
+export function adminSetupCookieName() { return 'svpro_admin_setup'; }
 
 function b64url(input) {
   return Buffer.from(input).toString('base64url');
@@ -141,12 +142,74 @@ export function adminSetCookie(token, maxAge = 60 * 60 * 8) {
 export function adminClearCookie() {
   return `${adminCookieName()}=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0`;
 }
+export function adminSetupSetCookie(token, maxAge = 60 * 15) {
+  return `${adminSetupCookieName()}=${token}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${maxAge}`;
+}
+export function adminSetupClearCookie() {
+  return `${adminSetupCookieName()}=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0`;
+}
 
 export async function requireAdmin(event) {
   const token = readCookie(event, adminCookieName());
   const session = verifyAdminSession(token);
   if (!session) return null;
   return session;
+}
+
+export async function requireAdminSetup(event) {
+  const token = readCookie(event, adminSetupCookieName());
+  const session = verifyAdminSession(token);
+  if (!session || session.purpose !== 'admin_setup') return null;
+  return session;
+}
+
+export function hashPassword(password) {
+  const salt = crypto.randomBytes(16);
+  const derived = crypto.scryptSync(String(password), salt, 64);
+  return `scrypt:${salt.toString('hex')}:${derived.toString('hex')}`;
+}
+
+export function verifyPassword(password, passwordHash) {
+  const [scheme, saltHex, hashHex] = String(passwordHash || '').split(':');
+  if (scheme !== 'scrypt' || !saltHex || !hashHex) return false;
+  const salt = Buffer.from(saltHex, 'hex');
+  const expected = Buffer.from(hashHex, 'hex');
+  const provided = crypto.scryptSync(String(password), salt, expected.length);
+  return crypto.timingSafeEqual(provided, expected);
+}
+
+export function getAdminSetupSecret() {
+  return getEnv('SMILEVISION_ADMIN_SETUP_SECRET');
+}
+
+export async function getAdminCredential() {
+  const supabase = getSupabase();
+  const { data, error } = await supabase
+    .from('admin_credentials')
+    .select('id, password_hash, activated_at, password_updated_at')
+    .eq('id', 'primary')
+    .maybeSingle();
+  if (error) throw error;
+  return data;
+}
+
+export async function setAdminCredential({ passwordHash, metadata = {} }) {
+  const supabase = getSupabase();
+  const now = new Date().toISOString();
+  const payload = {
+    id: 'primary',
+    password_hash: passwordHash,
+    activated_at: now,
+    password_updated_at: now,
+    metadata,
+  };
+  const { data, error } = await supabase
+    .from('admin_credentials')
+    .upsert(payload, { onConflict: 'id' })
+    .select('id, activated_at, password_updated_at')
+    .single();
+  if (error) throw error;
+  return data;
 }
 
 function getKeyBytes() {
