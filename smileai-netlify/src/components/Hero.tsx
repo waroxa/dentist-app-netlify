@@ -23,188 +23,149 @@ export function Hero({ clinicBranding }: HeroProps) {
 
   return (
     <section className="relative overflow-hidden bg-white">
-      {/* Decorative Background Elements */}
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute top-0 right-0 h-[500px] w-[500px] rounded-full blur-3xl" style={{ background: 'radial-gradient(circle, rgba(8,145,178,0.1) 0%, transparent 70%)' }} />
-        <div className="absolute bottom-0 left-0 h-[500px] w-[500px] rounded-full blur-3xl" style={{ background: 'radial-gradient(circle, rgba(6,182,212,0.08) 0%, transparent 70%)' }} />
-      </div>
-
-      {/* Navigation - Clean Professional Header */}
-      <nav className="relative z-10 border-b border-white/10 px-4 py-4 sm:px-6 sm:py-5 lg:px-8" style={{ backgroundColor: BRAND_PRIMARY }}>
-        <div className="flex w-full flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+      {/* Navigation - Logo Left, Buttons Right */}
+      <nav className="relative z-20 px-4 py-3 sm:px-6 sm:py-4 lg:px-8" style={{ backgroundColor: BRAND_PRIMARY }}>
+        <div className="mx-auto max-w-7xl flex items-center justify-between">
+          {/* Logo - Left */}
           <motion.div 
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
-            className="flex items-center justify-center gap-3 text-center sm:gap-4 lg:justify-start lg:text-left"
+            className="flex items-center gap-3"
           >
             <img 
               src={TOOTH_LOGO} 
               alt={clinicBranding.clinicName}
-              className="h-10 w-10 sm:h-12 sm:w-12 object-contain rounded-lg bg-white p-1"
+              className="h-10 w-10 sm:h-11 sm:w-11 object-contain rounded-lg bg-white p-1"
             />
-            <div>
-              <h1 className="text-lg sm:text-xl font-bold text-white">{clinicBranding.clinicName}</h1>
-              <p className="text-xs sm:text-sm font-medium text-white no-underline">
-                AI Smile Preview Platform
-              </p>
+            <div className="hidden sm:block">
+              <h1 className="text-base sm:text-lg font-bold text-white">{clinicBranding.clinicName}</h1>
+              <p className="text-xs text-white/80">AI Smile Preview Platform</p>
             </div>
           </motion.div>
+
+          {/* Buttons - Right */}
           <motion.div 
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
-            className="flex w-full flex-col gap-3 sm:flex-row sm:items-center sm:justify-center lg:w-auto lg:justify-end lg:ml-auto"
+            className="flex items-center gap-2 sm:gap-3"
           >
+            <div className="hidden md:flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1.5 text-sm text-white">
+              <MapPin className="h-3.5 w-3.5" />
+              <span className="font-medium">Premium AI Smile Preview</span>
+            </div>
             <Button 
               onClick={scrollToTransform}
-              className="order-2 text-sm sm:text-base h-9 sm:h-10 px-4 sm:px-6 font-semibold bg-white hover:bg-slate-50 sm:order-1"
-              style={{ color: '#0891b2' }}
+              className="text-sm h-9 px-4 font-semibold bg-white hover:bg-slate-50"
+              style={{ color: BRAND_PRIMARY }}
             >
               Try Free
             </Button>
-            <div className="order-1 flex items-center justify-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm text-white sm:order-2 lg:min-w-[260px] lg:justify-start">
-              <MapPin className="h-4 w-4 text-white" />
-              <span className="font-medium text-white no-underline">
-                Premium AI Smile Preview
-              </span>
-            </div>
           </motion.div>
         </div>
       </nav>
 
-      {/* Hero Content */}
-      <div className="relative z-10 mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8 lg:py-24">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-          {/* Left Column - Text Content */}
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center lg:text-left order-2 lg:order-1"
-          >
-            {/* Trust Badge */}
-            <div className="mb-6 inline-flex items-center gap-2 rounded-xl px-4 py-2" style={{ backgroundColor: 'rgba(8,145,178,0.1)', border: '1px solid rgba(8,145,178,0.2)' }}>
-              <Star className="h-4 w-4 sm:h-5 sm:w-5 text-yellow-500 fill-yellow-500" />
-              <span className="text-xs sm:text-sm font-medium text-slate-700">Trusted by 1000+ dental professionals</span>
-            </div>
-
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-slate-900 mb-6 leading-tight">
-              See Your Dream Smile
-              <span className="block mt-2" style={{ color: '#0891b2' }}>
-                With AI in 30 Seconds
-              </span>
-            </h1>
-            
-            <p className="text-base sm:text-lg lg:text-xl text-slate-600 mb-8 max-w-xl mx-auto lg:mx-0 leading-relaxed">
-              Upload a clear smile photo and instantly visualize your transformation. Powered by advanced AI, designed for modern dental consultations.
-            </p>
-
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-12">
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Button 
-                  onClick={scrollToTransform}
-                  size="lg"
-                  className="text-white h-12 sm:h-14 px-6 sm:px-8 text-base sm:text-lg shadow-xl font-semibold w-full sm:w-auto hover:opacity-90"
-                  style={{ backgroundColor: BRAND_PRIMARY }}
-                >
-                  Try AI Preview Free
-                  <ArrowRight className="h-5 w-5 ml-2" />
-                </Button>
-              </motion.div>
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Button 
-                  variant="outline"
-                  size="lg"
-                  className="h-12 sm:h-14 px-6 sm:px-8 text-base sm:text-lg border-2 border-slate-300 font-semibold hover:bg-slate-50 w-full sm:w-auto"
-                  onClick={() => {
-                    const section = document.getElementById('examples');
-                    section?.scrollIntoView({ behavior: 'smooth' });
-                  }}
-                >
-                  View Examples
-                </Button>
-              </motion.div>
-            </div>
-
-            {/* Trust Indicators */}
-            <div className="grid grid-cols-3 gap-4 sm:gap-6 max-w-lg mx-auto lg:mx-0">
-              <motion.div 
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-                className="text-center lg:text-left"
-              >
-                <div className="flex items-center justify-center lg:justify-start gap-2 mb-2">
-                  <Shield className="h-5 w-5 sm:h-6 sm:w-6" style={{ color: '#0891b2' }} />
-                </div>
-                <p className="text-xs sm:text-sm font-bold text-slate-900">100% Secure</p>
-                <p className="text-xs text-slate-500">Your privacy protected</p>
-              </motion.div>
-              <motion.div 
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
-                className="text-center lg:text-left"
-              >
-                <div className="flex items-center justify-center lg:justify-start gap-2 mb-2">
-                  <Award className="h-5 w-5 sm:h-6 sm:w-6" style={{ color: '#0891b2' }} />
-                </div>
-                <p className="text-xs sm:text-sm font-bold text-slate-900">AI Powered</p>
-                <p className="text-xs text-slate-500">Advanced technology</p>
-              </motion.div>
-              <motion.div 
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 }}
-                className="text-center lg:text-left"
-              >
-                <div className="flex items-center justify-center lg:justify-start gap-2 mb-2">
-                  <Star className="h-5 w-5 sm:h-6 sm:w-6 text-yellow-500 fill-yellow-500" />
-                </div>
-                <p className="text-xs sm:text-sm font-bold text-slate-900">4.9/5 Rating</p>
-                <p className="text-xs text-slate-500">500+ reviews</p>
-              </motion.div>
-            </div>
-          </motion.div>
-
-          {/* Right Column - Hero Image */}
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="relative order-1 lg:order-2"
-          >
-            <div className="relative overflow-hidden rounded-2xl border border-slate-200 shadow-2xl">
-              <img
-                src={clinicBranding.heroImage || "https://images.unsplash.com/photo-1606811841689-23dfddce3e95?w=800&q=80"}
-                alt="SmileVisionPro AI smile preview"
-                className="w-full h-[280px] sm:h-[380px] lg:h-[480px] xl:h-[550px] object-cover"
-              />
-              {/* Overlay Badge - with solid white background for readability */}
+      {/* Hero Section - Image with Overlay Content */}
+      <div className="relative">
+        {/* Hero Image - Full Width Background */}
+        <div className="relative h-[400px] sm:h-[500px] lg:h-[600px]">
+          <img
+            src={clinicBranding.heroImage || "https://images.unsplash.com/photo-1606811841689-23dfddce3e95?w=1600&q=80"}
+            alt="SmileVisionPro AI dental consultation"
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+          {/* Dark Overlay for text readability */}
+          <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-transparent" />
+          
+          {/* Overlay Content - Left Side */}
+          <div className="absolute inset-0 flex items-center">
+            <div className="mx-auto max-w-7xl w-full px-4 sm:px-6 lg:px-8">
               <motion.div 
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 }}
-                className="absolute bottom-4 left-4 right-4 rounded-xl bg-white p-4 shadow-xl sm:bottom-6 sm:left-6 sm:right-6 sm:p-5"
+                transition={{ duration: 0.6 }}
+                className="max-w-xl"
               >
-                <div className="flex items-center gap-3 sm:gap-4">
-                  <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: BRAND_PRIMARY }}>
-                    <span className="text-lg sm:text-xl text-white">✨</span>
+                {/* Trust Badge */}
+                <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 px-3 py-1.5">
+                  <Star className="h-4 w-4 text-yellow-400 fill-yellow-400" />
+                  <span className="text-xs sm:text-sm font-medium text-white">Trusted by 1000+ dental professionals</span>
+                </div>
+
+                <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-white mb-4 leading-tight">
+                  See Your Dream Smile
+                  <span className="block mt-1" style={{ color: '#06b6d4' }}>
+                    With AI in 30 Seconds
+                  </span>
+                </h1>
+                
+                <p className="text-sm sm:text-base lg:text-lg text-white/90 mb-6 max-w-lg leading-relaxed">
+                  Upload a clear smile photo and instantly visualize your transformation. Powered by advanced AI, designed for modern dental consultations.
+                </p>
+
+                {/* CTA Buttons */}
+                <div className="flex flex-col sm:flex-row gap-3 mb-8">
+                  <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+                    <Button 
+                      onClick={scrollToTransform}
+                      size="lg"
+                      className="text-white h-11 sm:h-12 px-6 sm:px-8 text-sm sm:text-base shadow-lg font-semibold w-full sm:w-auto"
+                      style={{ backgroundColor: BRAND_PRIMARY }}
+                    >
+                      Try AI Preview Free
+                      <ArrowRight className="h-4 w-4 ml-2" />
+                    </Button>
+                  </motion.div>
+                  <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+                    <Button 
+                      variant="outline"
+                      size="lg"
+                      className="h-11 sm:h-12 px-6 sm:px-8 text-sm sm:text-base border-2 border-white/30 bg-white/10 backdrop-blur-sm text-white font-semibold hover:bg-white/20 w-full sm:w-auto"
+                      onClick={() => {
+                        const section = document.getElementById('examples');
+                        section?.scrollIntoView({ behavior: 'smooth' });
+                      }}
+                    >
+                      View Examples
+                    </Button>
+                  </motion.div>
+                </div>
+
+                {/* Trust Indicators */}
+                <div className="flex flex-wrap gap-4 sm:gap-6">
+                  <div className="flex items-center gap-2">
+                    <Shield className="h-4 w-4 sm:h-5 sm:w-5 text-cyan-400" />
+                    <span className="text-xs sm:text-sm font-medium text-white">100% Secure</span>
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm sm:text-base font-bold text-slate-900">100% Free AI Preview</p>
-                    <p className="text-xs sm:text-sm text-slate-600">See your new smile instantly</p>
+                  <div className="flex items-center gap-2">
+                    <Award className="h-4 w-4 sm:h-5 sm:w-5 text-cyan-400" />
+                    <span className="text-xs sm:text-sm font-medium text-white">AI Powered</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Star className="h-4 w-4 sm:h-5 sm:w-5 text-yellow-400 fill-yellow-400" />
+                    <span className="text-xs sm:text-sm font-medium text-white">4.9/5 Rating</span>
                   </div>
                 </div>
               </motion.div>
+            </div>
+          </div>
+
+          {/* Floating Badge - Bottom Right */}
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+            className="absolute bottom-4 right-4 sm:bottom-6 sm:right-6 lg:bottom-8 lg:right-8"
+          >
+            <div className="flex items-center gap-3 rounded-xl bg-white p-3 sm:p-4 shadow-xl">
+              <div className="h-10 w-10 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: BRAND_PRIMARY }}>
+                <span className="text-lg text-white">✨</span>
+              </div>
+              <div>
+                <p className="text-sm font-bold text-slate-900">100% Free AI Preview</p>
+                <p className="text-xs text-slate-500">See your new smile instantly</p>
+              </div>
             </div>
           </motion.div>
         </div>
