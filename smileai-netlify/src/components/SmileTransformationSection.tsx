@@ -82,8 +82,6 @@ function getVideoEndpoint(provider: VideoProvider) {
   return '/api/video/veo';
 }
 
-const STEP_LABELS = ['Lead Form', 'Upload Photo', 'Choose Style', 'AI Preview', 'Create Video', 'Compare'] as const;
-
 // Clean Blue/White color scheme like professional dental websites
 const BRAND_BLUE = '#2563eb';
 
@@ -155,7 +153,6 @@ export function SmileTransformationSection() {
   const [favoriteMessage, setFavoriteMessage] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  const currentStep = getStepIndex(isLeadCaptured, uploadedImage, previewImage, videoResults);
   const selectedStyle = useMemo(() => STYLE_OPTIONS.find((option) => option.value === style) ?? STYLE_OPTIONS[1], [style]);
   const canGeneratePreview = isLeadCaptured && Boolean(uploadedImage) && !processingPreview;
   const canGenerateVideos = isLeadCaptured && Boolean(previewImage) && !videoProcessing;
@@ -458,65 +455,14 @@ export function SmileTransformationSection() {
 
   return (
     <section id="smile-transform" className="relative bg-slate-50 px-4 py-8 sm:py-12 lg:py-16">
-      <div className="mx-auto max-w-6xl">
-        {/* Professional 6-Step Progress Section */}
-        <div className="mb-10 sm:mb-14">
-          <div className="mx-auto max-w-6xl rounded-xl border border-slate-200 bg-white p-6 shadow-lg sm:p-8">
-            <h2 className="text-center text-xl sm:text-2xl font-bold text-slate-900 mb-8">Your Smile Transformation Journey</h2>
-            <div className="relative">
-              {/* Progress Line */}
-              <div className="absolute left-0 right-0 top-6 hidden h-1 bg-slate-200 lg:block" style={{ marginLeft: '8.33%', marginRight: '8.33%', width: '83.33%' }} />
-              <motion.div
-                className="absolute top-6 hidden h-1 lg:block"
-                style={{ backgroundColor: BRAND_BLUE, marginLeft: '8.33%' }}
-                initial={{ width: '0%' }}
-                animate={{ width: `${((currentStep - 1) / (STEP_LABELS.length - 1)) * 83.33}%` }}
-                transition={{ duration: 0.5, ease: 'easeInOut' }}
-              />
-              <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-6">
-                {STEP_LABELS.map((label, index) => {
-                  const stepNumber = index + 1;
-                  const isComplete = stepNumber < currentStep;
-                  const isActive = stepNumber === currentStep;
-                  const isHighlighted = isActive || isComplete;
-                  return (
-                    <div key={label} className="relative flex flex-col items-center text-center">
-                      <motion.div
-                        initial={false}
-                        animate={{
-                          scale: isActive ? 1.1 : 1,
-                          backgroundColor: isHighlighted ? BRAND_BLUE : '#ffffff',
-                          borderColor: isHighlighted ? BRAND_BLUE : '#e2e8f0',
-                        }}
-                        className="relative z-10 flex h-12 w-12 items-center justify-center rounded-full border-2 shadow-md transition-all duration-300"
-                      >
-                        {isComplete ? (
-                          <CheckCircle className="h-6 w-6 text-white" />
-                        ) : (
-                          <span className={`text-lg font-bold ${isHighlighted ? 'text-white' : 'text-slate-600'}`}>
-                            {stepNumber}
-                          </span>
-                        )}
-                      </motion.div>
-                      <p className={`mt-3 text-xs sm:text-sm font-semibold uppercase tracking-wide ${isHighlighted ? 'text-slate-900' : 'text-slate-500'}`}>
-                        {label}
-                      </p>
-                    </div>
-                  );
-                })}
-              </div>
+      <div className="mx-auto max-w-6xl space-y-8">
+        <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(320px,0.95fr)] lg:items-start">
+          <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="rounded-[28px] border border-slate-200 bg-white px-6 py-7 shadow-[0_20px_60px_rgba(15,23,42,0.08)] sm:px-8 sm:py-8">
+            <div className="mb-8">
+              <h2 className="text-3xl font-medium tracking-tight text-slate-900 sm:text-[2.1rem]">Enter Your Information</h2>
+              <p className="mt-3 text-lg text-slate-600">We&apos;ll create your personalized smile preview in the next step</p>
             </div>
-          </div>
-        </div>
-
-        <div className="mx-auto max-w-6xl space-y-8">
-          <div className="grid gap-6 lg:grid-cols-2">
-            <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-lg">
-              <div className="px-6 py-5" style={{ backgroundColor: BRAND_BLUE }}>
-                <h3 className="text-xl font-semibold text-white">Step 1: Enter Your Information</h3>
-                <p className="mt-1 text-sm text-white/80">We&apos;ll create your personalized smile preview in the next step</p>
-              </div>
-              <form onSubmit={handleLeadSubmit} className="space-y-5 px-6 py-6 sm:px-8">
+            <form onSubmit={handleLeadSubmit} className="space-y-5">
                 <div>
                   <Label htmlFor="lead-fullName" className="mb-2 flex items-center gap-2 text-base font-medium text-slate-900">
                     <User className="h-4 w-4 text-slate-500" />
@@ -530,7 +476,7 @@ export function SmileTransformationSection() {
                       if (leadErrors.fullName) setLeadErrors((current) => ({ ...current, fullName: undefined }));
                     }}
                     placeholder="John Smith"
-                    className={`h-12 text-base ${leadErrors.fullName ? 'border-red-500' : ''}`}
+                    className={`h-14 rounded-2xl border-slate-200 bg-slate-50 text-base shadow-none ${leadErrors.fullName ? 'border-red-500' : ''}`}
                   />
                   {leadErrors.fullName && <p className="mt-1.5 text-sm text-red-600">{leadErrors.fullName}</p>}
                 </div>
@@ -549,7 +495,7 @@ export function SmileTransformationSection() {
                       if (leadErrors.email) setLeadErrors((current) => ({ ...current, email: undefined }));
                     }}
                     placeholder="john@example.com"
-                    className={`h-12 text-base ${leadErrors.email ? 'border-red-500' : ''}`}
+                    className={`h-14 rounded-2xl border-slate-200 bg-slate-50 text-base shadow-none ${leadErrors.email ? 'border-red-500' : ''}`}
                   />
                   {leadErrors.email && <p className="mt-1.5 text-sm text-red-600">{leadErrors.email}</p>}
                 </div>
@@ -568,7 +514,7 @@ export function SmileTransformationSection() {
                       if (leadErrors.phone) setLeadErrors((current) => ({ ...current, phone: undefined }));
                     }}
                     placeholder="(555) 123-4567"
-                    className={`h-12 text-base ${leadErrors.phone ? 'border-red-500' : ''}`}
+                    className={`h-14 rounded-2xl border-slate-200 bg-slate-50 text-base shadow-none ${leadErrors.phone ? 'border-red-500' : ''}`}
                   />
                   {leadErrors.phone && <p className="mt-1.5 text-sm text-red-600">{leadErrors.phone}</p>}
                 </div>
@@ -583,7 +529,7 @@ export function SmileTransformationSection() {
                         setLeadForm((current) => ({ ...current, interestedIn: e.target.value }));
                         if (leadErrors.interestedIn) setLeadErrors((current) => ({ ...current, interestedIn: undefined }));
                       }}
-                      className={`h-12 w-full appearance-none rounded-xl border bg-background px-3 py-2 pr-10 text-base ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${leadErrors.interestedIn ? 'border-red-500' : 'border-input'}`}
+                      className={`h-14 w-full appearance-none rounded-2xl border bg-white px-4 py-2 pr-10 text-base ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${leadErrors.interestedIn ? 'border-red-500' : 'border-slate-200'}`}
                     >
                       <option value="">Select a service...</option>
                       {INTEREST_OPTIONS.map((option) => (
@@ -602,17 +548,17 @@ export function SmileTransformationSection() {
                     value={leadForm.notes}
                     onChange={(e) => setLeadForm((current) => ({ ...current, notes: e.target.value }))}
                     placeholder="Tell us about your smile goals or any specific concerns..."
-                    className="min-h-[120px] text-base"
+                    className="min-h-[120px] rounded-2xl border-slate-200 text-base shadow-none"
                   />
                 </div>
 
-                <Button type="submit" className="h-12 w-full rounded-xl text-base font-semibold text-white shadow-lg hover:opacity-90" style={{ backgroundColor: BRAND_BLUE }}>
-                  {isLeadCaptured ? 'Update & Continue' : 'Get Started Free'}
+                <Button type="submit" className="h-14 w-full rounded-2xl bg-gradient-to-r from-teal-500 to-blue-600 text-base font-semibold text-white shadow-[0_14px_30px_rgba(37,99,235,0.25)] hover:opacity-95">
+                  {isLeadCaptured ? 'Update & Continue ✨' : 'Get Started Free ✨'}
                 </Button>
 
-                <div className="space-y-4 pt-1 text-center text-sm text-slate-500">
+                <div className="space-y-6 pt-2 text-center text-sm text-slate-500">
                   <p>By continuing, you agree to be contacted about your smile transformation. Your information is secure and will never be shared.</p>
-                  <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-blue-600">
+                  <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-emerald-600">
                     <span>✓ Secure &amp; Confidential</span>
                     <span>✓ Get Results in 24 Hours</span>
                   </div>
@@ -620,8 +566,8 @@ export function SmileTransformationSection() {
               </form>
             </motion.div>
 
-            <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="rounded-xl border border-slate-200 bg-gradient-to-br from-blue-50 to-white p-6 shadow-lg sm:p-8">
-              <h3 className="text-xl font-semibold text-slate-900">Why Get Your Free Preview?</h3>
+            <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="rounded-[28px] border border-blue-100 bg-gradient-to-br from-slate-50 via-blue-50 to-white p-6 shadow-[0_20px_60px_rgba(15,23,42,0.08)] sm:p-8">
+              <h3 className="text-3xl font-medium tracking-tight text-slate-900">Why Get Your Free Preview?</h3>
               <div className="mt-6 space-y-4">
                 {[
                   ['See Your Potential', 'Visualize your smile transformation before committing to treatment'],
@@ -629,7 +575,7 @@ export function SmileTransformationSection() {
                   ['Personalized Consultation', 'Our team will review your preview and provide expert recommendations'],
                   ['Fast Results', 'Get your AI-generated smile transformation in under 30 seconds'],
                 ].map(([title, body]) => (
-                  <div key={title} className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+                  <div key={title} className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
                     <div className="flex items-start gap-3">
                       <CheckCircle className="mt-0.5 h-5 w-5 text-green-500" />
                       <div>
@@ -640,7 +586,7 @@ export function SmileTransformationSection() {
                   </div>
                 ))}
               </div>
-              <div className="mt-6 rounded-xl bg-green-50 px-5 py-4 text-center border border-green-100">
+              <div className="mt-6 rounded-2xl border border-cyan-200 bg-cyan-50/60 px-5 py-5 text-center">
                 <p className="text-lg font-semibold text-slate-900">Over 10,000+ smiles transformed!</p>
                 <p className="mt-0.5 text-sm text-slate-600">Join thousands who&apos;ve discovered their dream smile.</p>
               </div>
@@ -814,7 +760,6 @@ export function SmileTransformationSection() {
               </div>
             </motion.div>
           )}
-        </div>
       </div>
     </section>
   );
