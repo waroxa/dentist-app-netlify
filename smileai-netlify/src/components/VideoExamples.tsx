@@ -60,10 +60,10 @@ export function VideoExamples() {
               
               {/* Video Player */}
               <div className="p-4">
-                <div className="relative aspect-[4/5] overflow-hidden rounded-lg bg-slate-100">
+                <div className="relative h-[400px] overflow-hidden rounded-lg bg-slate-100">
                   <video
                     src={example.videoUrl}
-                    className="h-full w-full object-cover"
+                    className="h-full w-full object-cover object-top"
                     autoPlay
                     muted
                     loop
