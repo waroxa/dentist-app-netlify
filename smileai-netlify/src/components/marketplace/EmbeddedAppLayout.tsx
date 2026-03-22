@@ -1,5 +1,4 @@
 import { ReactNode, useEffect, useState } from 'react';
-import { AlertCircle } from 'lucide-react';
 
 interface EmbeddedAppLayoutProps {
   children: ReactNode;
@@ -8,14 +7,13 @@ interface EmbeddedAppLayoutProps {
 }
 
 /**
- * EmbeddedAppLayout - Optimized container for embedded CRM deployment
+ * EmbeddedAppLayout - Optimized container for GoHighLevel marketplace deployment
  * 
  * Features:
  * - Detects iframe context
  * - Handles viewport constraints
  * - Prevents scroll issues
  * - Responsive padding using 8px grid
- * - Maintains visual hierarchy
  */
 export function EmbeddedAppLayout({ 
   children, 
@@ -26,11 +24,9 @@ export function EmbeddedAppLayout({
   const [viewportHeight, setViewportHeight] = useState('100vh');
 
   useEffect(() => {
-    // Detect if running in iframe
     const embedded = window.self !== window.top;
     setIsEmbedded(embedded);
 
-    // Handle dynamic viewport height for mobile
     const updateHeight = () => {
       setViewportHeight(`${window.innerHeight}px`);
     };
@@ -38,7 +34,6 @@ export function EmbeddedAppLayout({
     updateHeight();
     window.addEventListener('resize', updateHeight);
 
-    // Post message to parent if embedded
     if (embedded) {
       window.parent.postMessage({ 
         type: 'APP_READY',
@@ -59,16 +54,16 @@ export function EmbeddedAppLayout({
     >
       {/* Embedded Mode Indicator (dev only) */}
       {isEmbedded && process.env.NODE_ENV === 'development' && (
-        <div className="fixed top-2 right-2 z-50 bg-blue-600 text-white text-xs px-2 py-1 rounded">
-          Embedded Mode
+        <div className="fixed top-2 right-2 z-50 bg-cyan-600 text-white text-xs px-2 py-1 rounded-md font-medium shadow-sm">
+          Embedded
         </div>
       )}
 
-      {/* Optional Header - Hidden in embedded mode by default */}
+      {/* Optional Header */}
       {showHeader && !isEmbedded && (
-        <header className="bg-white border-b border-gray-200 px-4 sm:px-6 py-4">
+        <header className="bg-white border-b border-slate-200 px-4 sm:px-6 py-3 shadow-sm">
           <div className={maxWidth === 'container' ? 'max-w-7xl mx-auto' : ''}>
-            <h1 className="text-lg font-semibold text-gray-900">SmileVision Pro</h1>
+            <h1 className="text-base font-semibold text-slate-900">SmileVision Pro</h1>
           </div>
         </header>
       )}
@@ -81,7 +76,7 @@ export function EmbeddedAppLayout({
           ${isEmbedded ? 'overflow-y-auto' : ''}
         `}
         style={{
-          maxHeight: isEmbedded ? `calc(${viewportHeight} - ${showHeader ? '64px' : '0px'})` : undefined,
+          maxHeight: isEmbedded ? `calc(${viewportHeight} - ${showHeader ? '56px' : '0px'})` : undefined,
         }}
       >
         {children}
@@ -92,19 +87,17 @@ export function EmbeddedAppLayout({
         .embedded-app-root {
           width: 100%;
           overflow-x: hidden;
-          background: #f9fafb;
+          background: #f8fafc;
         }
 
         .embedded-app-content {
           -webkit-overflow-scrolling: touch;
         }
 
-        /* Prevent horizontal scroll */
         .embedded-app-root * {
           max-width: 100%;
         }
 
-        /* Fix for modals in iframe */
         [role="dialog"] {
           position: fixed !important;
           top: 50% !important;
@@ -114,7 +107,6 @@ export function EmbeddedAppLayout({
           overflow-y: auto;
         }
 
-        /* Dropdown positioning fix */
         [role="menu"],
         [role="listbox"] {
           position: absolute !important;

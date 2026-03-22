@@ -84,17 +84,16 @@ export function SettingsView({ clinicBranding, onBrandingChange }: SettingsViewP
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 max-w-7xl">
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h2 className="text-xl sm:text-2xl font-semibold text-gray-900">Settings</h2>
-          <p className="text-sm sm:text-base text-gray-600 mt-1">Customize your SmileVisionPro experience</p>
+          <h2 className="text-xl sm:text-2xl font-semibold text-slate-900">Settings</h2>
+          <p className="text-sm text-slate-500 mt-0.5">Customize your SmileVisionPro experience</p>
         </div>
         <Button 
           onClick={handleSave}
-          className="text-white shadow-sm w-full sm:w-auto"
-          style={{ backgroundColor: clinicBranding.primaryColor }}
+          className="bg-cyan-600 hover:bg-cyan-700 text-white shadow-sm w-full sm:w-auto text-sm h-10"
           disabled={isSaving}
         >
           <Save className="w-4 h-4 mr-2" />
@@ -103,16 +102,16 @@ export function SettingsView({ clinicBranding, onBrandingChange }: SettingsViewP
       </div>
 
       {/* Settings Tabs */}
-      <div className="bg-white rounded-lg border border-gray-200 shadow-sm">
-        <div className="border-b border-gray-200 overflow-hidden">
+      <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+        <div className="border-b border-slate-100 bg-slate-50/50">
           <div className="overflow-x-auto scrollbar-hide">
-            <div className="flex gap-1 sm:gap-2 md:gap-6 px-3 sm:px-6 min-w-max">
+            <div className="flex gap-0 px-2 min-w-max">
               {[
                 { id: 'branding', label: 'Branding', icon: Palette },
                 { id: 'contact', label: 'Contact', icon: MapPin },
-                { id: 'testimonials', label: 'Testimonials', icon: MessageSquare },
-                { id: 'notifications', label: 'Notifications', icon: Bell },
-                { id: 'integration', label: 'Integration', icon: Zap },
+                { id: 'testimonials', label: 'Reviews', icon: MessageSquare },
+                { id: 'notifications', label: 'Alerts', icon: Bell },
+                { id: 'integration', label: 'API', icon: Zap },
                 { id: 'security', label: 'Security', icon: Shield },
                 { id: 'billing', label: 'Billing', icon: CreditCard },
               ].map((tab) => {
@@ -123,15 +122,14 @@ export function SettingsView({ clinicBranding, onBrandingChange }: SettingsViewP
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id as any)}
-                    className={`flex items-center gap-2 px-3 sm:px-4 py-3 sm:py-4 border-b-2 transition-colors whitespace-nowrap ${
+                    className={`flex items-center gap-1.5 px-3 py-3 border-b-2 transition-colors whitespace-nowrap text-sm ${
                       isActive
-                        ? 'font-medium'
-                        : 'border-transparent text-gray-600 hover:text-gray-900'
+                        ? 'border-cyan-600 text-cyan-700 font-medium bg-white'
+                        : 'border-transparent text-slate-500 hover:text-slate-700'
                     }`}
-                    style={isActive ? { borderColor: clinicBranding.primaryColor, color: clinicBranding.primaryColor } : {}}
                   >
                     <Icon className="w-4 h-4" />
-                    <span className="text-sm sm:text-base">{tab.label}</span>
+                    <span>{tab.label}</span>
                   </button>
                 );
               })}

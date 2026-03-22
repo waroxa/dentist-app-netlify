@@ -84,17 +84,16 @@ export function PatientsView({ clinicBranding, onViewContact }: PatientsViewProp
   });
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 max-w-7xl">
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h2 className="text-xl sm:text-2xl font-semibold text-gray-900">Patients</h2>
-          <p className="text-sm sm:text-base text-gray-600 mt-1">Manage your patient database and interactions</p>
+          <h2 className="text-xl sm:text-2xl font-semibold text-slate-900">Patients</h2>
+          <p className="text-sm text-slate-500 mt-0.5">Manage your patient database and interactions</p>
         </div>
         <Button 
           onClick={() => setIsAddModalOpen(true)}
-          className="text-white shadow-sm w-full sm:w-auto"
-          style={{ backgroundColor: clinicBranding.primaryColor }}
+          className="bg-cyan-600 hover:bg-cyan-700 text-white shadow-sm w-full sm:w-auto text-sm h-10"
         >
           <Plus className="w-4 h-4 mr-2" />
           Add Patient
@@ -102,24 +101,24 @@ export function PatientsView({ clinicBranding, onViewContact }: PatientsViewProp
       </div>
 
       {/* Search and Filters */}
-      <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-4">
-        <div className="flex flex-col sm:flex-row gap-4">
+      <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-4">
+        <div className="flex flex-col sm:flex-row gap-3">
           <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
             <Input
               type="text"
               placeholder="Search patients by name, email, or phone..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 h-11"
+              className="pl-9 h-10 text-sm border-slate-200 focus:border-cyan-500 focus:ring-cyan-500"
             />
           </div>
           <div className="flex gap-2">
-            <Button variant="outline" className="border-gray-300">
+            <Button variant="outline" className="border-slate-200 text-slate-600 hover:bg-slate-50 text-sm h-10">
               <Filter className="w-4 h-4 mr-2" />
               Filter
             </Button>
-            <Button variant="outline" className="border-gray-300">
+            <Button variant="outline" className="border-slate-200 text-slate-600 hover:bg-slate-50 text-sm h-10">
               <Download className="w-4 h-4 mr-2" />
               Export
             </Button>
@@ -127,17 +126,16 @@ export function PatientsView({ clinicBranding, onViewContact }: PatientsViewProp
         </div>
 
         {/* Filter Tabs */}
-        <div className="flex gap-2 mt-4 border-t border-gray-200 pt-4">
+        <div className="flex gap-1.5 mt-4 pt-4 border-t border-slate-100">
           {['all', 'active', 'pending', 'completed'].map((status) => (
             <button
               key={status}
               onClick={() => setFilterStatus(status)}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
                 filterStatus === status
-                  ? 'text-white'
-                  : 'text-gray-700 bg-gray-100 hover:bg-gray-200'
+                  ? 'bg-cyan-600 text-white'
+                  : 'text-slate-600 bg-slate-100 hover:bg-slate-200'
               }`}
-              style={filterStatus === status ? { backgroundColor: clinicBranding.primaryColor } : {}}
             >
               {status.charAt(0).toUpperCase() + status.slice(1)}
             </button>
@@ -147,31 +145,30 @@ export function PatientsView({ clinicBranding, onViewContact }: PatientsViewProp
 
       {/* Patients Grid */}
       {isLoading ? (
-        <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-12 text-center">
+        <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-10 text-center">
           <div className="max-w-sm mx-auto">
-            <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Loader2 className="w-8 h-8 text-gray-400 animate-spin" />
+            <div className="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Loader2 className="w-6 h-6 text-cyan-600 animate-spin" />
             </div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">Loading patients...</h3>
-            <p className="text-gray-500 mb-6">
+            <h3 className="text-sm font-semibold text-slate-900 mb-1">Loading patients...</h3>
+            <p className="text-xs text-slate-500">
               Please wait while we fetch your patient data
             </p>
           </div>
         </div>
       ) : filteredPatients.length === 0 ? (
-        <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-12 text-center">
+        <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-10 text-center">
           <div className="max-w-sm mx-auto">
-            <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Plus className="w-8 h-8 text-gray-400" />
+            <div className="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Plus className="w-6 h-6 text-slate-400" />
             </div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">No patients yet</h3>
-            <p className="text-gray-500 mb-6">
+            <h3 className="text-sm font-semibold text-slate-900 mb-1">No patients yet</h3>
+            <p className="text-xs text-slate-500 mb-5">
               Patient submissions from your landing page will appear here
             </p>
             <Button 
               onClick={() => setIsAddModalOpen(true)}
-              className="text-white shadow-sm"
-              style={{ backgroundColor: clinicBranding.primaryColor }}
+              className="bg-cyan-600 hover:bg-cyan-700 text-white shadow-sm text-sm"
             >
               <Plus className="w-4 h-4 mr-2" />
               Add Your First Patient
@@ -185,25 +182,24 @@ export function PatientsView({ clinicBranding, onViewContact }: PatientsViewProp
               <PatientCard
                 key={patient.id}
                 patient={patient}
-                primaryColor={clinicBranding.primaryColor}
+                primaryColor="#0891b2"
                 onViewContact={onViewContact}
               />
             ))}
           </div>
 
           {/* Pagination */}
-          <div className="flex items-center justify-between bg-white rounded-lg border border-gray-200 shadow-sm px-6 py-4">
-            <p className="text-sm text-gray-600">
-              Showing <span className="font-medium">{filteredPatients.length}</span> of <span className="font-medium">{patients.length}</span> patients
+          <div className="flex items-center justify-between bg-white rounded-xl border border-slate-200 shadow-sm px-5 py-3">
+            <p className="text-xs text-slate-500">
+              Showing <span className="font-medium text-slate-700">{filteredPatients.length}</span> of <span className="font-medium text-slate-700">{patients.length}</span> patients
             </p>
             <div className="flex gap-2">
-              <Button variant="outline" className="border-gray-300" disabled>
+              <Button variant="outline" className="border-slate-200 text-slate-600 text-sm h-9" disabled>
                 Previous
               </Button>
               <Button 
                 variant="outline" 
-                className="border-gray-300"
-                style={{ borderColor: clinicBranding.primaryColor, color: clinicBranding.primaryColor }}
+                className="border-cyan-200 text-cyan-700 text-sm h-9"
                 disabled
               >
                 Next
