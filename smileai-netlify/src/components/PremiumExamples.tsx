@@ -126,7 +126,7 @@ export function PremiumExamples() {
                     <p className="text-xs text-slate-500">Select a state to preview</p>
                   </div>
 
-                  <div className="grid grid-cols-3 gap-2">
+                  <div className="flex gap-2">
                     {STATE_OPTIONS.map((option) => {
                       const isActive = selectedState === option.id;
                       return (
@@ -134,7 +134,7 @@ export function PremiumExamples() {
                           key={option.id}
                           type="button"
                           onClick={() => handleSelectState(example.id, option.id)}
-                          className={`rounded-lg border-2 px-2 py-2 text-xs font-medium transition-all ${
+                          className={`flex-1 rounded-lg border-2 px-2 py-2 text-xs font-medium transition-all ${
                             isActive
                               ? 'border-transparent text-white'
                               : 'border-slate-200 bg-white text-slate-600'

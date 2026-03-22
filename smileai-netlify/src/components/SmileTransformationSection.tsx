@@ -427,21 +427,21 @@ export function SmileTransformationSection() {
           {result && <Badge className="bg-green-100 text-[10px] text-green-700">Ready</Badge>}
           {pending && <Badge className="bg-amber-100 text-[10px] text-amber-700">Processing</Badge>}
         </div>
-        <div className="aspect-[4/3] bg-slate-50">
+        <div className="bg-slate-50">
           {result?.assetUrl ? (
-            <video controls autoPlay loop muted playsInline preload="metadata" className="h-full w-full object-contain bg-slate-950">
+            <video controls autoPlay loop muted playsInline preload="metadata" className="aspect-[4/3] w-full object-contain bg-slate-950">
               <source src={result.assetUrl} type="video/mp4" />
               Your browser does not support the video tag.
             </video>
           ) : pending ? (
-            <div className="flex h-full flex-col items-center justify-center gap-2 px-4 text-center">
-              <Loader2 className="h-6 w-6 animate-spin text-cyan-600" />
-              <p className="text-xs text-slate-500">Creating video...</p>
+            <div className="flex flex-col items-center justify-center gap-3 px-4 py-16 text-center">
+              <Loader2 className="h-8 w-8 animate-spin text-cyan-600" />
+              <p className="text-sm text-slate-500">Creating video...</p>
             </div>
           ) : (
-            <div className="flex h-full flex-col items-center justify-center gap-2 px-4 text-center">
-              <Video className="h-6 w-6 text-slate-300" />
-              <p className="text-xs text-slate-500">Video will appear here</p>
+            <div className="flex flex-col items-center justify-center gap-3 px-4 py-16 text-center">
+              <Video className="h-8 w-8 text-slate-300" />
+              <p className="text-sm text-slate-500">Video will appear here</p>
             </div>
           )}
         </div>
@@ -530,7 +530,8 @@ export function SmileTransformationSection() {
                       setLeadForm((current) => ({ ...current, interestedIn: e.target.value }));
                       if (leadErrors.interestedIn) setLeadErrors((current) => ({ ...current, interestedIn: undefined }));
                     }}
-                    className={`h-10 w-full appearance-none rounded-lg border bg-white px-3 pr-10 text-sm text-slate-700 transition focus-visible:outline-none focus-visible:border-cyan-500 focus-visible:ring-1 focus-visible:ring-cyan-500 ${leadErrors.interestedIn ? 'border-red-500' : 'border-slate-200'}`}
+                    className={`h-10 w-full rounded-lg border bg-white px-3 pr-10 text-sm text-slate-700 transition focus-visible:outline-none focus-visible:border-cyan-500 focus-visible:ring-1 focus-visible:ring-cyan-500 ${leadErrors.interestedIn ? 'border-red-500' : 'border-slate-200'}`}
+                    style={{ WebkitAppearance: 'none', MozAppearance: 'none', appearance: 'none' }}
                   >
                     <option value="">Select a service...</option>
                     {INTEREST_OPTIONS.map((option) => (
@@ -564,7 +565,8 @@ export function SmileTransformationSection() {
                 <p className="text-xs text-slate-500">
                   By continuing, you agree to be contacted about your smile transformation. Your information is secure.
                 </p>
-                <div className="flex justify-center gap-4 text-xs text-slate-600">
+                <div className="flex flex-wrap justify-center gap-3 text-xs text-slate-600">
+                  <span className="inline-flex items-center gap-1"><span className="text-emerald-500">✓</span>HIPAA Compliant</span>
                   <span className="inline-flex items-center gap-1"><span className="text-emerald-500">✓</span>Secure</span>
                   <span className="inline-flex items-center gap-1"><span className="text-emerald-500">✓</span>Results in 24h</span>
                 </div>
@@ -709,50 +711,23 @@ export function SmileTransformationSection() {
               </div>
 
               <div className="space-y-4">
-                <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-                  <div className="mb-3 flex items-center justify-between">
-                    <h3 className="text-sm font-semibold text-slate-900">5. Video</h3>
-                    <span className="rounded-full bg-cyan-600 px-2 py-0.5 text-xs font-medium text-white">Step 5</span>
+                <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+                  <div className="px-4 py-2.5" style={{ background: 'linear-gradient(to right, #0891b2, #06b6d4)' }}>
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-sm font-semibold text-white">5. Video</h3>
+                      <span className="rounded-full px-2 py-0.5 text-xs font-medium text-white" style={{ backgroundColor: 'rgba(255,255,255,0.2)' }}>Step 5</span>
+                    </div>
                   </div>
-                  <p className="mb-3 text-xs text-slate-500">Video may take 2-5 minutes to generate.</p>
-                  <Button onClick={() => generateSingleVideo('veo')} disabled={!canGenerateVideos} className="mb-3 h-9 w-full rounded-lg text-sm font-semibold text-white" style={{ background: 'linear-gradient(to right, #0891b2, #06b6d4)' }}>
-                    {videoProcessing === 'veo' ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Creating...</> : 'Create AI Video'}
-                  </Button>
-                  {renderVideoCard('veo', 'AI VIDEO RESULT')}
+                  <div className="p-4">
+                    <p className="mb-3 text-xs text-slate-500">Video may take 2-5 minutes to generate.</p>
+                    <Button onClick={() => generateSingleVideo('veo')} disabled={!canGenerateVideos} className="mb-3 h-9 w-full rounded-lg text-sm font-semibold text-white" style={{ background: 'linear-gradient(to right, #0891b2, #06b6d4)' }}>
+                      {videoProcessing === 'veo' ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Creating...</> : 'Create AI Video'}
+                    </Button>
+                    {renderVideoCard('veo', 'AI VIDEO RESULT')}
+                  </div>
                 </motion.div>
 
-                <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-                  <div className="mb-3 flex items-center justify-between">
-                    <h3 className="text-sm font-semibold text-slate-900">6. Compare</h3>
-                    <span className="rounded-full bg-cyan-600 px-2 py-0.5 text-xs font-medium text-white">Step 6</span>
-                  </div>
-                  <div className="space-y-1.5">
-                    {[
-                      { key: 'original', label: 'Original', ready: Boolean(uploadedImage) },
-                      { key: 'preview', label: 'AI Preview', ready: Boolean(previewImage) },
-                      { key: 'video', label: 'AI Video', ready: Boolean(videoResults.veo?.assetUrl) },
-                    ].map((item) => (
-                      <button
-                        type="button"
-                        key={item.key}
-                        onClick={() => setFavoriteResult(item.key as FavoriteResult)}
-                        className={`w-full rounded-lg border-2 px-3 py-2 text-left text-xs font-medium transition-all ${!item.ready ? 'cursor-not-allowed opacity-40' : ''} ${favoriteResult === item.key ? 'border-cyan-600 bg-cyan-50 text-cyan-700' : 'border-slate-200 bg-white text-slate-600 hover:border-cyan-300'}`}
-                        disabled={!item.ready}
-                      >
-                        <div className="flex items-center justify-between">
-                          <span>{item.label}</span>
-                          {favoriteResult === item.key && <CheckCircle className="h-4 w-4 text-cyan-600" />}
-                        </div>
-                      </button>
-                    ))}
-                  </div>
-                  {favoriteResult && (
-                    <Button type="button" onClick={() => setFavoriteMessage(`Saved ${favoriteResult === 'video' ? 'AI video' : favoriteResult} as your preferred result.`)} className="mt-3 h-9 w-full rounded-lg text-sm font-semibold text-white" style={{ background: 'linear-gradient(to right, #0891b2, #06b6d4)' }}>
-                      <Save className="mr-2 h-4 w-4" /> Save Selection
-                    </Button>
-                  )}
-                  {favoriteMessage && <p className="mt-2 text-xs text-emerald-600">{favoriteMessage}</p>}
-                </motion.div>
+
               </div>
             </div>
           </div>

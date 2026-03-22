@@ -40,7 +40,7 @@ export function Hero({ clinicBranding }: HeroProps) {
             />
             <div className="hidden sm:block">
               <h1 className="text-base sm:text-lg font-bold text-white">{clinicBranding.clinicName}</h1>
-              <p className="text-xs text-white/80">AI Smile Preview Platform</p>
+              <p className="text-xs text-white">AI Smile Preview Platform</p>
             </div>
           </motion.div>
 
