@@ -31,7 +31,7 @@ export function Hero({ clinicBranding }: HeroProps) {
 
       {/* Navigation - Clean Professional Header */}
       <nav className="relative z-10 border-b border-white/10 px-4 py-4 sm:px-6 sm:py-5 lg:px-8" style={{ backgroundColor: BRAND_BLUE }}>
-        <div className="mx-auto flex max-w-6xl flex-col gap-4 md:flex-row md:items-center">
+        <div className="flex w-full flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <motion.div 
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
