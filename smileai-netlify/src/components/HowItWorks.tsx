@@ -29,11 +29,11 @@ export function HowItWorks() {
   ];
 
   return (
-    <section id="how-it-works" className="py-12 sm:py-16 lg:py-20 px-6 sm:px-8 lg:px-12 bg-gradient-to-b from-white to-gray-50">
-      <div className="max-w-7xl mx-auto">
+    <section id="how-it-works" className="bg-gradient-to-b from-white to-gray-50 px-4 py-12 sm:px-6 sm:py-16 lg:px-8 lg:py-20">
+      <div className="mx-auto max-w-6xl">
         {/* Section Header */}
         <div className="text-center mb-10 sm:mb-16">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 border border-blue-200 rounded-full mb-4">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 border border-blue-200 rounded-xl mb-4">
             <Sparkles className="w-4 h-4 text-blue-600" />
             <span className="text-sm font-medium text-blue-700">AI-Powered Process</span>
           </div>
@@ -46,7 +46,7 @@ export function HowItWorks() {
         </div>
 
         {/* Steps Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8 lg:grid-cols-4">
           {steps.map((step, index) => (
             <div key={index} className="relative">
               {/* Connector Line (hidden on mobile, last item) */}
@@ -55,7 +55,7 @@ export function HowItWorks() {
               )}
               
               {/* Step Card */}
-              <div className="relative bg-white border-2 border-gray-100 rounded-2xl p-6 hover:shadow-xl hover:border-blue-200 transition-all duration-300">
+              <div className="relative bg-white border-2 border-gray-100 rounded-xl p-6 hover:shadow-xl hover:border-blue-200 transition-all duration-300">
                 {/* Step Number */}
                 <div className="absolute -top-3 -left-3 w-9 h-9 bg-gradient-to-br from-blue-600 to-blue-600 rounded-full flex items-center justify-center text-white text-base font-bold shadow-lg">
                   {index + 1}

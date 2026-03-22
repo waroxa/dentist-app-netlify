@@ -458,10 +458,10 @@ export function SmileTransformationSection() {
 
   return (
     <section id="smile-transform" className="relative bg-slate-50 px-4 py-8 sm:py-12 lg:py-16">
-      <div className="mx-auto max-w-7xl">
+      <div className="mx-auto max-w-6xl">
         {/* Professional 6-Step Progress Section */}
         <div className="mb-10 sm:mb-14">
-          <div className="mx-auto max-w-6xl bg-white rounded-2xl shadow-lg border border-slate-200 p-6 sm:p-8">
+          <div className="mx-auto max-w-6xl rounded-xl border border-slate-200 bg-white p-6 shadow-lg sm:p-8">
             <h2 className="text-center text-xl sm:text-2xl font-bold text-slate-900 mb-8">Your Smile Transformation Journey</h2>
             <div className="relative">
               {/* Progress Line */}
@@ -511,7 +511,7 @@ export function SmileTransformationSection() {
 
         <div className="mx-auto max-w-6xl space-y-8">
           <div className="grid gap-6 lg:grid-cols-2">
-            <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-lg">
+            <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-lg">
               <div className="px-6 py-5" style={{ backgroundColor: BRAND_BLUE }}>
                 <h3 className="text-xl font-semibold text-white">Step 1: Enter Your Information</h3>
                 <p className="mt-1 text-sm text-white/80">We&apos;ll create your personalized smile preview in the next step</p>
@@ -583,7 +583,7 @@ export function SmileTransformationSection() {
                         setLeadForm((current) => ({ ...current, interestedIn: e.target.value }));
                         if (leadErrors.interestedIn) setLeadErrors((current) => ({ ...current, interestedIn: undefined }));
                       }}
-                      className={`h-12 w-full appearance-none rounded-md border bg-background px-3 py-2 pr-10 text-base ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${leadErrors.interestedIn ? 'border-red-500' : 'border-input'}`}
+                      className={`h-12 w-full appearance-none rounded-xl border bg-background px-3 py-2 pr-10 text-base ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${leadErrors.interestedIn ? 'border-red-500' : 'border-input'}`}
                     >
                       <option value="">Select a service...</option>
                       {INTEREST_OPTIONS.map((option) => (
@@ -620,7 +620,7 @@ export function SmileTransformationSection() {
               </form>
             </motion.div>
 
-            <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="rounded-2xl border border-slate-200 bg-gradient-to-br from-blue-50 to-white p-6 shadow-lg sm:p-8">
+            <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="rounded-xl border border-slate-200 bg-gradient-to-br from-blue-50 to-white p-6 shadow-lg sm:p-8">
               <h3 className="text-xl font-semibold text-slate-900">Why Get Your Free Preview?</h3>
               <div className="mt-6 space-y-4">
                 {[
@@ -650,10 +650,10 @@ export function SmileTransformationSection() {
           {renderInfoBanner()}
 
           <div className={`transition-all duration-300 ${isLeadCaptured ? 'opacity-100' : 'pointer-events-none opacity-40'}`}>
-            <div className="grid gap-6 xl:grid-cols-[minmax(0,1.2fr)_minmax(320px,0.8fr)]">
+            <div className="grid gap-6 xl:items-start xl:grid-cols-[minmax(0,1.15fr)_minmax(320px,0.85fr)]">
               <div className="space-y-6">
                 <div className="grid gap-6 lg:grid-cols-2">
-                  <motion.div id="smile-upload-panel" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-lg">
+                  <motion.div id="smile-upload-panel" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-lg">
                     <div className="border-b border-slate-100 px-6 py-4" style={{ backgroundColor: BRAND_BLUE }}>
                       <div className="flex items-center justify-between">
                         <h3 className="text-lg font-semibold text-white">2. Upload Photo</h3>
@@ -695,7 +695,7 @@ export function SmileTransformationSection() {
                     </div>
                   </motion.div>
 
-                  <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-lg">
+                  <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-lg">
                     <div className="border-b border-slate-100 px-6 py-4" style={{ backgroundColor: BRAND_BLUE }}>
                       <div className="flex items-center justify-between">
                         <h3 className="text-lg font-semibold text-white">4. AI Preview</h3>
@@ -723,7 +723,7 @@ export function SmileTransformationSection() {
                   </motion.div>
                 </div>
 
-                <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-lg">
+                <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="rounded-xl border border-slate-200 bg-white p-6 shadow-lg">
                   <div className="flex flex-col gap-6 xl:flex-row xl:items-center">
                     <div className="grid w-full flex-1 gap-3 sm:grid-cols-3">
                       {STYLE_OPTIONS.map((option) => (
@@ -748,7 +748,7 @@ export function SmileTransformationSection() {
               </div>
 
               <div className="space-y-6">
-                <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="rounded-2xl border border-slate-200 bg-white p-5 shadow-lg sm:p-6">
+                <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="rounded-xl border border-slate-200 bg-white p-5 shadow-lg sm:p-6">
                   <div className="mb-4 flex items-center justify-between">
                     <h3 className="text-lg font-semibold text-slate-900">5. Video</h3>
                     <Badge className="text-[10px] text-white" style={{ backgroundColor: BRAND_BLUE }}>Step 5</Badge>
@@ -760,7 +760,7 @@ export function SmileTransformationSection() {
                   {renderVideoCard('veo', 'AI VIDEO RESULT')}
                 </motion.div>
 
-                <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-lg">
+                <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="rounded-xl border border-slate-200 bg-white p-6 shadow-lg">
                   <div className="mb-4 flex items-center justify-between">
                     <h3 className="text-lg font-semibold text-slate-900">6. Compare</h3>
                     <Badge className="text-[10px] text-white" style={{ backgroundColor: BRAND_BLUE }}>Step 6</Badge>
