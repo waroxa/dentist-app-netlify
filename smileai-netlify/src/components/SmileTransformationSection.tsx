@@ -530,7 +530,8 @@ export function SmileTransformationSection() {
                       setLeadForm((current) => ({ ...current, interestedIn: e.target.value }));
                       if (leadErrors.interestedIn) setLeadErrors((current) => ({ ...current, interestedIn: undefined }));
                     }}
-                    className={`h-10 w-full appearance-none rounded-lg border bg-white px-3 pr-10 text-sm text-slate-700 transition focus-visible:outline-none focus-visible:border-cyan-500 focus-visible:ring-1 focus-visible:ring-cyan-500 ${leadErrors.interestedIn ? 'border-red-500' : 'border-slate-200'}`}
+                    className={`h-10 w-full rounded-lg border bg-white px-3 pr-10 text-sm text-slate-700 transition focus-visible:outline-none focus-visible:border-cyan-500 focus-visible:ring-1 focus-visible:ring-cyan-500 ${leadErrors.interestedIn ? 'border-red-500' : 'border-slate-200'}`}
+                    style={{ WebkitAppearance: 'none', MozAppearance: 'none', appearance: 'none' }}
                   >
                     <option value="">Select a service...</option>
                     {INTEREST_OPTIONS.map((option) => (
@@ -564,7 +565,8 @@ export function SmileTransformationSection() {
                 <p className="text-xs text-slate-500">
                   By continuing, you agree to be contacted about your smile transformation. Your information is secure.
                 </p>
-                <div className="flex justify-center gap-4 text-xs text-slate-600">
+                <div className="flex flex-wrap justify-center gap-3 text-xs text-slate-600">
+                  <span className="inline-flex items-center gap-1"><span className="text-emerald-500">✓</span>HIPAA Compliant</span>
                   <span className="inline-flex items-center gap-1"><span className="text-emerald-500">✓</span>Secure</span>
                   <span className="inline-flex items-center gap-1"><span className="text-emerald-500">✓</span>Results in 24h</span>
                 </div>
