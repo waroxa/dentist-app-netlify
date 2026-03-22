@@ -456,13 +456,14 @@ export function SmileTransformationSection() {
   return (
     <section id="smile-transform" className="relative bg-slate-50 px-4 py-8 sm:py-12 lg:py-16">
       <div className="mx-auto max-w-6xl space-y-8">
-        <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(320px,0.95fr)] lg:items-start">
+        <div className="grid gap-6 xl:grid-cols-[minmax(0,1.2fr)_minmax(320px,0.8fr)] xl:items-start">
           <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="rounded-[28px] border border-slate-200 bg-white px-6 py-7 shadow-[0_20px_60px_rgba(15,23,42,0.08)] sm:px-8 sm:py-8">
             <div className="mb-8">
               <h2 className="text-3xl font-medium tracking-tight text-slate-900 sm:text-[2.1rem]">Enter Your Information</h2>
               <p className="mt-3 text-lg text-slate-600">We&apos;ll create your personalized smile preview in the next step</p>
             </div>
             <form onSubmit={handleLeadSubmit} className="space-y-5">
+              <div className="grid gap-5 md:grid-cols-2 md:items-start">
                 <div>
                   <Label htmlFor="lead-fullName" className="mb-2 flex items-center gap-2 text-base font-medium text-slate-900">
                     <User className="h-4 w-4 text-slate-500" />
@@ -541,7 +542,7 @@ export function SmileTransformationSection() {
                   {leadErrors.interestedIn && <p className="mt-1.5 text-sm text-red-600">{leadErrors.interestedIn}</p>}
                 </div>
 
-                <div>
+                <div className="md:col-span-2">
                   <Label htmlFor="lead-notes" className="mb-2 block text-base font-medium text-slate-900">Optional Notes</Label>
                   <Textarea
                     id="lead-notes"
@@ -552,19 +553,20 @@ export function SmileTransformationSection() {
                   />
                 </div>
 
-                <Button type="submit" className="h-14 w-full rounded-2xl bg-gradient-to-r from-teal-500 to-blue-600 text-base font-semibold text-white shadow-[0_14px_30px_rgba(37,99,235,0.25)] hover:opacity-95">
+                <Button type="submit" className="h-14 w-full rounded-2xl bg-gradient-to-r from-teal-500 to-blue-600 text-base font-semibold text-white shadow-[0_14px_30px_rgba(37,99,235,0.25)] hover:opacity-95 md:col-span-2">
                   {isLeadCaptured ? 'Update & Continue ✨' : 'Get Started Free ✨'}
                 </Button>
 
-                <div className="space-y-6 pt-2 text-center text-sm text-slate-500">
+                <div className="space-y-6 pt-2 text-center text-sm text-slate-500 md:col-span-2">
                   <p>By continuing, you agree to be contacted about your smile transformation. Your information is secure and will never be shared.</p>
                   <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-emerald-600">
                     <span>✓ Secure &amp; Confidential</span>
                     <span>✓ Get Results in 24 Hours</span>
                   </div>
                 </div>
-              </form>
-            </motion.div>
+              </div>
+            </form>
+          </motion.div>
 
             <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="rounded-[28px] border border-blue-100 bg-gradient-to-br from-slate-50 via-blue-50 to-white p-6 shadow-[0_20px_60px_rgba(15,23,42,0.08)] sm:p-8">
               <h3 className="text-3xl font-medium tracking-tight text-slate-900">Why Get Your Free Preview?</h3>
