@@ -427,21 +427,21 @@ export function SmileTransformationSection() {
           {result && <Badge className="bg-green-100 text-[10px] text-green-700">Ready</Badge>}
           {pending && <Badge className="bg-amber-100 text-[10px] text-amber-700">Processing</Badge>}
         </div>
-        <div className="aspect-[4/3] bg-slate-50">
+        <div className="bg-slate-50">
           {result?.assetUrl ? (
-            <video controls autoPlay loop muted playsInline preload="metadata" className="h-full w-full object-contain bg-slate-950">
+            <video controls autoPlay loop muted playsInline preload="metadata" className="aspect-[4/3] w-full object-contain bg-slate-950">
               <source src={result.assetUrl} type="video/mp4" />
               Your browser does not support the video tag.
             </video>
           ) : pending ? (
-            <div className="flex h-full flex-col items-center justify-center gap-2 px-4 text-center">
-              <Loader2 className="h-6 w-6 animate-spin text-cyan-600" />
-              <p className="text-xs text-slate-500">Creating video...</p>
+            <div className="flex flex-col items-center justify-center gap-3 px-4 py-16 text-center">
+              <Loader2 className="h-8 w-8 animate-spin text-cyan-600" />
+              <p className="text-sm text-slate-500">Creating video...</p>
             </div>
           ) : (
-            <div className="flex h-full flex-col items-center justify-center gap-2 px-4 text-center">
-              <Video className="h-6 w-6 text-slate-300" />
-              <p className="text-xs text-slate-500">Video will appear here</p>
+            <div className="flex flex-col items-center justify-center gap-3 px-4 py-16 text-center">
+              <Video className="h-8 w-8 text-slate-300" />
+              <p className="text-sm text-slate-500">Video will appear here</p>
             </div>
           )}
         </div>
