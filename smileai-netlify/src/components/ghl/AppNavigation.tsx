@@ -1,5 +1,5 @@
 import React from 'react';
-import { LayoutDashboard, Users, Sparkles, Settings } from 'lucide-react';
+import { LayoutDashboard, Users, Sparkles, Settings, TrendingUp } from 'lucide-react';
 import { ViewType } from '../../App';
 
 interface AppNavigationProps {
@@ -17,8 +17,8 @@ export function AppNavigation({ activeView, onNavigate, primaryColor }: AppNavig
   ];
 
   return (
-    <nav className="w-64 bg-white border-r border-gray-200 h-screen overflow-y-auto p-4">
-      <div className="space-y-1">
+    <nav className="w-60 bg-white border-r border-slate-200 h-[calc(100vh-64px)] sticky top-16 overflow-y-auto">
+      <div className="p-3 space-y-1">
         {navItems.map((item) => {
           const Icon = item.icon;
           const isActive = activeView === item.id;
@@ -27,35 +27,49 @@ export function AppNavigation({ activeView, onNavigate, primaryColor }: AppNavig
             <button
               key={item.id}
               onClick={() => onNavigate(item.id)}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
+              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all text-sm font-medium ${
                 isActive
-                  ? 'text-white shadow-sm'
-                  : 'text-gray-700 hover:bg-gray-100'
+                  ? 'bg-cyan-50 text-cyan-700 shadow-sm'
+                  : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
               }`}
-              style={isActive ? { backgroundColor: primaryColor } : {}}
             >
-              <Icon className="w-5 h-5" />
-              <span className="font-medium">{item.label}</span>
+              <Icon className={`w-5 h-5 ${isActive ? 'text-cyan-600' : ''}`} />
+              <span>{item.label}</span>
             </button>
           );
         })}
       </div>
 
-      {/* Quick Stats in Sidebar */}
-      <div className="mt-8 pt-8 border-t border-gray-200">
-        <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">
+      {/* Quick Stats */}
+      <div className="mx-3 mt-6 pt-6 border-t border-slate-200">
+        <h3 className="px-3 text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">
           Quick Stats
         </h3>
-        <div className="space-y-3">
-          <div className="bg-gray-50 rounded-lg p-3">
-            <p className="text-2xl font-bold text-gray-900">0</p>
-            <p className="text-xs text-gray-600">Total Patients</p>
+        <div className="space-y-2">
+          <div className="bg-slate-50 rounded-lg p-3">
+            <div className="flex items-center justify-between mb-1">
+              <p className="text-xl font-bold text-slate-900">0</p>
+              <Users className="w-4 h-4 text-slate-400" />
+            </div>
+            <p className="text-xs text-slate-500">Total Patients</p>
           </div>
-          <div className="bg-gray-50 rounded-lg p-3">
-            <p className="text-2xl font-bold text-gray-900">0</p>
-            <p className="text-xs text-gray-600">This Month</p>
+          <div className="bg-slate-50 rounded-lg p-3">
+            <div className="flex items-center justify-between mb-1">
+              <p className="text-xl font-bold text-slate-900">0</p>
+              <TrendingUp className="w-4 h-4 text-slate-400" />
+            </div>
+            <p className="text-xs text-slate-500">This Month</p>
           </div>
         </div>
+      </div>
+
+      {/* Upgrade CTA */}
+      <div className="mx-3 mt-6 p-3 bg-gradient-to-br from-cyan-50 to-sky-50 rounded-lg border border-cyan-100">
+        <p className="text-xs font-medium text-cyan-800 mb-1">Pro Features</p>
+        <p className="text-xs text-cyan-600 mb-2">Unlock advanced AI tools</p>
+        <button className="w-full text-xs font-medium text-white bg-cyan-600 hover:bg-cyan-700 py-1.5 rounded-md transition-colors">
+          Upgrade
+        </button>
       </div>
     </nav>
   );
