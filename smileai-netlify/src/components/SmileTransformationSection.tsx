@@ -456,12 +456,12 @@ export function SmileTransformationSection() {
 
   return (
     <section id="smile-transform" className="relative bg-slate-50 px-4 py-8 sm:py-12 lg:py-16">
-      <div className="mx-auto max-w-6xl space-y-8">
-        <div className="grid gap-5 lg:gap-7 min-[1200px]:grid-cols-[minmax(0,0.98fr)_minmax(0,1fr)] min-[1200px]:items-stretch">
-          <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="rounded-[24px] border border-slate-200/80 bg-white px-6 py-7 shadow-[0_18px_48px_rgba(15,23,42,0.06)] sm:px-8 sm:py-8">
-            <div className="mb-7">
-              <h2 className="text-[2rem] font-medium tracking-[-0.03em] text-slate-900">Step 1: Enter Your Information</h2>
-              <p className="mt-2.5 text-[15px] leading-7 text-slate-600">We&apos;ll create your personalized smile preview in the next step</p>
+      <div className="mx-auto max-w-6xl space-y-6">
+        <div className="grid gap-4 lg:gap-6 lg:grid-cols-2 lg:items-stretch">
+          <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="rounded-xl border border-slate-200 bg-white p-5 sm:p-6 shadow-sm">
+            <div className="mb-5">
+              <h2 className="text-xl font-semibold text-slate-900">Step 1: Enter Your Information</h2>
+              <p className="mt-1 text-sm text-slate-500">We'll create your personalized smile preview in the next step</p>
             </div>
             <form onSubmit={handleLeadSubmit} className="space-y-5">
               <div>
