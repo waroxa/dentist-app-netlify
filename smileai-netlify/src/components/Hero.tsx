@@ -45,7 +45,9 @@ export function Hero({ clinicBranding }: HeroProps) {
             />
             <div>
               <h1 className="text-lg sm:text-xl font-bold text-white">{clinicBranding.clinicName}</h1>
-              <p className="text-xs sm:text-sm font-medium text-black underline decoration-2 underline-offset-4 decoration-white">AI Smile Preview Platform</p>
+              <p className="text-xs sm:text-sm font-medium text-white no-underline">
+                AI Smile Preview Platform
+              </p>
             </div>
           </motion.div>
           <motion.div 
@@ -56,7 +58,9 @@ export function Hero({ clinicBranding }: HeroProps) {
           >
             <div className="hidden md:flex items-center gap-2 text-sm text-white/90">
               <MapPin className="h-4 w-4 text-white" />
-              <span className="font-medium text-black underline decoration-2 underline-offset-4 decoration-white">Premium AI Smile Preview</span>
+              <span className="font-medium text-white no-underline">
+                Premium AI Smile Preview
+              </span>
             </div>
             <Button 
               onClick={scrollToTransform}
