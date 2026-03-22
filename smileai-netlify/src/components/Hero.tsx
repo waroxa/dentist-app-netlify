@@ -31,12 +31,12 @@ export function Hero({ clinicBranding }: HeroProps) {
 
       {/* Navigation - Clean Professional Header */}
       <nav className="relative z-10 border-b border-white/10 px-4 py-4 sm:px-6 sm:py-5 lg:px-8" style={{ backgroundColor: BRAND_BLUE }}>
-        <div className="flex w-full flex-col gap-4 md:flex-row md:items-center md:justify-between">
+        <div className="flex w-full flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <motion.div 
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
-            className="flex items-center justify-center gap-3 text-center sm:gap-4 md:justify-start md:text-left"
+            className="flex items-center justify-center gap-3 text-center sm:gap-4 lg:justify-start lg:text-left"
           >
             <img 
               src={TOOTH_LOGO} 
@@ -54,20 +54,20 @@ export function Hero({ clinicBranding }: HeroProps) {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
-            className="ml-auto flex flex-wrap items-center justify-center gap-3 sm:gap-4 md:justify-end"
+            className="flex w-full flex-col gap-3 sm:flex-row sm:items-center sm:justify-center lg:w-auto lg:justify-end lg:ml-auto"
           >
-            <div className="hidden md:flex items-center gap-2 text-sm text-white/90">
+            <Button 
+              onClick={scrollToTransform}
+              className="order-2 text-sm sm:text-base h-9 sm:h-10 px-4 sm:px-6 font-semibold bg-white text-blue-600 hover:bg-blue-50 sm:order-1"
+            >
+              Try Free
+            </Button>
+            <div className="order-1 flex items-center justify-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm text-white sm:order-2 lg:min-w-[260px] lg:justify-start">
               <MapPin className="h-4 w-4 text-white" />
               <span className="font-medium text-white no-underline">
                 Premium AI Smile Preview
               </span>
             </div>
-            <Button 
-              onClick={scrollToTransform}
-              className="text-sm sm:text-base h-9 sm:h-10 px-4 sm:px-6 font-semibold bg-white text-blue-600 hover:bg-blue-50"
-            >
-              Try Free
-            </Button>
           </motion.div>
         </div>
       </nav>
