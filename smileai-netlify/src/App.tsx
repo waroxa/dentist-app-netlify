@@ -100,10 +100,10 @@ function App() {
   return (
     <div className="min-h-screen bg-white">
       <Hero clinicBranding={clinicBranding} />
-      <SmileTransformationSection />
       <div id="examples">
         <PremiumExamples />
       </div>
+      <SmileTransformationSection />
       <HowItWorks />
       <Testimonials clinicBranding={clinicBranding} />
       <Footer clinicBranding={clinicBranding} />
