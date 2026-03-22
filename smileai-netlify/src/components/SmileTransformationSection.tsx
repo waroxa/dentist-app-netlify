@@ -463,10 +463,10 @@ export function SmileTransformationSection() {
               <h2 className="text-xl font-semibold text-slate-900">Step 1: Enter Your Information</h2>
               <p className="mt-1 text-sm text-slate-500">We'll create your personalized smile preview in the next step</p>
             </div>
-            <form onSubmit={handleLeadSubmit} className="space-y-5">
+            <form onSubmit={handleLeadSubmit} className="space-y-4">
               <div>
-                <Label htmlFor="lead-fullName" className="mb-2.5 flex items-center gap-2 text-[15px] font-semibold text-slate-900">
-                  <User className="h-[15px] w-[15px] text-slate-500" />
+                <Label htmlFor="lead-fullName" className="mb-1.5 flex items-center gap-1.5 text-sm font-medium text-slate-700">
+                  <User className="h-4 w-4 text-slate-400" />
                   Full Name *
                 </Label>
                 <Input
@@ -477,14 +477,14 @@ export function SmileTransformationSection() {
                     if (leadErrors.fullName) setLeadErrors((current) => ({ ...current, fullName: undefined }));
                   }}
                   placeholder="John Smith"
-                  className={`h-[44px] rounded-[12px] border border-slate-200 bg-slate-50/90 px-4 text-[15px] text-slate-700 shadow-none placeholder:text-slate-400 focus-visible:border-slate-300 focus-visible:ring-2 focus-visible:ring-blue-100 ${leadErrors.fullName ? 'border-red-500' : ''}`}
+                  className={`h-10 rounded-lg border border-slate-200 bg-slate-50 px-3 text-sm text-slate-700 placeholder:text-slate-400 focus-visible:border-cyan-500 focus-visible:ring-1 focus-visible:ring-cyan-500 ${leadErrors.fullName ? 'border-red-500' : ''}`}
                 />
-                {leadErrors.fullName && <p className="mt-1.5 text-sm text-red-600">{leadErrors.fullName}</p>}
+                {leadErrors.fullName && <p className="mt-1 text-xs text-red-600">{leadErrors.fullName}</p>}
               </div>
 
               <div>
-                <Label htmlFor="lead-email" className="mb-2.5 flex items-center gap-2 text-[15px] font-semibold text-slate-900">
-                  <Mail className="h-[15px] w-[15px] text-slate-500" />
+                <Label htmlFor="lead-email" className="mb-1.5 flex items-center gap-1.5 text-sm font-medium text-slate-700">
+                  <Mail className="h-4 w-4 text-slate-400" />
                   Email *
                 </Label>
                 <Input
@@ -496,14 +496,14 @@ export function SmileTransformationSection() {
                     if (leadErrors.email) setLeadErrors((current) => ({ ...current, email: undefined }));
                   }}
                   placeholder="john@example.com"
-                  className={`h-[44px] rounded-[12px] border border-slate-200 bg-slate-50/90 px-4 text-[15px] text-slate-700 shadow-none placeholder:text-slate-400 focus-visible:border-slate-300 focus-visible:ring-2 focus-visible:ring-blue-100 ${leadErrors.email ? 'border-red-500' : ''}`}
+                  className={`h-10 rounded-lg border border-slate-200 bg-slate-50 px-3 text-sm text-slate-700 placeholder:text-slate-400 focus-visible:border-cyan-500 focus-visible:ring-1 focus-visible:ring-cyan-500 ${leadErrors.email ? 'border-red-500' : ''}`}
                 />
-                {leadErrors.email && <p className="mt-1.5 text-sm text-red-600">{leadErrors.email}</p>}
+                {leadErrors.email && <p className="mt-1 text-xs text-red-600">{leadErrors.email}</p>}
               </div>
 
               <div>
-                <Label htmlFor="lead-phone" className="mb-2.5 flex items-center gap-2 text-[15px] font-semibold text-slate-900">
-                  <Phone className="h-[15px] w-[15px] text-slate-500" />
+                <Label htmlFor="lead-phone" className="mb-1.5 flex items-center gap-1.5 text-sm font-medium text-slate-700">
+                  <Phone className="h-4 w-4 text-slate-400" />
                   Phone Number *
                 </Label>
                 <Input
@@ -515,13 +515,13 @@ export function SmileTransformationSection() {
                     if (leadErrors.phone) setLeadErrors((current) => ({ ...current, phone: undefined }));
                   }}
                   placeholder="(555) 123-4567"
-                  className={`h-[44px] rounded-[12px] border border-slate-200 bg-slate-50/90 px-4 text-[15px] text-slate-700 shadow-none placeholder:text-slate-400 focus-visible:border-slate-300 focus-visible:ring-2 focus-visible:ring-blue-100 ${leadErrors.phone ? 'border-red-500' : ''}`}
+                  className={`h-10 rounded-lg border border-slate-200 bg-slate-50 px-3 text-sm text-slate-700 placeholder:text-slate-400 focus-visible:border-cyan-500 focus-visible:ring-1 focus-visible:ring-cyan-500 ${leadErrors.phone ? 'border-red-500' : ''}`}
                 />
-                {leadErrors.phone && <p className="mt-1.5 text-sm text-red-600">{leadErrors.phone}</p>}
+                {leadErrors.phone && <p className="mt-1 text-xs text-red-600">{leadErrors.phone}</p>}
               </div>
 
               <div>
-                <Label htmlFor="lead-interest" className="mb-2.5 block text-[15px] font-semibold text-slate-900">Interested In *</Label>
+                <Label htmlFor="lead-interest" className="mb-1.5 block text-sm font-medium text-slate-700">Interested In *</Label>
                 <div className="relative">
                   <select
                     id="lead-interest"
@@ -530,21 +530,21 @@ export function SmileTransformationSection() {
                       setLeadForm((current) => ({ ...current, interestedIn: e.target.value }));
                       if (leadErrors.interestedIn) setLeadErrors((current) => ({ ...current, interestedIn: undefined }));
                     }}
-                    className={`h-[44px] w-full appearance-none rounded-[12px] border bg-white px-5 py-2 pr-11 text-[15px] text-slate-900 ring-offset-background transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-100 ${leadErrors.interestedIn ? 'border-red-500' : 'border-slate-300'}`}
+                    className={`h-10 w-full appearance-none rounded-lg border bg-white px-3 pr-10 text-sm text-slate-700 transition focus-visible:outline-none focus-visible:border-cyan-500 focus-visible:ring-1 focus-visible:ring-cyan-500 ${leadErrors.interestedIn ? 'border-red-500' : 'border-slate-200'}`}
                   >
                     <option value="">Select a service...</option>
                     {INTEREST_OPTIONS.map((option) => (
                       <option key={option} value={option}>{option}</option>
                     ))}
                   </select>
-                  <ChevronDown className="pointer-events-none absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
+                  <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
                 </div>
-                {leadErrors.interestedIn && <p className="mt-1.5 text-sm text-red-600">{leadErrors.interestedIn}</p>}
+                {leadErrors.interestedIn && <p className="mt-1 text-xs text-red-600">{leadErrors.interestedIn}</p>}
               </div>
 
               <div>
-                <Label htmlFor="lead-notes" className="mb-2.5 flex items-center gap-2 text-[15px] font-semibold text-slate-900">
-                  <FileText className="h-[15px] w-[15px] text-slate-500" />
+                <Label htmlFor="lead-notes" className="mb-1.5 flex items-center gap-1.5 text-sm font-medium text-slate-700">
+                  <FileText className="h-4 w-4 text-slate-400" />
                   Optional Notes
                 </Label>
                 <Textarea
@@ -552,50 +552,49 @@ export function SmileTransformationSection() {
                   value={leadForm.notes}
                   onChange={(e) => setLeadForm((current) => ({ ...current, notes: e.target.value }))}
                   placeholder="Tell us about your smile goals or any specific concerns..."
-                  className="min-h-[82px] rounded-[12px] border border-slate-200 px-4 py-3 text-[15px] text-slate-700 shadow-none placeholder:text-slate-400 focus-visible:border-slate-300 focus-visible:ring-2 focus-visible:ring-blue-100"
+                  className="min-h-[70px] rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-700 placeholder:text-slate-400 focus-visible:border-cyan-500 focus-visible:ring-1 focus-visible:ring-cyan-500"
                 />
               </div>
 
-              <Button type="submit" className="h-[49px] w-full rounded-[10px] bg-gradient-to-r from-teal-600 to-blue-600 text-[15px] font-semibold text-white shadow-[0_10px_24px_rgba(37,99,235,0.28)] hover:opacity-95">
-                {isLeadCaptured ? 'Update & Continue ✨' : 'Get Started Free ✨'}
+              <Button type="submit" className="h-10 w-full rounded-lg bg-gradient-to-r from-cyan-600 to-cyan-500 text-sm font-semibold text-white shadow-sm hover:from-cyan-700 hover:to-cyan-600">
+                {isLeadCaptured ? 'Update & Continue' : 'Get Started Free'}
               </Button>
 
-              <div className="space-y-5 pt-3 text-center">
-                <div className="space-y-0.5 text-[13px] leading-5 text-slate-500">
-                  <p>By continuing, you agree to be contacted about your smile transformation.</p>
-                  <p>Your information is secure and will never be shared.</p>
-                </div>
-                <div className="flex flex-col items-center gap-1.5 text-[14px] text-slate-600 sm:text-[15px]">
-                  <span className="inline-flex items-center gap-2"><span className="text-emerald-500">✓</span>Secure &amp; Confidential</span>
-                  <span className="inline-flex items-center gap-2"><span className="text-emerald-500">✓</span>Get Results in 24 Hours</span>
+              <div className="space-y-3 pt-2 text-center">
+                <p className="text-xs text-slate-500">
+                  By continuing, you agree to be contacted about your smile transformation. Your information is secure.
+                </p>
+                <div className="flex justify-center gap-4 text-xs text-slate-600">
+                  <span className="inline-flex items-center gap-1"><span className="text-emerald-500">✓</span>Secure</span>
+                  <span className="inline-flex items-center gap-1"><span className="text-emerald-500">✓</span>Results in 24h</span>
                 </div>
               </div>
             </form>
           </motion.div>
 
-          <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="rounded-[24px] border border-[#dfe6fb] bg-gradient-to-b from-[#f4f7ff] via-[#f7f8ff] to-[#fbfbff] p-6 shadow-[0_18px_48px_rgba(15,23,42,0.05)] sm:p-8">
-            <h3 className="text-[2rem] font-medium tracking-[-0.03em] text-slate-900">Why Get Your Free Preview?</h3>
-            <div className="mt-6 space-y-[14px]">
+          <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="rounded-xl border border-slate-200 bg-gradient-to-b from-slate-50 to-white p-5 sm:p-6 shadow-sm">
+            <h3 className="text-lg font-semibold text-slate-900">Why Get Your Free Preview?</h3>
+            <div className="mt-4 space-y-3">
               {[
-                ['See Your Potential', 'Visualize your smile transformation before committing to treatment'],
-                ['100% Free & No Obligation', 'Get your AI smile preview instantly - no payment required'],
-                ['Personalized Consultation', 'Our team will review your preview and provide expert recommendations'],
-                ['Fast Results', 'Get your AI-generated smile transformation in under 30 seconds'],
+                ['See Your Potential', 'Visualize your transformation before committing'],
+                ['100% Free & No Obligation', 'Get your AI preview instantly - no payment required'],
+                ['Personalized Consultation', 'Our team will review and provide recommendations'],
+                ['Fast Results', 'Get your AI smile transformation in under 30 seconds'],
               ].map(([title, body]) => (
-                <div key={title} className="rounded-[16px] border border-slate-200/90 bg-white px-4 py-4 shadow-[0_3px_10px_rgba(15,23,42,0.05)] sm:px-5">
-                  <div className="flex items-start gap-3">
-                    <CheckCircle className="mt-0.5 h-5 w-5 shrink-0 text-emerald-500" />
+                <div key={title} className="rounded-lg border border-slate-100 bg-white px-4 py-3 shadow-sm">
+                  <div className="flex items-start gap-2.5">
+                    <CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-cyan-600" />
                     <div>
-                      <p className="text-[15px] font-semibold text-slate-900 sm:text-[16px]">{title}</p>
-                      <p className="mt-1 text-[14px] leading-6 text-slate-600">{body}</p>
+                      <p className="text-sm font-medium text-slate-900">{title}</p>
+                      <p className="mt-0.5 text-xs text-slate-500">{body}</p>
                     </div>
                   </div>
                 </div>
               ))}
             </div>
-            <div className="mt-6 rounded-[14px] border border-[#a8efe8] bg-[#eefcf9] px-5 py-5 text-center">
-              <p className="text-[15px] font-semibold text-slate-900 sm:text-[16px]">Over 10,000+ smiles transformed!</p>
-              <p className="mt-1 text-[14px] leading-6 text-slate-600">Join thousands who&apos;ve discovered their dream smile.</p>
+            <div className="mt-4 rounded-lg border border-cyan-100 bg-cyan-50 px-4 py-3 text-center">
+              <p className="text-sm font-semibold text-cyan-800">Over 10,000+ smiles transformed!</p>
+              <p className="mt-0.5 text-xs text-cyan-600">Join thousands who've discovered their dream smile.</p>
             </div>
           </motion.div>
         </div>
