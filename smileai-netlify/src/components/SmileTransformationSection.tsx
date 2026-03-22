@@ -556,7 +556,7 @@ export function SmileTransformationSection() {
                 />
               </div>
 
-              <Button type="submit" className="h-10 w-full rounded-lg bg-gradient-to-r from-cyan-600 to-cyan-500 text-sm font-semibold text-white shadow-sm hover:from-cyan-700 hover:to-cyan-600">
+              <Button type="submit" className="h-10 w-full rounded-lg text-sm font-semibold text-white shadow-sm" style={{ background: 'linear-gradient(to right, #0891b2, #06b6d4)' }}>
                 {isLeadCaptured ? 'Update & Continue' : 'Get Started Free'}
               </Button>
 
@@ -606,10 +606,10 @@ export function SmileTransformationSection() {
               <div className="space-y-6">
                 <div className="grid gap-4 lg:grid-cols-2">
                   <motion.div id="smile-upload-panel" initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
-                    <div className="bg-gradient-to-r from-cyan-600 to-cyan-500 px-4 py-2.5">
+                    <div className="px-4 py-2.5" style={{ background: 'linear-gradient(to right, #0891b2, #06b6d4)' }}>
                       <div className="flex items-center justify-between">
                         <h3 className="text-sm font-semibold text-white">2. Upload Photo</h3>
-                        <span className="rounded-full bg-white/20 px-2 py-0.5 text-xs font-medium text-white">Step 2</span>
+                        <span className="rounded-full px-2 py-0.5 text-xs font-medium text-white" style={{ backgroundColor: 'rgba(255,255,255,0.2)' }}>Step 2</span>
                       </div>
                     </div>
                     <div className="p-4">
@@ -648,10 +648,10 @@ export function SmileTransformationSection() {
                   </motion.div>
 
                   <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
-                    <div className="bg-gradient-to-r from-cyan-600 to-cyan-500 px-4 py-2.5">
+                    <div className="px-4 py-2.5" style={{ background: 'linear-gradient(to right, #0891b2, #06b6d4)' }}>
                       <div className="flex items-center justify-between">
                         <h3 className="text-sm font-semibold text-white">4. AI Preview</h3>
-                        <span className="rounded-full bg-white/20 px-2 py-0.5 text-xs font-medium text-white">Step 4</span>
+                        <span className="rounded-full px-2 py-0.5 text-xs font-medium text-white" style={{ backgroundColor: 'rgba(255,255,255,0.2)' }}>Step 4</span>
                       </div>
                     </div>
                     <div className="p-4">
@@ -688,7 +688,7 @@ export function SmileTransformationSection() {
                         </label>
                       ))}
                     </div>
-                    <Button onClick={generatePreview} disabled={!canGeneratePreview} className="h-10 w-full rounded-lg bg-gradient-to-r from-cyan-600 to-cyan-500 text-sm font-semibold text-white shadow-sm hover:from-cyan-700 hover:to-cyan-600 xl:w-auto xl:min-w-[180px]">
+                    <Button onClick={generatePreview} disabled={!canGeneratePreview} className="h-10 w-full rounded-lg text-sm font-semibold text-white shadow-sm xl:w-auto xl:min-w-[180px]" style={{ background: 'linear-gradient(to right, #0891b2, #06b6d4)' }}>
                       {processingPreview ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Generating...</> : 'Generate Preview'}
                     </Button>
                   </div>
@@ -706,7 +706,7 @@ export function SmileTransformationSection() {
                     <span className="rounded-full bg-cyan-600 px-2 py-0.5 text-xs font-medium text-white">Step 5</span>
                   </div>
                   <p className="mb-3 text-xs text-slate-500">Video may take 2-5 minutes to generate.</p>
-                  <Button onClick={() => generateSingleVideo('veo')} disabled={!canGenerateVideos} className="mb-3 h-9 w-full rounded-lg bg-gradient-to-r from-cyan-600 to-cyan-500 text-sm font-semibold text-white hover:from-cyan-700 hover:to-cyan-600">
+                  <Button onClick={() => generateSingleVideo('veo')} disabled={!canGenerateVideos} className="mb-3 h-9 w-full rounded-lg text-sm font-semibold text-white" style={{ background: 'linear-gradient(to right, #0891b2, #06b6d4)' }}>
                     {videoProcessing === 'veo' ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Creating...</> : 'Create AI Video'}
                   </Button>
                   {renderVideoCard('veo', 'AI VIDEO RESULT')}
@@ -738,7 +738,7 @@ export function SmileTransformationSection() {
                     ))}
                   </div>
                   {favoriteResult && (
-                    <Button type="button" onClick={() => setFavoriteMessage(`Saved ${favoriteResult === 'video' ? 'AI video' : favoriteResult} as your preferred result.`)} className="mt-3 h-9 w-full rounded-lg bg-gradient-to-r from-cyan-600 to-cyan-500 text-sm font-semibold text-white hover:from-cyan-700 hover:to-cyan-600">
+                    <Button type="button" onClick={() => setFavoriteMessage(`Saved ${favoriteResult === 'video' ? 'AI video' : favoriteResult} as your preferred result.`)} className="mt-3 h-9 w-full rounded-lg text-sm font-semibold text-white" style={{ background: 'linear-gradient(to right, #0891b2, #06b6d4)' }}>
                       <Save className="mr-2 h-4 w-4" /> Save Selection
                     </Button>
                   )}

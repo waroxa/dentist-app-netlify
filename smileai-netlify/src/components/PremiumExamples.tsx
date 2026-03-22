@@ -74,13 +74,13 @@ export function PremiumExamples() {
           transition={{ duration: 0.5 }}
           className="mx-auto mb-8 max-w-3xl text-center sm:mb-10"
         >
-          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-cyan-200 bg-white px-3 py-1.5 text-cyan-700 shadow-sm">
+          <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-white px-3 py-1.5 shadow-sm" style={{ border: '1px solid #06b6d4', color: '#0e7490' }}>
             <Sparkles className="h-3.5 w-3.5" />
             <span className="text-xs font-semibold">Real Transformations</span>
           </div>
           <h2 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl lg:text-4xl">
             See What&apos;s Possible{' '}
-            <span className="text-cyan-600">In Under 30 Seconds</span>
+            <span style={{ color: '#0891b2' }}>In Under 30 Seconds</span>
           </h2>
           <p className="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-slate-600 sm:text-base">
             Explore real smile transformations with before, natural, and Hollywood options. Every image is watermarked with your practice logo.
@@ -101,7 +101,7 @@ export function PremiumExamples() {
                 transition={{ duration: 0.4, delay: index * 0.1 }}
                 className="flex flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-md hover:shadow-lg transition-shadow"
               >
-                <div className="bg-gradient-to-r from-cyan-600 to-cyan-500 px-4 py-2.5 text-center">
+                <div className="px-4 py-2.5 text-center" style={{ background: 'linear-gradient(to right, #0891b2, #06b6d4)' }}>
                   <p className="text-sm font-semibold text-white">AI Enhanced Smile</p>
                 </div>
 
@@ -136,9 +136,10 @@ export function PremiumExamples() {
                           onClick={() => handleSelectState(example.id, option.id)}
                           className={`rounded-lg border-2 px-2 py-2 text-xs font-medium transition-all ${
                             isActive
-                              ? 'border-cyan-600 bg-cyan-600 text-white'
-                              : 'border-slate-200 bg-white text-slate-600 hover:border-cyan-300'
+                              ? 'border-transparent text-white'
+                              : 'border-slate-200 bg-white text-slate-600'
                           }`}
+                          style={isActive ? { backgroundColor: '#0891b2', borderColor: '#0891b2' } : {}}
                           aria-pressed={isActive}
                         >
                           {option.label}
@@ -148,7 +149,7 @@ export function PremiumExamples() {
                   </div>
 
                   <div className="mt-3 flex items-start gap-2 rounded-lg border border-slate-100 bg-slate-50 px-3 py-2.5">
-                    <ShieldCheck className="mt-0.5 h-4 w-4 flex-shrink-0 text-cyan-600" />
+                    <ShieldCheck className="mt-0.5 h-4 w-4 flex-shrink-0" style={{ color: '#0891b2' }} />
                     <p className="text-xs text-slate-500">
                       We only adjust teeth and smile - not the face.
                     </p>
