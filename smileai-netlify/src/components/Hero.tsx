@@ -30,13 +30,13 @@ export function Hero({ clinicBranding }: HeroProps) {
       </div>
 
       {/* Navigation - Clean Professional Header */}
-      <nav className="relative z-10 px-4 sm:px-6 lg:px-8 py-4 sm:py-5" style={{ backgroundColor: BRAND_BLUE }}>
-        <div className="mx-auto max-w-7xl flex items-center justify-between">
+      <nav className="relative z-10 border-b border-white/10 px-4 py-4 sm:px-6 sm:py-5 lg:px-8" style={{ backgroundColor: BRAND_BLUE }}>
+        <div className="mx-auto flex max-w-6xl flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <motion.div 
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
-            className="flex items-center gap-3 sm:gap-4"
+            className="flex items-center justify-center gap-3 text-center sm:gap-4 md:justify-start md:text-left"
           >
             <img 
               src={TOOTH_LOGO} 
@@ -52,7 +52,7 @@ export function Hero({ clinicBranding }: HeroProps) {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
-            className="flex items-center gap-2 sm:gap-4"
+            className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 md:justify-end"
           >
             <div className="hidden md:flex items-center gap-2 text-sm text-white/90">
               <MapPin className="h-4 w-4 text-white" />
@@ -69,7 +69,7 @@ export function Hero({ clinicBranding }: HeroProps) {
       </nav>
 
       {/* Hero Content */}
-      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-24">
+      <div className="relative z-10 mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8 lg:py-24">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           {/* Left Column - Text Content */}
           <motion.div 
@@ -79,7 +79,7 @@ export function Hero({ clinicBranding }: HeroProps) {
             className="text-center lg:text-left order-2 lg:order-1"
           >
             {/* Trust Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 rounded-full border border-blue-100 mb-6">
+            <div className="mb-6 inline-flex items-center gap-2 rounded-xl border border-blue-100 bg-blue-50 px-4 py-2">
               <Star className="h-4 w-4 sm:h-5 sm:w-5 text-yellow-500 fill-yellow-500" />
               <span className="text-xs sm:text-sm font-medium text-slate-700">Trusted by 1000+ dental professionals</span>
             </div>
@@ -177,7 +177,7 @@ export function Hero({ clinicBranding }: HeroProps) {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="relative order-1 lg:order-2"
           >
-            <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-slate-200">
+            <div className="relative overflow-hidden rounded-2xl border border-slate-200 shadow-2xl">
               <img
                 src={clinicBranding.heroImage || "https://images.unsplash.com/photo-1606811841689-23dfddce3e95?w=800&q=80"}
                 alt="SmileVisionPro AI smile preview"
@@ -188,7 +188,7 @@ export function Hero({ clinicBranding }: HeroProps) {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
-                className="absolute bottom-4 left-4 right-4 sm:bottom-6 sm:left-6 sm:right-6 bg-white rounded-xl p-4 sm:p-5 shadow-xl"
+                className="absolute bottom-4 left-4 right-4 rounded-xl bg-white p-4 shadow-xl sm:bottom-6 sm:left-6 sm:right-6 sm:p-5"
               >
                 <div className="flex items-center gap-3 sm:gap-4">
                   <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: BRAND_BLUE }}>

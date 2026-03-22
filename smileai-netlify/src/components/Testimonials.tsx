@@ -127,11 +127,11 @@ export function Testimonials({ clinicBranding }: TestimonialsProps) {
   const visibleTestimonials = getVisibleTestimonials();
 
   return (
-    <section className="py-12 sm:py-16 lg:py-20 px-4 bg-white">
-      <div className="max-w-7xl mx-auto">
+    <section className="bg-white px-4 py-12 sm:px-6 sm:py-16 lg:px-8 lg:py-20">
+      <div className="mx-auto max-w-6xl">
         {/* Section Header */}
         <div className="text-center mb-10 sm:mb-16">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 border border-blue-200 rounded-full mb-4">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 border border-blue-200 rounded-xl mb-4">
             <Star className="w-4 h-4 text-blue-600" />
             <span className="text-sm font-medium text-blue-700">Real Patient Results</span>
           </div>
@@ -150,14 +150,14 @@ export function Testimonials({ clinicBranding }: TestimonialsProps) {
             <>
               <button
                 onClick={prevSlide}
-                className="hidden lg:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-6 z-10 w-12 h-12 bg-white hover:bg-gray-50 border-2 border-gray-200 rounded-full items-center justify-center shadow-lg transition-all hover:scale-110 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="hidden lg:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-6 z-10 w-12 h-12 bg-white hover:bg-gray-50 border-2 border-gray-200 rounded-xl items-center justify-center shadow-lg transition-all hover:scale-110 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 aria-label="Previous testimonial"
               >
                 <ChevronLeft className="w-6 h-6 text-gray-700" />
               </button>
               <button
                 onClick={nextSlide}
-                className="hidden lg:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-6 z-10 w-12 h-12 bg-white hover:bg-gray-50 border-2 border-gray-200 rounded-full items-center justify-center shadow-lg transition-all hover:scale-110 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="hidden lg:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-6 z-10 w-12 h-12 bg-white hover:bg-gray-50 border-2 border-gray-200 rounded-xl items-center justify-center shadow-lg transition-all hover:scale-110 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 aria-label="Next testimonial"
               >
                 <ChevronRight className="w-6 h-6 text-gray-700" />
@@ -170,7 +170,7 @@ export function Testimonials({ clinicBranding }: TestimonialsProps) {
             {visibleTestimonials.map((testimonial, idx) => (
               <div
                 key={`${testimonial.id}-${idx}`}
-                className="bg-gradient-to-br from-gray-50 to-white border-2 border-gray-100 rounded-2xl p-6 hover:shadow-xl hover:border-blue-200 transition-all duration-300 relative animate-in fade-in slide-in-from-bottom-4"
+                className="bg-gradient-to-br from-gray-50 to-white border-2 border-gray-100 rounded-xl p-6 hover:shadow-xl hover:border-blue-200 transition-all duration-300 relative animate-in fade-in slide-in-from-bottom-4"
                 style={{ animationDelay: `${idx * 100}ms` }}
               >
                 {/* Quote Icon */}
@@ -202,7 +202,7 @@ export function Testimonials({ clinicBranding }: TestimonialsProps) {
                       className="w-12 h-12 rounded-full object-cover"
                     />
                   ) : (
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-600 to-blue-600 flex items-center justify-center text-white font-semibold text-lg">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-600 to-blue-600 flex items-center justify-center text-white font-semibold text-lg">
                       {testimonial.name.charAt(0)}
                     </div>
                   )}
@@ -227,7 +227,7 @@ export function Testimonials({ clinicBranding }: TestimonialsProps) {
                 <button
                   key={index}
                   onClick={() => goToSlide(index)}
-                  className={`h-2 rounded-full transition-all focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
+                  className={`h-2 rounded-xl transition-all focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
                     index === currentIndex
                       ? 'w-8 bg-blue-600'
                       : 'w-2 bg-blue-200 hover:bg-blue-300'

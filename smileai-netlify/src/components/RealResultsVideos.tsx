@@ -8,8 +8,8 @@ const VIDEO_URLS = [
 
 export function RealResultsVideos() {
   return (
-    <section className="bg-gradient-to-b from-white to-slate-50 px-4 py-16 sm:py-20 lg:py-24">
-      <div className="mx-auto max-w-7xl">
+    <section className="bg-gradient-to-b from-white to-slate-50 px-4 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
+      <div className="mx-auto max-w-6xl">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -17,7 +17,7 @@ export function RealResultsVideos() {
           transition={{ duration: 0.6 }}
           className="mb-12 text-center sm:mb-16"
         >
-          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-sky-200 bg-sky-50 px-4 py-2 text-sky-700">
+          <div className="mb-4 inline-flex items-center gap-2 rounded-xl border border-sky-200 bg-sky-50 px-4 py-2 text-sky-700">
             <Play className="h-4 w-4" />
             <span className="text-sm font-semibold">Real SmileVisionPro outputs</span>
           </div>
@@ -39,13 +39,13 @@ export function RealResultsVideos() {
               transition={{ duration: 0.6, delay: 0.1 * (index + 1) }}
               className="group"
             >
-              <div className="overflow-hidden rounded-[28px] border border-slate-100 bg-white shadow-[0_25px_80px_rgba(15,23,42,0.08)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_30px_90px_rgba(14,165,233,0.16)]">
+              <div className="overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-[0_25px_80px_rgba(15,23,42,0.08)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_30px_90px_rgba(14,165,233,0.16)]">
                 <div className="relative aspect-square bg-slate-950">
                   <video controls autoPlay loop muted playsInline preload="metadata" className="h-full w-full object-cover">
                     <source src={videoUrl} type="video/mp4" />
                     Your browser does not support the video tag.
                   </video>
-                  <div className="absolute left-4 top-4 rounded-full bg-[linear-gradient(135deg,#0f172a_0%,#0284c7_100%)] px-3 py-1.5 text-sm font-semibold text-white shadow-lg">
+                  <div className="absolute left-4 top-4 rounded-xl bg-[linear-gradient(135deg,#0f172a_0%,#0284c7_100%)] px-3 py-1.5 text-sm font-semibold text-white shadow-lg">
                     ✨ Public MP4
                   </div>
                 </div>
