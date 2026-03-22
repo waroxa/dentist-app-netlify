@@ -463,6 +463,7 @@ export function SmileTransformationSection() {
               <p className="mt-3 text-lg text-slate-600">We&apos;ll create your personalized smile preview in the next step</p>
             </div>
             <form onSubmit={handleLeadSubmit} className="space-y-5">
+              <div className="grid gap-5 md:grid-cols-2 md:items-start">
                 <div>
                   <Label htmlFor="lead-fullName" className="mb-2 flex items-center gap-2 text-base font-medium text-slate-900">
                     <User className="h-4 w-4 text-slate-500" />
@@ -552,11 +553,11 @@ export function SmileTransformationSection() {
                   />
                 </div>
 
-                <Button type="submit" className="h-14 w-full rounded-2xl bg-gradient-to-r from-teal-500 to-blue-600 text-base font-semibold text-white shadow-[0_14px_30px_rgba(37,99,235,0.25)] hover:opacity-95">
+                <Button type="submit" className="h-14 w-full rounded-2xl bg-gradient-to-r from-teal-500 to-blue-600 text-base font-semibold text-white shadow-[0_14px_30px_rgba(37,99,235,0.25)] hover:opacity-95 md:col-span-2">
                   {isLeadCaptured ? 'Update & Continue ✨' : 'Get Started Free ✨'}
                 </Button>
 
-                <div className="space-y-6 pt-2 text-center text-sm text-slate-500">
+                <div className="space-y-6 pt-2 text-center text-sm text-slate-500 md:col-span-2">
                   <p>By continuing, you agree to be contacted about your smile transformation. Your information is secure and will never be shared.</p>
                   <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-emerald-600">
                     <span>✓ Secure &amp; Confidential</span>
