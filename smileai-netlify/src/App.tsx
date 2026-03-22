@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Hero } from './components/Hero';
 import { SmileTransformationSection } from './components/SmileTransformationSection';
 import { PremiumExamples } from './components/PremiumExamples';
+import { VideoExamples } from './components/VideoExamples';
 import { HowItWorks } from './components/HowItWorks';
 import { Testimonials } from './components/Testimonials';
 import { Footer } from './components/Footer';
@@ -103,6 +104,7 @@ function App() {
       <div id="examples">
         <PremiumExamples />
       </div>
+      <VideoExamples />
       <SmileTransformationSection />
       <HowItWorks />
       <Testimonials clinicBranding={clinicBranding} />

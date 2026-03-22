@@ -709,16 +709,20 @@ export function SmileTransformationSection() {
               </div>
 
               <div className="space-y-4">
-                <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-                  <div className="mb-3 flex items-center justify-between">
-                    <h3 className="text-sm font-semibold text-slate-900">5. Video</h3>
-                    <span className="rounded-full bg-cyan-600 px-2 py-0.5 text-xs font-medium text-white">Step 5</span>
+                <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+                  <div className="px-4 py-2.5" style={{ background: 'linear-gradient(to right, #0891b2, #06b6d4)' }}>
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-sm font-semibold text-white">5. Video</h3>
+                      <span className="rounded-full px-2 py-0.5 text-xs font-medium text-white" style={{ backgroundColor: 'rgba(255,255,255,0.2)' }}>Step 5</span>
+                    </div>
                   </div>
-                  <p className="mb-3 text-xs text-slate-500">Video may take 2-5 minutes to generate.</p>
-                  <Button onClick={() => generateSingleVideo('veo')} disabled={!canGenerateVideos} className="mb-3 h-9 w-full rounded-lg text-sm font-semibold text-white" style={{ background: 'linear-gradient(to right, #0891b2, #06b6d4)' }}>
-                    {videoProcessing === 'veo' ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Creating...</> : 'Create AI Video'}
-                  </Button>
-                  {renderVideoCard('veo', 'AI VIDEO RESULT')}
+                  <div className="p-4">
+                    <p className="mb-3 text-xs text-slate-500">Video may take 2-5 minutes to generate.</p>
+                    <Button onClick={() => generateSingleVideo('veo')} disabled={!canGenerateVideos} className="mb-3 h-9 w-full rounded-lg text-sm font-semibold text-white" style={{ background: 'linear-gradient(to right, #0891b2, #06b6d4)' }}>
+                      {videoProcessing === 'veo' ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Creating...</> : 'Create AI Video'}
+                    </Button>
+                    {renderVideoCard('veo', 'AI VIDEO RESULT')}
+                  </div>
                 </motion.div>
 
 
