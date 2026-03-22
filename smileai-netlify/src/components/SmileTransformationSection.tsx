@@ -678,15 +678,24 @@ export function SmileTransformationSection() {
                 <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
                   <div className="flex flex-col gap-4 xl:flex-row xl:items-center">
                     <div className="grid w-full flex-1 gap-2 sm:grid-cols-3">
-                      {STYLE_OPTIONS.map((option) => (
-                        <label key={option.value} className="cursor-pointer">
-                          <input type="radio" name="previewStyle" value={option.value} checked={style === option.value} onChange={() => setStyle(option.value)} className="peer sr-only" />
-                          <div className={`rounded-lg border-2 px-3 py-2.5 text-center transition-all ${style === option.value ? 'border-cyan-600 bg-cyan-50' : 'border-slate-200 bg-white hover:border-cyan-300'}`}>
-                            <p className="text-sm font-medium text-slate-900">{option.label}</p>
-                            <p className="mt-0.5 text-xs text-slate-500">{option.helper}</p>
-                          </div>
-                        </label>
-                      ))}
+{STYLE_OPTIONS.map((option) => {
+    const isSelected = style === option.value;
+    return (
+      <label key={option.value} className="cursor-pointer">
+        <input type="radio" name="previewStyle" value={option.value} checked={isSelected} onChange={() => setStyle(option.value)} className="peer sr-only" />
+        <div 
+          className="rounded-lg border-2 px-3 py-2.5 text-center transition-all"
+          style={isSelected 
+            ? { borderColor: '#0891b2', backgroundColor: '#ecfeff' } 
+            : { borderColor: '#e2e8f0', backgroundColor: '#ffffff' }
+          }
+        >
+          <p className="text-sm font-medium" style={{ color: isSelected ? '#0891b2' : '#0f172a' }}>{option.label}</p>
+          <p className="mt-0.5 text-xs text-slate-500">{option.helper}</p>
+        </div>
+      </label>
+    );
+  })}
                     </div>
                     <Button onClick={generatePreview} disabled={!canGeneratePreview} className="h-10 w-full rounded-lg text-sm font-semibold text-white shadow-sm xl:w-auto xl:min-w-[180px]" style={{ background: 'linear-gradient(to right, #0891b2, #06b6d4)' }}>
                       {processingPreview ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Generating...</> : 'Generate Preview'}
