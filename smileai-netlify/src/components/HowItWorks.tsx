@@ -1,7 +1,13 @@
-import { Upload, Sparkles, Video, Calendar } from 'lucide-react';
+import { Upload, Sparkles, Video, Calendar, type LucideIcon } from 'lucide-react';
+
+interface Step {
+  icon: LucideIcon;
+  title: string;
+  description: string;
+}
 
 export function HowItWorks() {
-  const steps = [
+  const steps: Step[] = [
     {
       icon: Upload,
       title: 'Upload Your Photo',
@@ -43,35 +49,38 @@ export function HowItWorks() {
 
         {/* Steps Grid */}
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5">
-          {steps.map((step, index) => (
-            <div key={index} className="relative">
-              {/* Connector Line (hidden on mobile, last item) */}
-              {index < steps.length - 1 && (
-                <div className="hidden lg:block absolute top-12 left-[60%] w-full h-0.5 bg-slate-200 -z-10"></div>
-              )}
-              
-              {/* Step Card */}
-              <div className="relative bg-white border border-slate-200 rounded-xl p-5 hover:shadow-md hover:border-cyan-200 transition-all">
-                {/* Step Number */}
-                <div className="absolute -top-2.5 -left-2.5 w-7 h-7 bg-cyan-600 rounded-full flex items-center justify-center text-white text-sm font-bold shadow-sm">
-                  {index + 1}
-                </div>
+          {steps.map((step, index) => {
+            const IconComponent = step.icon;
+            return (
+              <div key={index} className="relative">
+                {/* Connector Line (hidden on mobile, last item) */}
+                {index < steps.length - 1 && (
+                  <div className="hidden lg:block absolute top-12 left-[60%] w-full h-0.5 bg-slate-200 -z-10"></div>
+                )}
                 
-                {/* Icon */}
-                <div className="w-14 h-14 bg-gradient-to-br from-cyan-600 to-cyan-500 rounded-lg flex items-center justify-center mb-3 mx-auto shadow-sm">
-                  <step.icon className="w-7 h-7 text-white" />
+                {/* Step Card */}
+                <div className="relative bg-white border border-slate-200 rounded-xl p-5 hover:shadow-md hover:border-cyan-200 transition-all">
+                  {/* Step Number */}
+                  <div className="absolute -top-2.5 -left-2.5 w-7 h-7 bg-cyan-600 rounded-full flex items-center justify-center text-white text-sm font-bold shadow-sm">
+                    {index + 1}
+                  </div>
+                  
+                  {/* Icon */}
+                  <div className="w-14 h-14 bg-gradient-to-br from-cyan-600 to-cyan-500 rounded-lg flex items-center justify-center mb-3 mx-auto shadow-sm">
+                    <IconComponent className="w-7 h-7 text-white" />
+                  </div>
+                  
+                  {/* Content */}
+                  <h3 className="text-base font-semibold text-slate-900 mb-1.5 text-center">
+                    {step.title}
+                  </h3>
+                  <p className="text-sm text-slate-500 text-center leading-relaxed">
+                    {step.description}
+                  </p>
                 </div>
-                
-                {/* Content */}
-                <h3 className="text-base font-semibold text-slate-900 mb-1.5 text-center">
-                  {step.title}
-                </h3>
-                <p className="text-sm text-slate-500 text-center leading-relaxed">
-                  {step.description}
-                </p>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         {/* CTA */}
