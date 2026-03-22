@@ -3,8 +3,8 @@ import { Button } from './ui/button';
 import { ClinicBranding } from '../App';
 import { motion } from 'motion/react';
 
-// Clean blue color scheme
-const BRAND_BLUE = '#2563eb';
+// Professional cyan color scheme
+const BRAND_PRIMARY = '#0891b2';
 
 interface HeroProps {
   clinicBranding: ClinicBranding;
@@ -25,12 +25,12 @@ export function Hero({ clinicBranding }: HeroProps) {
     <section className="relative overflow-hidden bg-white">
       {/* Decorative Background Elements */}
       <div className="absolute inset-0 -z-10">
-        <div className="absolute top-0 right-0 h-[500px] w-[500px] rounded-full bg-gradient-to-br from-blue-100/40 to-transparent blur-3xl" />
-        <div className="absolute bottom-0 left-0 h-[500px] w-[500px] rounded-full bg-gradient-to-tr from-blue-50/30 to-transparent blur-3xl" />
+        <div className="absolute top-0 right-0 h-[500px] w-[500px] rounded-full blur-3xl" style={{ background: 'radial-gradient(circle, rgba(8,145,178,0.1) 0%, transparent 70%)' }} />
+        <div className="absolute bottom-0 left-0 h-[500px] w-[500px] rounded-full blur-3xl" style={{ background: 'radial-gradient(circle, rgba(6,182,212,0.08) 0%, transparent 70%)' }} />
       </div>
 
       {/* Navigation - Clean Professional Header */}
-      <nav className="relative z-10 border-b border-white/10 px-4 py-4 sm:px-6 sm:py-5 lg:px-8" style={{ backgroundColor: BRAND_BLUE }}>
+      <nav className="relative z-10 border-b border-white/10 px-4 py-4 sm:px-6 sm:py-5 lg:px-8" style={{ backgroundColor: BRAND_PRIMARY }}>
         <div className="flex w-full flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <motion.div 
             initial={{ opacity: 0, x: -20 }}
@@ -58,7 +58,8 @@ export function Hero({ clinicBranding }: HeroProps) {
           >
             <Button 
               onClick={scrollToTransform}
-              className="order-2 text-sm sm:text-base h-9 sm:h-10 px-4 sm:px-6 font-semibold bg-white text-blue-600 hover:bg-blue-50 sm:order-1"
+              className="order-2 text-sm sm:text-base h-9 sm:h-10 px-4 sm:px-6 font-semibold bg-white hover:bg-slate-50 sm:order-1"
+              style={{ color: '#0891b2' }}
             >
               Try Free
             </Button>
@@ -83,14 +84,14 @@ export function Hero({ clinicBranding }: HeroProps) {
             className="text-center lg:text-left order-2 lg:order-1"
           >
             {/* Trust Badge */}
-            <div className="mb-6 inline-flex items-center gap-2 rounded-xl border border-blue-100 bg-blue-50 px-4 py-2">
+            <div className="mb-6 inline-flex items-center gap-2 rounded-xl px-4 py-2" style={{ backgroundColor: 'rgba(8,145,178,0.1)', border: '1px solid rgba(8,145,178,0.2)' }}>
               <Star className="h-4 w-4 sm:h-5 sm:w-5 text-yellow-500 fill-yellow-500" />
               <span className="text-xs sm:text-sm font-medium text-slate-700">Trusted by 1000+ dental professionals</span>
             </div>
 
             <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-slate-900 mb-6 leading-tight">
               See Your Dream Smile
-              <span className="block text-blue-600 mt-2">
+              <span className="block mt-2" style={{ color: '#0891b2' }}>
                 With AI in 30 Seconds
               </span>
             </h1>
@@ -109,7 +110,7 @@ export function Hero({ clinicBranding }: HeroProps) {
                   onClick={scrollToTransform}
                   size="lg"
                   className="text-white h-12 sm:h-14 px-6 sm:px-8 text-base sm:text-lg shadow-xl font-semibold w-full sm:w-auto hover:opacity-90"
-                  style={{ backgroundColor: BRAND_BLUE }}
+                  style={{ backgroundColor: BRAND_PRIMARY }}
                 >
                   Try AI Preview Free
                   <ArrowRight className="h-5 w-5 ml-2" />
@@ -142,7 +143,7 @@ export function Hero({ clinicBranding }: HeroProps) {
                 className="text-center lg:text-left"
               >
                 <div className="flex items-center justify-center lg:justify-start gap-2 mb-2">
-                  <Shield className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600" />
+                  <Shield className="h-5 w-5 sm:h-6 sm:w-6" style={{ color: '#0891b2' }} />
                 </div>
                 <p className="text-xs sm:text-sm font-bold text-slate-900">100% Secure</p>
                 <p className="text-xs text-slate-500">Your privacy protected</p>
@@ -154,7 +155,7 @@ export function Hero({ clinicBranding }: HeroProps) {
                 className="text-center lg:text-left"
               >
                 <div className="flex items-center justify-center lg:justify-start gap-2 mb-2">
-                  <Award className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600" />
+                  <Award className="h-5 w-5 sm:h-6 sm:w-6" style={{ color: '#0891b2' }} />
                 </div>
                 <p className="text-xs sm:text-sm font-bold text-slate-900">AI Powered</p>
                 <p className="text-xs text-slate-500">Advanced technology</p>
@@ -195,7 +196,7 @@ export function Hero({ clinicBranding }: HeroProps) {
                 className="absolute bottom-4 left-4 right-4 rounded-xl bg-white p-4 shadow-xl sm:bottom-6 sm:left-6 sm:right-6 sm:p-5"
               >
                 <div className="flex items-center gap-3 sm:gap-4">
-                  <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: BRAND_BLUE }}>
+                  <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: BRAND_PRIMARY }}>
                     <span className="text-lg sm:text-xl text-white">✨</span>
                   </div>
                   <div className="flex-1 min-w-0">
