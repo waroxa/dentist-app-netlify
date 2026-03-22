@@ -1,97 +1,117 @@
-import { Upload, Sparkles, Video, Calendar } from 'lucide-react';
+'use client';
 
 export function HowItWorks() {
-  const steps = [
-    {
-      icon: Upload,
-      title: 'Upload Your Photo',
-      description: 'Take a quick selfie or upload an existing photo showing your current smile.',
-      color: 'from-blue-500 to-blue-600',
-    },
-    {
-      icon: Sparkles,
-      title: 'AI Analysis',
-      description: 'Our advanced AI instantly analyzes and enhances your smile in seconds.',
-      color: 'from-blue-500 to-blue-600',
-    },
-    {
-      icon: Video,
-      title: 'Watch AI Preview',
-      description: 'See your AI-enhanced smile come to life with an animated video preview.',
-      color: 'from-purple-500 to-purple-600',
-    },
-    {
-      icon: Calendar,
-      title: 'Book Free Consult',
-      description: 'Love your AI preview? Schedule a free consultation with our expert team.',
-      color: 'from-pink-500 to-pink-600',
-    },
-  ];
-
   return (
-    <section id="how-it-works" className="bg-gradient-to-b from-white to-gray-50 px-4 py-12 sm:px-6 sm:py-16 lg:px-8 lg:py-20">
-      <div className="mx-auto max-w-6xl">
+    <section id="how-it-works" className="bg-slate-50 px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
+      <div className="mx-auto max-w-5xl">
         {/* Section Header */}
-        <div className="text-center mb-10 sm:mb-16">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 border border-blue-200 rounded-xl mb-4">
-            <Sparkles className="w-4 h-4 text-blue-600" />
-            <span className="text-sm font-medium text-blue-700">AI-Powered Process</span>
+        <div className="text-center mb-10">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white rounded-full mb-4 shadow-sm" style={{ border: '1px solid #06b6d4' }}>
+            <svg className="w-4 h-4" fill="none" stroke="#0891b2" strokeWidth="2" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456z" />
+            </svg>
+            <span className="text-xs font-semibold" style={{ color: '#0e7490' }}>AI-Powered Process</span>
           </div>
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">
+          <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-3">
             How It Works
           </h2>
-          <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">
+          <p className="text-base text-slate-600 max-w-xl mx-auto">
             Get your AI-enhanced dream smile preview in 4 simple steps
           </p>
         </div>
 
         {/* Steps Grid */}
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8 lg:grid-cols-4">
-          {steps.map((step, index) => (
-            <div key={index} className="relative">
-              {/* Connector Line (hidden on mobile, last item) */}
-              {index < steps.length - 1 && (
-                <div className="hidden lg:block absolute top-16 left-[60%] w-full h-0.5 bg-gradient-to-r from-gray-300 to-gray-200 -z-10"></div>
-              )}
-              
-              {/* Step Card */}
-              <div className="relative bg-white border-2 border-gray-100 rounded-xl p-6 hover:shadow-xl hover:border-blue-200 transition-all duration-300">
-                {/* Step Number */}
-                <div className="absolute -top-3 -left-3 w-9 h-9 bg-gradient-to-br from-blue-600 to-blue-600 rounded-full flex items-center justify-center text-white text-base font-bold shadow-lg">
-                  {index + 1}
-                </div>
-                
-                {/* Icon */}
-                <div className={`w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br ${step.color} rounded-xl flex items-center justify-center mb-4 mx-auto shadow-md`}>
-                  <step.icon className="w-8 h-8 sm:w-10 sm:h-10 text-white" />
-                </div>
-                
-                {/* Content */}
-                <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2 text-center">
-                  {step.title}
-                </h3>
-                <p className="text-sm sm:text-base text-gray-600 text-center leading-relaxed">
-                  {step.description}
-                </p>
-              </div>
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {/* Step 1 - Upload */}
+          <div className="relative bg-white border border-slate-200 rounded-xl p-6 hover:shadow-lg hover:border-cyan-300 transition-all">
+            <div className="absolute -top-3 -left-3 w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-bold shadow-md" style={{ backgroundColor: '#0891b2' }}>
+              1
             </div>
-          ))}
+            <div className="w-16 h-16 rounded-xl flex items-center justify-center mb-4 mx-auto shadow-md" style={{ backgroundColor: '#0891b2' }}>
+              <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
+              </svg>
+            </div>
+            <h3 className="text-lg font-semibold text-slate-900 mb-2 text-center">
+              Upload Your Photo
+            </h3>
+            <p className="text-sm text-slate-600 text-center leading-relaxed">
+              Take a quick selfie or upload an existing photo showing your current smile.
+            </p>
+          </div>
+
+          {/* Step 2 - AI Analysis */}
+          <div className="relative bg-white border border-slate-200 rounded-xl p-6 hover:shadow-lg hover:border-cyan-300 transition-all">
+            <div className="absolute -top-3 -left-3 w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-bold shadow-md" style={{ backgroundColor: '#0891b2' }}>
+              2
+            </div>
+            <div className="w-16 h-16 rounded-xl flex items-center justify-center mb-4 mx-auto shadow-md" style={{ backgroundColor: '#0891b2' }}>
+              <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456z" />
+              </svg>
+            </div>
+            <h3 className="text-lg font-semibold text-slate-900 mb-2 text-center">
+              AI Analysis
+            </h3>
+            <p className="text-sm text-slate-600 text-center leading-relaxed">
+              Our advanced AI instantly analyzes and enhances your smile in seconds.
+            </p>
+          </div>
+
+          {/* Step 3 - Video Preview */}
+          <div className="relative bg-white border border-slate-200 rounded-xl p-6 hover:shadow-lg hover:border-cyan-300 transition-all">
+            <div className="absolute -top-3 -left-3 w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-bold shadow-md" style={{ backgroundColor: '#0891b2' }}>
+              3
+            </div>
+            <div className="w-16 h-16 rounded-xl flex items-center justify-center mb-4 mx-auto shadow-md" style={{ backgroundColor: '#0891b2' }}>
+              <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z" />
+              </svg>
+            </div>
+            <h3 className="text-lg font-semibold text-slate-900 mb-2 text-center">
+              Watch AI Preview
+            </h3>
+            <p className="text-sm text-slate-600 text-center leading-relaxed">
+              See your AI-enhanced smile come to life with an animated video preview.
+            </p>
+          </div>
+
+          {/* Step 4 - Book Consult */}
+          <div className="relative bg-white border border-slate-200 rounded-xl p-6 hover:shadow-lg hover:border-cyan-300 transition-all">
+            <div className="absolute -top-3 -left-3 w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-bold shadow-md" style={{ backgroundColor: '#0891b2' }}>
+              4
+            </div>
+            <div className="w-16 h-16 rounded-xl flex items-center justify-center mb-4 mx-auto shadow-md" style={{ backgroundColor: '#0891b2' }}>
+              <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
+              </svg>
+            </div>
+            <h3 className="text-lg font-semibold text-slate-900 mb-2 text-center">
+              Book Free Consult
+            </h3>
+            <p className="text-sm text-slate-600 text-center leading-relaxed">
+              Love your AI preview? Schedule a free consultation with our expert team.
+            </p>
+          </div>
         </div>
 
         {/* CTA */}
-        <div className="mt-12 sm:mt-16 text-center">
-          <p className="text-base sm:text-lg text-gray-600 mb-4 sm:mb-6 font-medium">Ready to see your AI-enhanced smile?</p>
+        <div className="mt-12 text-center">
+          <p className="text-base text-slate-700 mb-4 font-medium">Ready to see your AI-enhanced smile?</p>
           <button
             onClick={() => {
               const section = document.getElementById('smile-transform');
               section?.scrollIntoView({ behavior: 'smooth' });
             }}
-            className="inline-flex items-center gap-2 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold bg-gradient-to-r from-blue-600 to-blue-600 text-white rounded-xl hover:shadow-xl transition-all duration-300 hover:scale-105"
+            className="inline-flex items-center gap-2 px-6 py-3 text-base font-semibold text-white rounded-lg shadow-md transition-all"
+            style={{ backgroundColor: '#0891b2' }}
           >
             <span>Try AI Smile Preview Free</span>
-            <Sparkles className="w-5 h-5" />
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
+            </svg>
           </button>
-          <p className="text-xs sm:text-sm text-gray-500 mt-3">No credit card required • Results in 30 seconds</p>
+          <p className="text-sm text-slate-500 mt-3">No credit card required</p>
         </div>
       </div>
     </section>

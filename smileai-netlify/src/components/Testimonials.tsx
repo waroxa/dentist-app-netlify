@@ -127,18 +127,18 @@ export function Testimonials({ clinicBranding }: TestimonialsProps) {
   const visibleTestimonials = getVisibleTestimonials();
 
   return (
-    <section className="bg-white px-4 py-12 sm:px-6 sm:py-16 lg:px-8 lg:py-20">
-      <div className="mx-auto max-w-6xl">
+    <section className="bg-white px-4 py-10 sm:px-6 sm:py-14 lg:px-8">
+      <div className="mx-auto max-w-5xl">
         {/* Section Header */}
-        <div className="text-center mb-10 sm:mb-16">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 border border-blue-200 rounded-xl mb-4">
-            <Star className="w-4 h-4 text-blue-600" />
-            <span className="text-sm font-medium text-blue-700">Real Patient Results</span>
+        <div className="text-center mb-8 sm:mb-10">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-cyan-200 rounded-full mb-3 shadow-sm">
+            <Star className="w-3.5 h-3.5 text-cyan-600" />
+            <span className="text-xs font-semibold text-cyan-700">Real Patient Results</span>
           </div>
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">
+          <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-slate-900 mb-2">
             What Our Patients Say
           </h2>
-          <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">
+          <p className="text-sm sm:text-base text-slate-600 max-w-xl mx-auto">
             Join hundreds of satisfied patients who transformed their smiles with AI-powered previews
           </p>
         </div>
@@ -150,70 +150,70 @@ export function Testimonials({ clinicBranding }: TestimonialsProps) {
             <>
               <button
                 onClick={prevSlide}
-                className="hidden lg:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-6 z-10 w-12 h-12 bg-white hover:bg-gray-50 border-2 border-gray-200 rounded-xl items-center justify-center shadow-lg transition-all hover:scale-110 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="hidden lg:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 w-9 h-9 bg-white hover:bg-slate-50 border border-slate-200 rounded-lg items-center justify-center shadow-sm transition-all hover:border-cyan-300 focus:outline-none focus:ring-2 focus:ring-cyan-500"
                 aria-label="Previous testimonial"
               >
-                <ChevronLeft className="w-6 h-6 text-gray-700" />
+                <ChevronLeft className="w-5 h-5 text-slate-600" />
               </button>
               <button
                 onClick={nextSlide}
-                className="hidden lg:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-6 z-10 w-12 h-12 bg-white hover:bg-gray-50 border-2 border-gray-200 rounded-xl items-center justify-center shadow-lg transition-all hover:scale-110 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="hidden lg:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 w-9 h-9 bg-white hover:bg-slate-50 border border-slate-200 rounded-lg items-center justify-center shadow-sm transition-all hover:border-cyan-300 focus:outline-none focus:ring-2 focus:ring-cyan-500"
                 aria-label="Next testimonial"
               >
-                <ChevronRight className="w-6 h-6 text-gray-700" />
+                <ChevronRight className="w-5 h-5 text-slate-600" />
               </button>
             </>
           )}
 
           {/* Testimonials Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {visibleTestimonials.map((testimonial, idx) => (
               <div
                 key={`${testimonial.id}-${idx}`}
-                className="bg-gradient-to-br from-gray-50 to-white border-2 border-gray-100 rounded-xl p-6 hover:shadow-xl hover:border-blue-200 transition-all duration-300 relative animate-in fade-in slide-in-from-bottom-4"
+                className="bg-white border border-slate-200 rounded-xl p-5 hover:shadow-md hover:border-cyan-200 transition-all relative"
                 style={{ animationDelay: `${idx * 100}ms` }}
               >
                 {/* Quote Icon */}
-                <div className="absolute top-4 right-4 text-blue-200">
-                  <Quote className="w-8 h-8 sm:w-10 sm:h-10" />
+                <div className="absolute top-4 right-4 text-slate-200">
+                  <Quote className="w-7 h-7" />
                 </div>
 
                 {/* Rating */}
-                <div className="flex gap-1 mb-4">
+                <div className="flex gap-0.5 mb-3">
                   {[...Array(testimonial.rating)].map((_, i) => (
                     <Star
                       key={i}
-                      className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-500 fill-yellow-500"
+                      className="w-4 h-4 text-amber-400 fill-amber-400"
                     />
                   ))}
                 </div>
 
                 {/* Testimonial Text */}
-                <p className="text-sm sm:text-base text-gray-700 mb-6 leading-relaxed min-h-[100px]">
+                <p className="text-sm text-slate-600 mb-4 leading-relaxed min-h-[80px]">
                   "{testimonial.text}"
                 </p>
 
                 {/* Patient Info */}
-                <div className="flex items-center gap-3 pt-4 border-t border-gray-200">
+                <div className="flex items-center gap-2.5 pt-3 border-t border-slate-100">
                   {testimonial.image ? (
                     <img
                       src={testimonial.image}
                       alt={testimonial.name}
-                      className="w-12 h-12 rounded-full object-cover"
+                      className="w-10 h-10 rounded-full object-cover"
                     />
                   ) : (
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-600 to-blue-600 flex items-center justify-center text-white font-semibold text-lg">
+                    <div className="w-10 h-10 rounded-full bg-cyan-600 flex items-center justify-center text-white font-semibold text-sm">
                       {testimonial.name.charAt(0)}
                     </div>
                   )}
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm sm:text-base font-semibold text-gray-900 truncate">
+                    <p className="text-sm font-semibold text-slate-900 truncate">
                       {testimonial.name}
                     </p>
-                    <p className="text-xs sm:text-sm text-gray-600 truncate">
+                    <p className="text-xs text-slate-500 truncate">
                       {testimonial.city}
                     </p>
-                    <p className="text-xs font-medium text-blue-600">{testimonial.service}</p>
+                    <p className="text-xs font-medium text-cyan-600">{testimonial.service}</p>
                   </div>
                 </div>
               </div>
@@ -222,15 +222,15 @@ export function Testimonials({ clinicBranding }: TestimonialsProps) {
 
           {/* Dots Navigation - Only show if more than 3 testimonials */}
           {testimonials.length > 3 && (
-            <div className="flex justify-center gap-2 mt-8">
+            <div className="flex justify-center gap-1.5 mt-6">
               {testimonials.map((_, index) => (
                 <button
                   key={index}
                   onClick={() => goToSlide(index)}
-                  className={`h-2 rounded-xl transition-all focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
+                  className={`h-1.5 rounded-full transition-all focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 ${
                     index === currentIndex
-                      ? 'w-8 bg-blue-600'
-                      : 'w-2 bg-blue-200 hover:bg-blue-300'
+                      ? 'w-6 bg-cyan-600'
+                      : 'w-1.5 bg-slate-300 hover:bg-slate-400'
                   }`}
                   aria-label={`Go to testimonial ${index + 1}`}
                 />
@@ -240,10 +240,10 @@ export function Testimonials({ clinicBranding }: TestimonialsProps) {
         </div>
 
         {/* Trust Badge */}
-        <div className="mt-12 text-center">
-          <div className="inline-flex items-center gap-2 px-4 sm:px-6 py-3 bg-gradient-to-r from-blue-50 to-blue-50 border border-blue-200 rounded-full">
-            <Star className="w-5 h-5 text-yellow-500 fill-yellow-500" />
-            <span className="text-sm sm:text-base font-medium text-gray-700">
+        <div className="mt-8 text-center">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-cyan-50 border border-cyan-200 rounded-full">
+            <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
+            <span className="text-sm font-medium text-slate-700">
               <strong>4.9/5</strong> Average Rating from 500+ Reviews
             </span>
           </div>
@@ -251,7 +251,7 @@ export function Testimonials({ clinicBranding }: TestimonialsProps) {
 
         {/* Google Reviews Integration */}
         {googleReviewsScript && googleReviewsScript.trim() !== '' && (
-          <div className="mt-12">
+          <div className="mt-8">
             <div id="google-reviews-container" className="max-w-4xl mx-auto"></div>
           </div>
         )}

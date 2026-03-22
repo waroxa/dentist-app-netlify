@@ -65,36 +65,29 @@ export function PremiumExamples() {
   };
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-white via-slate-50/70 to-white px-4 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute left-1/2 top-0 h-72 w-72 -translate-x-1/2 rounded-full bg-blue-100/40 blur-3xl" />
-        <div className="absolute bottom-10 right-10 h-64 w-64 rounded-full bg-blue-100/30 blur-3xl" />
-      </div>
-
-      <div className="mx-auto max-w-7xl">
+    <section className="relative overflow-hidden bg-slate-50 px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
+      <div className="mx-auto max-w-6xl">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 15 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="mx-auto mb-12 max-w-4xl text-center sm:mb-16"
+          transition={{ duration: 0.5 }}
+          className="mx-auto mb-8 max-w-3xl text-center sm:mb-10"
         >
-          <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-blue-200 bg-white/90 px-4 py-2 text-blue-700 shadow-sm backdrop-blur-sm">
-            <Sparkles className="h-4 w-4" />
-            <span className="text-sm font-semibold">Real Transformations Gallery</span>
+          <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-white px-3 py-1.5 shadow-sm" style={{ border: '1px solid #06b6d4', color: '#0e7490' }}>
+            <Sparkles className="h-3.5 w-3.5" />
+            <span className="text-xs font-semibold">Real Transformations</span>
           </div>
-          <h2 className="text-4xl font-bold tracking-tight text-slate-950 sm:text-5xl lg:text-6xl">
+          <h2 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl lg:text-4xl">
             See What&apos;s Possible{' '}
-            <span className="bg-gradient-to-r from-blue-600 via-sky-500 to-blue-600 bg-clip-text text-transparent">
-              In Under 30 Seconds
-            </span>
+            <span style={{ color: '#0891b2' }}>In Under 30 Seconds</span>
           </h2>
-          <p className="mx-auto mt-5 max-w-3xl text-lg leading-relaxed text-slate-600 sm:text-xl">
-            Explore three smile-preview examples using the same before, natural, and Hollywood states available in your image set. The styling now matches the hero and footer instead of repeating the old duplicate cards section.
+          <p className="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-slate-600 sm:text-base">
+            Explore real smile transformations with before, natural, and Hollywood options. Every image is watermarked with your practice logo.
           </p>
         </motion.div>
 
-        <div className="grid items-stretch gap-8 md:gap-10 lg:grid-cols-3 lg:gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6">
           {EXAMPLES.map((example, index) => {
             const selectedState = selectedStates[example.id];
             const selectedImage = example.images[selectedState];
@@ -102,40 +95,38 @@ export function PremiumExamples() {
             return (
               <motion.article
                 key={example.id}
-                initial={{ opacity: 0, y: 24 }}
+                initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.55, delay: index * 0.08 }}
-                className="flex h-full flex-col overflow-hidden rounded-[28px] border border-slate-200/80 bg-white shadow-[0_24px_80px_rgba(15,23,42,0.08)] transition-transform duration-300 hover:-translate-y-1"
+                transition={{ duration: 0.4, delay: index * 0.1 }}
+                className="flex flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-md hover:shadow-lg transition-shadow"
               >
-                <div className="bg-gradient-to-r from-blue-600 via-sky-600 to-blue-600 px-6 py-4 text-center">
-                  <p className="text-xl font-bold text-white">AI Enhanced Smile</p>
+                <div className="px-4 py-2.5 text-center" style={{ background: 'linear-gradient(to right, #0891b2, #06b6d4)' }}>
+                  <p className="text-sm font-semibold text-white">AI Enhanced Smile</p>
                 </div>
 
-                <div className="border-x-2 border-b-2 border-blue-500/90 bg-slate-100">
+                <div className="border-x border-b border-cyan-200 bg-slate-50">
                   <AnimatePresence mode="wait">
                     <motion.img
                       key={`${example.id}-${selectedState}`}
                       src={selectedImage}
                       alt={`AI enhanced smile ${example.id + 1} ${selectedState} preview`}
-                      initial={{ opacity: 0.15, scale: 0.985 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0.15, scale: 1.015 }}
-                      transition={{ duration: 0.28, ease: 'easeInOut' }}
-                      className="h-[440px] w-full object-cover object-center sm:h-[500px] lg:h-[480px] xl:h-[500px]"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.25 }}
+                      className="w-full h-48 sm:h-56 md:h-52 lg:h-60 object-cover object-top"
                     />
                   </AnimatePresence>
                 </div>
 
-                <div className="flex flex-1 flex-col p-6 sm:p-7">
-                  <div className="mb-6">
-                    <div>
-                      <p className="text-lg font-semibold text-slate-950">Smile Intensity</p>
-                      <p className="mt-1 text-sm text-slate-500">Select a state to preview the result.</p>
-                    </div>
+                <div className="flex flex-col p-4">
+                  <div className="mb-3">
+                    <p className="text-sm font-semibold text-slate-900">Smile Intensity</p>
+                    <p className="text-xs text-slate-500">Select a state to preview</p>
                   </div>
 
-                  <div className="grid grid-cols-3 gap-3 sm:gap-4">
+                  <div className="grid grid-cols-3 gap-2">
                     {STATE_OPTIONS.map((option) => {
                       const isActive = selectedState === option.id;
                       return (
@@ -143,11 +134,12 @@ export function PremiumExamples() {
                           key={option.id}
                           type="button"
                           onClick={() => handleSelectState(example.id, option.id)}
-                          className={`rounded-2xl border-2 px-3 py-4 text-sm font-semibold transition-all duration-200 sm:text-base ${
+                          className={`rounded-lg border-2 px-2 py-2 text-xs font-medium transition-all ${
                             isActive
-                              ? 'border-transparent bg-gradient-to-r from-blue-600 to-blue-600 text-white shadow-lg shadow-sky-500/20'
-                              : 'border-slate-200 bg-white text-slate-700 hover:border-blue-300 hover:text-slate-950'
+                              ? 'border-transparent text-white'
+                              : 'border-slate-200 bg-white text-slate-600'
                           }`}
+                          style={isActive ? { backgroundColor: '#0891b2', borderColor: '#0891b2' } : {}}
                           aria-pressed={isActive}
                         >
                           {option.label}
@@ -156,10 +148,10 @@ export function PremiumExamples() {
                     })}
                   </div>
 
-                  <div className="mt-6 flex items-start gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4">
-                    <ShieldCheck className="mt-0.5 h-5 w-5 flex-shrink-0 text-blue-600" />
-                    <p className="text-sm leading-relaxed text-slate-600">
-                      We only adjust teeth and smile — we don&apos;t change the patient&apos;s face.
+                  <div className="mt-3 flex items-start gap-2 rounded-lg border border-slate-100 bg-slate-50 px-3 py-2.5">
+                    <ShieldCheck className="mt-0.5 h-4 w-4 flex-shrink-0" style={{ color: '#0891b2' }} />
+                    <p className="text-xs text-slate-500">
+                      We only adjust teeth and smile - not the face.
                     </p>
                   </div>
                 </div>
