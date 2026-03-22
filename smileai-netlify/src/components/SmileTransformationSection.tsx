@@ -456,10 +456,10 @@ export function SmileTransformationSection() {
   return (
     <section id="smile-transform" className="relative bg-slate-50 px-4 py-8 sm:py-12 lg:py-16">
       <div className="mx-auto max-w-6xl space-y-8">
-        <div className="grid gap-6 xl:grid-cols-[minmax(0,1.2fr)_minmax(320px,0.8fr)] xl:items-start">
+        <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(360px,0.98fr)] lg:items-start">
           <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="rounded-[28px] border border-slate-200 bg-white px-6 py-7 shadow-[0_20px_60px_rgba(15,23,42,0.08)] sm:px-8 sm:py-8">
             <div className="mb-8">
-              <h2 className="text-3xl font-medium tracking-tight text-slate-900 sm:text-[2.1rem]">Enter Your Information</h2>
+              <h2 className="text-3xl font-medium tracking-tight text-slate-900 sm:text-[2.1rem]">Step 1: Enter Your Information</h2>
               <p className="mt-3 text-lg text-slate-600">We&apos;ll create your personalized smile preview in the next step</p>
             </div>
             <form onSubmit={handleLeadSubmit} className="space-y-5">
@@ -542,8 +542,8 @@ export function SmileTransformationSection() {
                   {leadErrors.interestedIn && <p className="mt-1.5 text-sm text-red-600">{leadErrors.interestedIn}</p>}
                 </div>
 
-                <div className="md:col-span-2">
-                  <Label htmlFor="lead-notes" className="mb-2 block text-base font-medium text-slate-900">Optional Notes</Label>
+                <div>
+                  <Label htmlFor="lead-notes" className="mb-2 flex items-center gap-2 text-base font-medium text-slate-900"><FileText className="h-4 w-4 text-slate-500" />Optional Notes</Label>
                   <Textarea
                     id="lead-notes"
                     value={leadForm.notes}
@@ -564,11 +564,10 @@ export function SmileTransformationSection() {
                     <span>✓ Get Results in 24 Hours</span>
                   </div>
                 </div>
-              </div>
             </form>
           </motion.div>
 
-            <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="rounded-[28px] border border-blue-100 bg-gradient-to-br from-slate-50 via-blue-50 to-white p-6 shadow-[0_20px_60px_rgba(15,23,42,0.08)] sm:p-8">
+          <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="rounded-[28px] border border-blue-100 bg-gradient-to-br from-slate-50 via-blue-50 to-white p-6 shadow-[0_20px_60px_rgba(15,23,42,0.08)] sm:p-8">
               <h3 className="text-3xl font-medium tracking-tight text-slate-900">Why Get Your Free Preview?</h3>
               <div className="mt-6 space-y-4">
                 {[
