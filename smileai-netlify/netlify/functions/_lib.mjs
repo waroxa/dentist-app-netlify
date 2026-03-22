@@ -51,6 +51,11 @@ export function safeParse(body) {
   try { return body ? JSON.parse(body) : {}; } catch { return null; }
 }
 
+export function normalizeWorkspaceKey(value) {
+  const normalized = String(value || '').trim();
+  return normalized || 'default';
+}
+
 export function normalizeEmail(email = '') { return String(email).trim().toLowerCase(); }
 export function onlyDigits(value = '') { return String(value).replace(/\D/g, ''); }
 
@@ -163,6 +168,17 @@ export async function requireAdminSetup(event) {
   return session;
 }
 
+export function resolveWorkspaceKey(event, body = {}) {
+  return normalizeWorkspaceKey(
+    body.workspaceKey ||
+    body.locationId ||
+    body.location_id ||
+    event?.queryStringParameters?.workspaceKey ||
+    event?.queryStringParameters?.locationId ||
+    event?.queryStringParameters?.location_id,
+  );
+}
+
 export function hashPassword(password) {
   const salt = crypto.randomBytes(16);
   const derived = crypto.scryptSync(String(password), salt, 64);
@@ -182,22 +198,22 @@ export function getAdminSetupSecret() {
   return getEnv('SMILEVISION_ADMIN_SETUP_SECRET');
 }
 
-export async function getAdminCredential() {
+export async function getAdminCredential(workspaceKey = 'default') {
   const supabase = getSupabase();
   const { data, error } = await supabase
     .from('admin_credentials')
-    .select('id, password_hash, activated_at, password_updated_at')
-    .eq('id', 'primary')
+    .select('workspace_key, password_hash, activated_at, password_updated_at')
+    .eq('workspace_key', normalizeWorkspaceKey(workspaceKey))
     .maybeSingle();
   if (error) throw error;
   return data;
 }
 
-export async function setAdminCredential({ passwordHash, metadata = {} }) {
+export async function setAdminCredential({ workspaceKey = 'default', passwordHash, metadata = {} }) {
   const supabase = getSupabase();
   const now = new Date().toISOString();
   const payload = {
-    id: 'primary',
+    workspace_key: normalizeWorkspaceKey(workspaceKey),
     password_hash: passwordHash,
     activated_at: now,
     password_updated_at: now,
@@ -205,8 +221,8 @@ export async function setAdminCredential({ passwordHash, metadata = {} }) {
   };
   const { data, error } = await supabase
     .from('admin_credentials')
-    .upsert(payload, { onConflict: 'id' })
-    .select('id, activated_at, password_updated_at')
+    .upsert(payload, { onConflict: 'workspace_key' })
+    .select('workspace_key, activated_at, password_updated_at')
     .single();
   if (error) throw error;
   return data;

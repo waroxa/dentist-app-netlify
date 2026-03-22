@@ -1,11 +1,14 @@
-import { getAdminCredential, getAdminSetupSecret, json } from './_lib.mjs';
+import { getAdminCredential, getAdminSetupSecret, json, resolveWorkspaceKey } from './_lib.mjs';
 
-export async function handler() {
+export async function handler(event) {
   try {
-    const credential = await getAdminCredential();
-    const configured = Boolean(credential?.password_hash || process.env.SMILEVISION_ADMIN_PASSWORD);
+    const workspaceKey = resolveWorkspaceKey(event);
+    const credential = await getAdminCredential(workspaceKey);
+    const legacyConfigured = workspaceKey === 'default' && Boolean(process.env.SMILEVISION_ADMIN_PASSWORD);
+    const configured = Boolean(credential?.password_hash || legacyConfigured);
     const activationEnabled = configured ? false : Boolean(getAdminSetupSecret());
     return json(200, {
+      workspaceKey,
       mode: configured ? 'login' : 'setup',
       configured,
       activationEnabled,

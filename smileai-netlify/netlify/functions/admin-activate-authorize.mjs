@@ -5,6 +5,7 @@ import {
   getAdminCredential,
   getAdminSetupSecret,
   json,
+  resolveWorkspaceKey,
   safeParse,
   signAdminSession,
 } from './_lib.mjs';
@@ -13,24 +14,28 @@ export async function handler(event) {
   if (event.httpMethod !== 'POST') return json(405, { error: 'Method not allowed' });
 
   try {
-    const existing = await getAdminCredential();
-    if (existing?.password_hash) return json(409, { error: 'Staff access has already been configured. Please use the password sign-in form.' });
-
     const body = safeParse(event.body);
     if (!body?.activationSecret) return json(400, { error: 'Activation code is required.' });
+    const workspaceKey = resolveWorkspaceKey(event, body);
 
-    const expected = Buffer.from(getAdminSetupSecret(), 'utf8');
+    const existing = await getAdminCredential(workspaceKey);
+    if (existing?.password_hash) return json(409, { error: 'Staff access has already been configured. Please use the password sign-in form.' });
+
     const provided = Buffer.from(String(body.activationSecret), 'utf8');
-    const validLength = expected.length === provided.length;
-    const isAuthorized = validLength && crypto.timingSafeEqual(provided, expected);
+    const candidates = [`${workspaceKey}:${getAdminSetupSecret()}`];
+    if (workspaceKey === 'default') candidates.push(getAdminSetupSecret());
+    const isAuthorized = candidates.some((candidate) => {
+      const expected = Buffer.from(candidate, 'utf8');
+      return expected.length === provided.length && crypto.timingSafeEqual(provided, expected);
+    });
 
     if (!isAuthorized) {
-      await auditLog('admin_activation_authorize_failed', { ip: event.headers['x-forwarded-for'] || 'unknown' });
+      await auditLog('admin_activation_authorize_failed', { ip: event.headers['x-forwarded-for'] || 'unknown', workspaceKey });
       return json(401, { error: 'The activation code is invalid.' });
     }
 
-    const token = signAdminSession({ purpose: 'admin_setup', exp: Date.now() + 1000 * 60 * 15 });
-    await auditLog('admin_activation_authorized');
+    const token = signAdminSession({ purpose: 'admin_setup', workspaceKey, exp: Date.now() + 1000 * 60 * 15 });
+    await auditLog('admin_activation_authorized', { workspaceKey });
     return json(200, { ok: true }, { 'Set-Cookie': adminSetupSetCookie(token) });
   } catch (error) {
     console.error('admin_activate_authorize_failed', error);

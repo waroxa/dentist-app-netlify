@@ -85,10 +85,17 @@ function App() {
   });
 
   const path = window.location.pathname;
+  const search = window.location.search;
+
+  const resolveWorkspaceKey = () => {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('location_id') || params.get('locationId') || sessionStorage.getItem('ghl_current_location_id') || localStorage.getItem('ghl_location_id') || 'default';
+  };
 
   useEffect(() => {
     document.title = 'SmileVisionPro AI';
-    fetch('/api/admin/session', { credentials: 'include' }).then((res) => setIsAdmin(res.ok)).catch(() => setIsAdmin(false));
+    const workspaceKey = resolveWorkspaceKey();
+    fetch(`/api/admin/session?workspaceKey=${encodeURIComponent(workspaceKey)}`, { credentials: 'include' }).then((res) => setIsAdmin(res.ok)).catch(() => setIsAdmin(false));
   }, []);
 
   if (path === '/getting-started') return <GettingStarted />;
@@ -96,7 +103,7 @@ function App() {
   if (path === '/support') return <Support />;
   if (path === '/privacy') return <Privacy />;
   if (path === '/terms') return <Terms />;
-  if (path.startsWith('/admin')) return isAdmin ? <AdminArea onLogout={async () => { await fetch('/api/admin/logout', { method: 'POST', credentials: 'include' }); window.location.href = '/'; }} /> : <><StaffLoginModal isOpen={true} onClose={() => { window.location.href = '/'; }} onSuccess={() => { setIsAdmin(true); window.location.href = '/admin'; }} /></>;
+  if (path.startsWith('/admin')) return isAdmin ? <AdminArea onLogout={async () => { await fetch('/api/admin/logout', { method: 'POST', credentials: 'include' }); window.location.href = '/'; }} /> : <><StaffLoginModal isOpen={true} onClose={() => { window.location.href = '/'; }} onSuccess={() => { setIsAdmin(true); window.location.href = `/admin${search}`; }} /></>;
 
   return (
     <div className="min-h-screen bg-white">

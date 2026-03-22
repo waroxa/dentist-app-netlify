@@ -16,9 +16,22 @@ interface AdminStatusResponse {
   mode?: 'login' | 'setup' | 'unavailable';
   activationEnabled?: boolean;
   error?: string;
+  workspaceKey?: string;
 }
 
 const initialMessage = 'Use your administrator password to open the private control panel.';
+
+function getWorkspaceKey() {
+  const url = new URL(window.location.href);
+  const params = url.searchParams;
+  return (
+    params.get('location_id') ||
+    params.get('locationId') ||
+    sessionStorage.getItem('ghl_current_location_id') ||
+    localStorage.getItem('ghl_location_id') ||
+    'default'
+  );
+}
 
 export function StaffLoginModal({ isOpen, onClose, onSuccess }: StaffLoginModalProps) {
   const [accessMode, setAccessMode] = useState<AccessMode>('loading');
@@ -31,6 +44,7 @@ export function StaffLoginModal({ isOpen, onClose, onSuccess }: StaffLoginModalP
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [activationAuthorized, setActivationAuthorized] = useState(false);
+  const [workspaceKey, setWorkspaceKey] = useState('default');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -51,8 +65,11 @@ export function StaffLoginModal({ isOpen, onClose, onSuccess }: StaffLoginModalP
     setIsLoading(true);
     setError('');
     try {
-      const res = await fetch('/api/admin/status', { credentials: 'include' });
+      const currentWorkspaceKey = getWorkspaceKey();
+      setWorkspaceKey(currentWorkspaceKey);
+      const res = await fetch(`/api/admin/status?workspaceKey=${encodeURIComponent(currentWorkspaceKey)}`, { credentials: 'include' });
       const data: AdminStatusResponse = await res.json();
+      if (data.workspaceKey) setWorkspaceKey(data.workspaceKey);
 
       if (!res.ok || data.mode === 'unavailable') {
         setAccessMode('unavailable');
@@ -103,7 +120,7 @@ export function StaffLoginModal({ isOpen, onClose, onSuccess }: StaffLoginModalP
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password }),
+        body: JSON.stringify({ password, workspaceKey }),
       });
       const data = await res.json();
       if (!res.ok) {
@@ -131,7 +148,7 @@ export function StaffLoginModal({ isOpen, onClose, onSuccess }: StaffLoginModalP
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ activationSecret }),
+        body: JSON.stringify({ activationSecret, workspaceKey }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Authorization failed.');
@@ -154,7 +171,7 @@ export function StaffLoginModal({ isOpen, onClose, onSuccess }: StaffLoginModalP
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password: newPassword, confirmPassword }),
+        body: JSON.stringify({ password: newPassword, confirmPassword, workspaceKey }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Setup failed.');
@@ -270,8 +287,14 @@ export function StaffLoginModal({ isOpen, onClose, onSuccess }: StaffLoginModalP
             {accessMode === 'setup' && !activationAuthorized && (
               <form onSubmit={handleAuthorizeActivation} className="space-y-4">
                 <div className="rounded-xl border border-blue-100 bg-blue-50 p-4 text-sm text-blue-900">
-                  Enter the private activation code to verify authorized access before creating the first staff password.
+                  Enter the private activation code for this workspace to verify authorized access before creating the first staff password.
                 </div>
+                {workspaceKey !== 'default' && (
+                  <p className="text-xs text-gray-500">Workspace ID: {workspaceKey}</p>
+                )}
+                <p className="text-xs text-gray-500">
+                  For workspace installs, use this format: <span className="font-mono">{workspaceKey}:your-setup-secret</span>
+                </p>
                 <div>
                   <label htmlFor="activationSecret" className="mb-2 block text-sm font-medium text-gray-900">
                     Activation code

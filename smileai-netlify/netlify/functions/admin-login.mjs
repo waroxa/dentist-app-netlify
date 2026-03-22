@@ -1,5 +1,5 @@
 import crypto from 'node:crypto';
-import { adminSetCookie, auditLog, getAdminCredential, json, safeParse, signAdminSession, verifyPassword } from './_lib.mjs';
+import { adminSetCookie, auditLog, getAdminCredential, json, resolveWorkspaceKey, safeParse, signAdminSession, verifyPassword } from './_lib.mjs';
 
 export async function handler(event) {
   if (event.httpMethod !== 'POST') return json(405, { error: 'Method not allowed' });
@@ -7,10 +7,11 @@ export async function handler(event) {
   try {
     const body = safeParse(event.body);
     if (!body?.password) return json(400, { error: 'Password is required.' });
+    const workspaceKey = resolveWorkspaceKey(event, body);
 
-    const credential = await getAdminCredential();
+    const credential = await getAdminCredential(workspaceKey);
     const configuredPasswordHash = credential?.password_hash;
-    const configuredPassword = process.env.SMILEVISION_ADMIN_PASSWORD;
+    const configuredPassword = workspaceKey === 'default' ? process.env.SMILEVISION_ADMIN_PASSWORD : undefined;
 
     if (!configuredPasswordHash && !configuredPassword) {
       return json(409, { error: 'Staff access has not been activated yet. Use the secure setup flow to create the first password.' });
@@ -26,12 +27,12 @@ export async function handler(event) {
     }
 
     if (!ok) {
-      await auditLog('admin_login_failed', { ip: event.headers['x-forwarded-for'] || 'unknown' });
+      await auditLog('admin_login_failed', { ip: event.headers['x-forwarded-for'] || 'unknown', workspaceKey });
       return json(401, { error: 'Invalid password.' });
     }
 
-    const token = signAdminSession({ role: 'admin', exp: Date.now() + 1000 * 60 * 60 * 8 });
-    await auditLog('admin_login_success');
+    const token = signAdminSession({ role: 'admin', workspaceKey, exp: Date.now() + 1000 * 60 * 60 * 8 });
+    await auditLog('admin_login_success', { workspaceKey });
     return json(200, { ok: true }, { 'Set-Cookie': adminSetCookie(token) });
   } catch (error) {
     console.error('admin_login_failed_unexpected', error);
