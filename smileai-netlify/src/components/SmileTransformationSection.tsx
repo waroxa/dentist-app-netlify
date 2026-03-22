@@ -721,38 +721,7 @@ export function SmileTransformationSection() {
                   {renderVideoCard('veo', 'AI VIDEO RESULT')}
                 </motion.div>
 
-                <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-                  <div className="mb-3 flex items-center justify-between">
-                    <h3 className="text-sm font-semibold text-slate-900">6. Compare</h3>
-                    <span className="rounded-full bg-cyan-600 px-2 py-0.5 text-xs font-medium text-white">Step 6</span>
-                  </div>
-                  <div className="space-y-1.5">
-                    {[
-                      { key: 'original', label: 'Original', ready: Boolean(uploadedImage) },
-                      { key: 'preview', label: 'AI Preview', ready: Boolean(previewImage) },
-                      { key: 'video', label: 'AI Video', ready: Boolean(videoResults.veo?.assetUrl) },
-                    ].map((item) => (
-                      <button
-                        type="button"
-                        key={item.key}
-                        onClick={() => setFavoriteResult(item.key as FavoriteResult)}
-                        className={`w-full rounded-lg border-2 px-3 py-2 text-left text-xs font-medium transition-all ${!item.ready ? 'cursor-not-allowed opacity-40' : ''} ${favoriteResult === item.key ? 'border-cyan-600 bg-cyan-50 text-cyan-700' : 'border-slate-200 bg-white text-slate-600 hover:border-cyan-300'}`}
-                        disabled={!item.ready}
-                      >
-                        <div className="flex items-center justify-between">
-                          <span>{item.label}</span>
-                          {favoriteResult === item.key && <CheckCircle className="h-4 w-4 text-cyan-600" />}
-                        </div>
-                      </button>
-                    ))}
-                  </div>
-                  {favoriteResult && (
-                    <Button type="button" onClick={() => setFavoriteMessage(`Saved ${favoriteResult === 'video' ? 'AI video' : favoriteResult} as your preferred result.`)} className="mt-3 h-9 w-full rounded-lg text-sm font-semibold text-white" style={{ background: 'linear-gradient(to right, #0891b2, #06b6d4)' }}>
-                      <Save className="mr-2 h-4 w-4" /> Save Selection
-                    </Button>
-                  )}
-                  {favoriteMessage && <p className="mt-2 text-xs text-emerald-600">{favoriteMessage}</p>}
-                </motion.div>
+
               </div>
             </div>
           </div>
