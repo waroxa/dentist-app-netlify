@@ -1,4 +1,45 @@
 import React, { useEffect } from 'react';
+import { BookOpen, Clock3, Home, LifeBuoy, Mail, ShieldCheck } from 'lucide-react';
+
+function SupportCard({
+  icon: Icon,
+  title,
+  description,
+  href,
+  linkText,
+}: {
+  icon: React.ComponentType<{ className?: string }>;
+  title: string;
+  description: string;
+  href: string;
+  linkText: string;
+}) {
+  return (
+    <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+      <div className="flex items-start gap-4">
+        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-sky-50">
+          <Icon className="h-6 w-6 text-sky-600" />
+        </div>
+        <div className="min-w-0 flex-1">
+          <h3 className="text-xl font-semibold text-slate-900">{title}</h3>
+          <p className="mt-2 text-slate-600">{description}</p>
+          <a href={href} className="mt-4 inline-flex text-base font-semibold text-sky-600 hover:text-sky-700">
+            {linkText}
+          </a>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function FAQItem({ question, answer }: { question: string; answer: string }) {
+  return (
+    <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+      <h3 className="text-base font-semibold text-slate-900">{question}</h3>
+      <p className="mt-2 text-slate-600">{answer}</p>
+    </div>
+  );
+}
 
 export function Support() {
   useEffect(() => {
@@ -7,209 +48,118 @@ export function Support() {
   }, []);
 
   return (
-    <div style={{
-      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif',
-      lineHeight: 1.6,
-      color: '#333',
-      background: 'linear-gradient(135deg, #0EA5E9 0%, #06B6D4 100%)',
-      minHeight: '100vh',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      padding: '20px'
-    }}>
-      <div style={{
-        maxWidth: '700px',
-        background: 'white',
-        borderRadius: '16px',
-        boxShadow: '0 20px 60px rgba(0,0,0,0.3)',
-        overflow: 'hidden'
-      }}>
-        {/* Header */}
-        <header style={{
-          background: 'linear-gradient(135deg, #1e293b 0%, #334155 100%)',
-          color: 'white',
-          padding: '40px',
-          textAlign: 'center'
-        }}>
-          <h1 style={{ fontSize: '2rem', marginBottom: '10px' }}>🦷 SmileVisionPro AI</h1>
-          <p>Customer Support & Help Center</p>
+    <div className="min-h-screen bg-slate-50 px-4 py-12">
+      <div className="mx-auto max-w-5xl space-y-8">
+        <header className="rounded-3xl bg-gradient-to-r from-slate-900 via-slate-800 to-sky-700 px-8 py-12 text-white shadow-lg">
+          <p className="text-sm uppercase tracking-[0.2em] text-sky-200">Support</p>
+          <h1 className="mt-3 text-4xl font-bold">Customer support and help center</h1>
+          <p className="mt-4 max-w-3xl text-lg text-slate-100">
+            Need help with setup, account access, preview generation, or patient workflows? Use the resources below to
+            get support quickly.
+          </p>
         </header>
 
-        {/* Content */}
-        <div style={{ padding: '40px' }}>
-          <h2 style={{ color: '#0EA5E9', margin: '30px 0 20px' }}>📞 Contact Support</h2>
-          <p>Need help with setup, troubleshooting, or have questions? We're here for you!</p>
-
-          {/* Email Support */}
-          <ContactMethod 
-            icon="📧"
+        <section className="grid gap-6 md:grid-cols-2">
+          <SupportCard
+            icon={Mail}
             title="Email Support"
-            link="mailto:support@smilevisionpro.ai"
+            description="Contact the SmileVisionPro support team for setup, troubleshooting, and general product questions."
+            href="mailto:support@smilevisionpro.ai"
             linkText="support@smilevisionpro.ai"
-            description="Response within 24 hours"
           />
-
-          {/* Documentation */}
-          <ContactMethod 
-            icon="📚"
+          <SupportCard
+            icon={BookOpen}
             title="Documentation"
-            link="/setup-guide"
-            linkText="Complete Setup Guide"
-            description="Step-by-step instructions"
+            description="Review the setup guide and getting-started instructions for a clear overview of the live workflow."
+            href="/setup-guide"
+            linkText="Open Setup Guide"
           />
+        </section>
 
-          {/* Live Chat */}
-          <ContactMethod 
-            icon="💬"
-            title="Live Chat"
-            link="https://help.smilevisionpro.ai"
-            linkText="help.smilevisionpro.ai"
-            description="Available during business hours"
-          />
-
-          {/* Support Hours */}
-          <div style={{
-            background: '#fef3c7',
-            borderLeft: '4px solid #f59e0b',
-            padding: '15px',
-            margin: '20px 0',
-            borderRadius: '8px'
-          }}>
-            <strong>⏰ Support Hours:</strong><br />
-            Monday - Friday: 9:00 AM - 6:00 PM EST<br />
-            Saturday: 10:00 AM - 2:00 PM EST<br />
-            Sunday: Closed
+        <section className="rounded-3xl border border-amber-200 bg-amber-50 p-6 shadow-sm">
+          <div className="flex items-start gap-3">
+            <Clock3 className="mt-0.5 h-5 w-5 text-amber-600" />
+            <div>
+              <h2 className="text-xl font-semibold text-slate-900">Support hours</h2>
+              <p className="mt-2 text-slate-700">Monday to Friday, 9:00 AM to 6:00 PM EST</p>
+              <p className="text-slate-700">Saturday, 10:00 AM to 2:00 PM EST</p>
+              <p className="text-slate-700">Sunday, closed</p>
+            </div>
           </div>
+        </section>
 
-          {/* FAQ Section */}
-          <h2 style={{ color: '#0EA5E9', margin: '30px 0 20px' }}>❓ Common Questions</h2>
-          
-          <div style={{ margin: '30px 0' }}>
-            <FAQItem 
-              question="Q: How do I get my CRM API credentials?"
-              answer="Retrieve your API key and location ID from your CRM admin settings."
+        <section className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
+          <h2 className="text-2xl font-semibold text-slate-900">Common questions</h2>
+          <div className="mt-6 space-y-4">
+            <FAQItem
+              question="How do I configure the app?"
+              answer="Start with the setup guide, then sign in to the private admin area to update branding, contact information, testimonials, and security settings."
             />
-            <FAQItem 
-              question="Q: Where are the videos saved in the CRM?"
-              answer='Videos are saved in two places: (1) Custom field "smile_video_url" and (2) Contact Notes with a clickable link.'
+            <FAQItem
+              question="Where are patient previews and videos stored?"
+              answer="Preview images and generated videos are saved to the patient record so your team can review them and use them in follow-up workflows."
             />
-            <FAQItem 
-              question="Q: What custom fields do I need?"
-              answer="You need 5 custom fields: service_interest, transformation_status, before_image_url, after_image_url, and smile_video_url. See the setup guide for details."
+            <FAQItem
+              question="What should I do if a preview or video fails?"
+              answer="Check that the uploaded image is clear and front-facing, then retry. If the issue continues, contact support and include the approximate time of the request."
             />
-            <FAQItem 
-              question="Q: Why aren't contacts being created in the CRM?"
-              answer="Check that your API Key and Location ID are correctly saved in Settings → Integration. Verify your API key has contacts.write permission."
-            />
-            <FAQItem 
-              question="Q: How long does video generation take?"
-              answer="Video generation typically takes 3-5 minutes. The customer will see a progress indicator while the video is being created."
-            />
-            <FAQItem 
-              question="Q: Can I customize the branding?"
-              answer="Yes! Go to Staff Login → Settings → Branding to customize your clinic name, colors, logo, and more."
+            <FAQItem
+              question="Can I customize the public site?"
+              answer="Yes. The admin settings let you update branding, colors, contact details, testimonials, and other visible content without editing code."
             />
           </div>
+        </section>
 
-          {/* Resources */}
-          <h2 style={{ color: '#0EA5E9', margin: '30px 0 20px' }}>📖 Resources</h2>
-          <div style={{ margin: '20px 0' }}>
-            <a href="/setup-guide" className="btn" style={{
-              display: 'inline-block',
-              background: '#0EA5E9',
-              color: 'white',
-              padding: '12px 24px',
-              textDecoration: 'none',
-              borderRadius: '8px',
-              fontWeight: 600,
-              margin: '10px 10px 10px 0',
-              textAlign: 'center'
-            }}>📚 Setup Guide</a>
-            <a href="/" className="btn" style={{
-              display: 'inline-block',
-              background: '#0EA5E9',
-              color: 'white',
-              padding: '12px 24px',
-              textDecoration: 'none',
-              borderRadius: '8px',
-              fontWeight: 600,
-              margin: '10px 10px 10px 0',
-              textAlign: 'center'
-            }}>🏠 Back to App</a>
+        <section className="grid gap-6 md:grid-cols-2">
+          <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+            <div className="flex items-start gap-3">
+              <ShieldCheck className="mt-0.5 h-5 w-5 text-sky-600" />
+              <div>
+                <h2 className="text-xl font-semibold text-slate-900">Privacy</h2>
+                <p className="mt-2 text-slate-600">
+                  Review the privacy notice and terms before completing your production launch.
+                </p>
+                <div className="mt-4 flex flex-wrap gap-3">
+                  <a href="/privacy-notice" className="font-semibold text-sky-600 hover:text-sky-700">
+                    Privacy Notice
+                  </a>
+                  <a href="/terms" className="font-semibold text-sky-600 hover:text-sky-700">
+                    Terms
+                  </a>
+                </div>
+              </div>
+            </div>
           </div>
 
-          {/* Priority Support */}
-          <div style={{
-            background: '#f0f9ff',
-            borderLeft: '4px solid #0EA5E9',
-            padding: '20px',
-            margin: '20px 0',
-            borderRadius: '8px'
-          }}>
-            <h3 style={{ color: '#1e293b', marginBottom: '10px' }}>🚀 Need Priority Support?</h3>
-            <p>For urgent issues or enterprise support, please email us at <strong>priority@smilevisionpro.ai</strong> with "URGENT" in the subject line.</p>
+          <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+            <div className="flex items-start gap-3">
+              <Home className="mt-0.5 h-5 w-5 text-sky-600" />
+              <div>
+                <h2 className="text-xl font-semibold text-slate-900">Back to app</h2>
+                <p className="mt-2 text-slate-600">
+                  Return to the live experience to test the patient journey and staff access flow.
+                </p>
+                <a href="/" className="mt-4 inline-flex font-semibold text-sky-600 hover:text-sky-700">
+                  Open Homepage
+                </a>
+              </div>
+            </div>
           </div>
-        </div>
+        </section>
 
-        {/* Footer */}
-        <footer style={{
-          background: 'white',
-          padding: '30px',
-          marginTop: '40px',
-          borderRadius: '12px',
-          textAlign: 'center',
-          boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
-        }}>
-          <p><strong>SmileVisionPro AI</strong></p>
-          <p style={{ marginTop: '10px' }}>© 2026 All Rights Reserved</p>
-          <p style={{ marginTop: '10px', fontSize: '0.9em' }}>Powered by Advanced AI Technology</p>
-        </footer>
+        <section className="rounded-3xl border border-sky-200 bg-sky-50 p-6 shadow-sm">
+          <div className="flex items-start gap-3">
+            <LifeBuoy className="mt-0.5 h-5 w-5 text-sky-600" />
+            <div>
+              <h2 className="text-xl font-semibold text-slate-900">Need priority help?</h2>
+              <p className="mt-2 text-slate-700">
+                For urgent production issues, email <strong>support@smilevisionpro.ai</strong> with a short summary of
+                the issue and the clinic name in the subject line.
+              </p>
+            </div>
+          </div>
+        </section>
       </div>
-    </div>
-  );
-}
-
-// Helper Components
-function ContactMethod({ icon, title, link, linkText, description }: {
-  icon: string;
-  title: string;
-  link: string;
-  linkText: string;
-  description: string;
-}) {
-  return (
-    <div style={{
-      display: 'flex',
-      alignItems: 'center',
-      gap: '15px',
-      padding: '15px',
-      background: 'white',
-      borderRadius: '8px',
-      margin: '15px 0',
-      boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-    }}>
-      <div style={{ fontSize: '2rem' }}>{icon}</div>
-      <div style={{ flex: 1 }}>
-        <strong style={{ display: 'block', color: '#1e293b', marginBottom: '5px' }}>{title}</strong>
-        <a href={link} style={{ color: '#0EA5E9', textDecoration: 'none', fontWeight: 600 }}>{linkText}</a>
-        <p style={{ fontSize: '0.9em', color: '#64748b', marginTop: '5px' }}>{description}</p>
-      </div>
-    </div>
-  );
-}
-
-function FAQItem({ question, answer }: { question: string; answer: string }) {
-  return (
-    <div style={{
-      background: '#f9fafb',
-      padding: '15px',
-      margin: '10px 0',
-      borderRadius: '8px',
-      borderLeft: '3px solid #0EA5E9'
-    }}>
-      <strong style={{ color: '#1e293b', display: 'block', marginBottom: '8px' }}>{question}</strong>
-      <p>{answer}</p>
     </div>
   );
 }
