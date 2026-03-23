@@ -50,14 +50,14 @@ export function Support() {
   return (
     <div className="min-h-screen bg-slate-50 px-4 py-12">
       <div className="mx-auto max-w-5xl space-y-8">
-        <header className="rounded-3xl bg-gradient-to-r from-slate-900 via-slate-800 to-sky-700 px-8 py-12 text-white shadow-lg">
-          <p className="text-sm uppercase tracking-[0.2em] text-sky-200">Support</p>
-          <h1 className="mt-3 text-4xl font-bold">Customer support and help center</h1>
-          <p className="mt-4 max-w-3xl text-lg text-slate-100">
+        <section className="space-y-3">
+          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-sky-600">Support</p>
+          <h1 className="text-4xl font-bold text-slate-900">Customer support and help center</h1>
+          <p className="max-w-3xl text-lg text-slate-600">
             Need help with setup, account access, preview generation, or patient workflows? Use the resources below to
             get support quickly.
           </p>
-        </header>
+        </section>
 
         <section className="grid gap-6 md:grid-cols-2">
           <SupportCard

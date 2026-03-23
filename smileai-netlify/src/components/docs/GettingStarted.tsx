@@ -9,15 +9,15 @@ export function GettingStarted() {
   return (
     <div className="min-h-screen bg-slate-50 px-4 py-12">
       <div className="mx-auto max-w-4xl space-y-8">
-        <header className="rounded-3xl bg-gradient-to-r from-slate-900 via-sky-700 to-cyan-500 px-8 py-12 text-white shadow-lg">
-          <p className="text-sm uppercase tracking-[0.2em] text-sky-100">Getting started</p>
-          <h1 className="mt-3 text-4xl font-bold">Start using SmileVisionPro AI in a few simple steps.</h1>
-          <p className="mt-4 max-w-2xl text-lg text-sky-50">
+        <section className="space-y-3">
+          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-sky-600">Getting started</p>
+          <h1 className="text-4xl font-bold text-slate-900">Start using SmileVisionPro AI in a few simple steps.</h1>
+          <p className="max-w-3xl text-lg text-slate-600">
             SmileVisionPro AI helps clinics and patients visualize cosmetic smile improvements from a single photo. The
             live flow keeps lead capture, image preview generation, before-and-after comparison, and smile video
             generation in one streamlined experience.
           </p>
-        </header>
+        </section>
 
         <section className="grid gap-6 md:grid-cols-2">
           {[

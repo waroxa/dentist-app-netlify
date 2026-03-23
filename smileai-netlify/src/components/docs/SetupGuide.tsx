@@ -9,11 +9,14 @@ export function SetupGuide() {
   return (
     <div className="min-h-screen bg-white px-4 py-12">
       <div className="mx-auto max-w-5xl space-y-8">
-        <header className="rounded-3xl bg-slate-900 px-8 py-12 text-white">
-          <p className="text-sm uppercase tracking-[0.2em] text-sky-300">Setup guide</p>
-          <h1 className="mt-3 text-4xl font-bold">Production setup for SmileVisionPro AI</h1>
-          <p className="mt-4 max-w-3xl text-slate-200">Use this page to prepare account access, image standards, provider configuration, workflow setup, privacy expectations, and support procedures. This guide is intentionally white-label and suitable for public documentation.</p>
-        </header>
+        <section className="space-y-3">
+          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-sky-600">Setup guide</p>
+          <h1 className="text-4xl font-bold text-slate-900">Production setup for SmileVisionPro AI</h1>
+          <p className="max-w-3xl text-lg text-slate-600">
+            Use this page to prepare account access, image standards, provider configuration, workflow setup, privacy
+            expectations, and support procedures.
+          </p>
+        </section>
 
         <section className="rounded-2xl border p-8">
           <h2 className="text-2xl font-semibold">1. Account setup</h2>
