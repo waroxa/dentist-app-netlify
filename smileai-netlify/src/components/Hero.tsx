@@ -14,6 +14,7 @@ export function Hero({ clinicBranding }: HeroProps) {
   const primaryColor = clinicBranding.primaryColor || '#0891b2';
   const accentColor = clinicBranding.accentColor || '#06b6d4';
   const logo = clinicBranding.logo || TOOTH_LOGO;
+  const hasHeroImage = Boolean(clinicBranding.heroImage);
 
   const scrollToTransform = () => {
     const section = document.getElementById('smile-transform');
@@ -70,12 +71,14 @@ export function Hero({ clinicBranding }: HeroProps) {
       {/* Hero Section - Image with Overlay Content */}
       <div className="relative">
         {/* Hero Image - Full Width Background */}
-        <div className="relative h-[400px] sm:h-[500px] lg:h-[600px]">
-          <img
-            src={clinicBranding.heroImage || "https://images.unsplash.com/photo-1606811841689-23dfddce3e95?w=1600&q=80"}
-            alt="SmileVisionPro AI dental consultation"
-            className="absolute inset-0 w-full h-full object-cover"
-          />
+        <div className="relative h-[400px] sm:h-[500px] lg:h-[600px]" style={!hasHeroImage ? { background: `linear-gradient(135deg, ${primaryColor}, ${accentColor})` } : undefined}>
+          {hasHeroImage && (
+            <img
+              src={clinicBranding.heroImage}
+              alt="SmileVisionPro AI dental consultation"
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+          )}
           {/* Dark Overlay for text readability */}
           <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-transparent" />
           

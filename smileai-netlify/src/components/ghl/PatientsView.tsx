@@ -83,6 +83,8 @@ export function PatientsView({ clinicBranding, onViewContact }: PatientsViewProp
     return matchesSearch && matchesStatus;
   });
 
+  const primaryTone = `${clinicBranding.primaryColor}14`;
+
   return (
     <div className="space-y-6 max-w-7xl">
       {/* Page Header */}
@@ -93,7 +95,8 @@ export function PatientsView({ clinicBranding, onViewContact }: PatientsViewProp
         </div>
         <Button 
           onClick={() => setIsAddModalOpen(true)}
-          className="bg-cyan-600 hover:bg-cyan-700 text-white shadow-sm w-full sm:w-auto text-sm h-10"
+          className="shadow-sm w-full sm:w-auto text-sm h-10"
+          style={{ backgroundColor: clinicBranding.primaryColor, color: '#ffffff' }}
         >
           <Plus className="w-4 h-4 mr-2" />
           Add Patient
@@ -110,7 +113,7 @@ export function PatientsView({ clinicBranding, onViewContact }: PatientsViewProp
               placeholder="Search patients by name, email, or phone..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-9 h-10 text-sm border-slate-200 focus:border-cyan-500 focus:ring-cyan-500"
+              className="pl-9 h-10 text-sm border-slate-200"
             />
           </div>
           <div className="flex gap-2">
@@ -133,9 +136,10 @@ export function PatientsView({ clinicBranding, onViewContact }: PatientsViewProp
               onClick={() => setFilterStatus(status)}
               className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
                 filterStatus === status
-                  ? 'bg-cyan-600 text-white'
+                  ? 'text-white'
                   : 'text-slate-600 bg-slate-100 hover:bg-slate-200'
               }`}
+              style={filterStatus === status ? { backgroundColor: clinicBranding.primaryColor } : undefined}
             >
               {status.charAt(0).toUpperCase() + status.slice(1)}
             </button>
@@ -148,7 +152,7 @@ export function PatientsView({ clinicBranding, onViewContact }: PatientsViewProp
         <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-10 text-center">
           <div className="max-w-sm mx-auto">
             <div className="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Loader2 className="w-6 h-6 text-cyan-600 animate-spin" />
+              <Loader2 className="w-6 h-6 animate-spin" style={{ color: clinicBranding.primaryColor }} />
             </div>
             <h3 className="text-sm font-semibold text-slate-900 mb-1">Loading patients...</h3>
             <p className="text-xs text-slate-500">
@@ -168,7 +172,8 @@ export function PatientsView({ clinicBranding, onViewContact }: PatientsViewProp
             </p>
             <Button 
               onClick={() => setIsAddModalOpen(true)}
-              className="bg-cyan-600 hover:bg-cyan-700 text-white shadow-sm text-sm"
+              className="shadow-sm text-sm"
+              style={{ backgroundColor: clinicBranding.primaryColor, color: '#ffffff' }}
             >
               <Plus className="w-4 h-4 mr-2" />
               Add Your First Patient
@@ -182,7 +187,7 @@ export function PatientsView({ clinicBranding, onViewContact }: PatientsViewProp
               <PatientCard
                 key={patient.id}
                 patient={patient}
-                primaryColor="#0891b2"
+                primaryColor={clinicBranding.primaryColor}
                 onViewContact={onViewContact}
               />
             ))}
@@ -199,7 +204,8 @@ export function PatientsView({ clinicBranding, onViewContact }: PatientsViewProp
               </Button>
               <Button 
                 variant="outline" 
-                className="border-cyan-200 text-cyan-700 text-sm h-9"
+                className="text-sm h-9"
+                style={{ borderColor: primaryTone, color: clinicBranding.primaryColor }}
                 disabled
               >
                 Next

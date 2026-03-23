@@ -20,10 +20,8 @@ export function BrandCustomizationPanel({
 }: BrandCustomizationPanelProps) {
   const [localBranding, setLocalBranding] = useState(branding);
   const [logoError, setLogoError] = useState<string | null>(null);
-  const [heroImageError, setHeroImageError] = useState<string | null>(null);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const heroImageInputRef = useRef<HTMLInputElement>(null);
 
   // Preset color palettes for easy selection
   const colorPresets = [
@@ -73,38 +71,6 @@ export function BrandCustomizationPanel({
     updateBranding({ logo: null });
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
-    }
-  };
-
-  const handleHeroImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    // Validate file type
-    const validTypes = ['image/png', 'image/jpeg', 'image/jpg'];
-    if (!validTypes.includes(file.type)) {
-      setHeroImageError('Please upload a PNG or JPG file');
-      return;
-    }
-
-    // Validate file size (max 5MB for hero images)
-    if (file.size > 5 * 1024 * 1024) {
-      setHeroImageError('File size must be less than 5MB');
-      return;
-    }
-
-    setHeroImageError(null);
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      updateBranding({ heroImage: reader.result as string });
-    };
-    reader.readAsDataURL(file);
-  };
-
-  const removeHeroImage = () => {
-    updateBranding({ heroImage: null });
-    if (heroImageInputRef.current) {
-      heroImageInputRef.current.value = '';
     }
   };
 
@@ -228,94 +194,6 @@ export function BrandCustomizationPanel({
                 <div className="bg-red-50 border border-red-200 rounded-lg p-3 flex items-center gap-2">
                   <X className="w-4 h-4 text-red-600" />
                   <p className="text-sm text-red-800">{logoError}</p>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-
-        {/* Hero Image Upload */}
-        <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-4 sm:p-6">
-          <div className="flex items-center gap-2 mb-4">
-            <ImageIcon className="w-5 h-5 text-gray-700" />
-            <h3 className="text-base sm:text-lg font-semibold text-gray-900">Hero Image</h3>
-          </div>
-
-          <p className="text-sm text-gray-600 mb-4">
-            Upload a hero image for your landing page. This appears at the top of your site.
-          </p>
-
-          <div className="space-y-4">
-            {/* Hero Image Preview */}
-            <div className="w-full bg-gray-50 rounded-lg border-2 border-dashed border-gray-300 overflow-hidden">
-              {localBranding.heroImage ? (
-                <div className="relative">
-                  <img 
-                    src={localBranding.heroImage} 
-                    alt="Hero" 
-                    className="w-full h-48 object-cover" 
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
-                </div>
-              ) : (
-                <div className="h-48 flex flex-col items-center justify-center">
-                  <Upload className="w-12 h-12 text-gray-400 mb-2" />
-                  <p className="text-sm text-gray-500">No hero image uploaded</p>
-                </div>
-              )}
-            </div>
-
-            {/* Upload Controls */}
-            <div className="space-y-3">
-              <input
-                ref={heroImageInputRef}
-                type="file"
-                className="hidden"
-                accept="image/png,image/jpeg,image/jpg"
-                onChange={handleHeroImageUpload}
-              />
-              
-              <div className="flex gap-2">
-                <Button
-                  onClick={() => heroImageInputRef.current?.click()}
-                  className="bg-gray-900 hover:bg-gray-800 text-white"
-                >
-                  <Upload className="w-4 h-4 mr-2" />
-                  {localBranding.heroImage ? 'Change Hero Image' : 'Upload Hero Image'}
-                </Button>
-                
-                {localBranding.heroImage && (
-                  <Button
-                    onClick={removeHeroImage}
-                    variant="outline"
-                    className="border-gray-300 text-red-600 hover:bg-red-50"
-                  >
-                    <X className="w-4 h-4 mr-2" />
-                    Remove
-                  </Button>
-                )}
-              </div>
-
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
-                <div className="flex gap-2">
-                  <AlertCircle className="w-4 h-4 text-blue-600 flex-shrink-0 mt-0.5" />
-                  <div className="text-xs text-blue-800">
-                    <p className="font-medium mb-1">Hero Image Guidelines:</p>
-                    <ul className="space-y-1 list-disc list-inside">
-                      <li>Landscape format recommended (16:9 ratio)</li>
-                      <li>Minimum 1920x1080px for best quality</li>
-                      <li>PNG or JPG format</li>
-                      <li>Maximum file size: 5MB</li>
-                      <li>Shows dental office, staff, or patients</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-
-              {heroImageError && (
-                <div className="bg-red-50 border border-red-200 rounded-lg p-3 flex items-center gap-2">
-                  <X className="w-4 h-4 text-red-600" />
-                  <p className="text-sm text-red-800">{heroImageError}</p>
                 </div>
               )}
             </div>

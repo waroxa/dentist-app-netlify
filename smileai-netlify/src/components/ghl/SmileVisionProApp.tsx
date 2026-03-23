@@ -74,7 +74,8 @@ export function SmileVisionProApp({ clinicBranding, onBrandingChange, onLogout }
       {/* Mobile Menu Button */}
       <button
         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-        className="lg:hidden fixed bottom-6 right-6 z-[100] bg-cyan-600 hover:bg-cyan-700 text-white p-3.5 rounded-full shadow-lg hover:shadow-xl transition-all"
+        className="lg:hidden fixed bottom-6 right-6 z-[100] text-white p-3.5 rounded-full shadow-lg hover:shadow-xl transition-all"
+        style={{ backgroundColor: clinicBranding.primaryColor }}
         aria-label="Toggle menu"
       >
         {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -101,7 +102,7 @@ export function SmileVisionProApp({ clinicBranding, onBrandingChange, onLogout }
             <div className="lg:hidden fixed inset-y-0 left-0 z-50 w-72 bg-white shadow-2xl overflow-y-auto">
               <div className="p-4 border-b border-slate-200 flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-500 to-cyan-600 flex items-center justify-center">
+                  <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: `linear-gradient(135deg, ${clinicBranding.primaryColor}, ${clinicBranding.accentColor || clinicBranding.primaryColor})` }}>
                     <Sparkles className="w-4 h-4 text-white" />
                   </div>
                   <span className="font-semibold text-slate-900">Menu</span>
@@ -132,11 +133,12 @@ export function SmileVisionProApp({ clinicBranding, onBrandingChange, onLogout }
                         onClick={() => handleNavigate(item.id)}
                         className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all text-sm font-medium ${
                           isActive
-                            ? 'bg-cyan-50 text-cyan-700'
+                            ? ''
                             : 'text-slate-600 hover:bg-slate-50'
                         }`}
+                        style={isActive ? { backgroundColor: `${clinicBranding.primaryColor}14`, color: clinicBranding.primaryColor } : undefined}
                       >
-                        <Icon className={`w-5 h-5 ${isActive ? 'text-cyan-600' : ''}`} />
+                        <Icon className="w-5 h-5" style={isActive ? { color: clinicBranding.primaryColor } : undefined} />
                         <span>{item.label}</span>
                       </button>
                     );

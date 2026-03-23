@@ -19,6 +19,7 @@ import { Badge } from './ui/badge';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { Textarea } from './ui/textarea';
+import { ClinicBranding } from '../App';
 
 type SmileStyle = 'subtle' | 'natural' | 'hollywood';
 type VideoProvider = 'veo';
@@ -124,7 +125,11 @@ function getStepIndex(isLeadCaptured: boolean, uploadedImage: string | null, pre
   return 2;
 }
 
-export function SmileTransformationSection() {
+interface SmileTransformationSectionProps {
+  clinicBranding: ClinicBranding;
+}
+
+export function SmileTransformationSection({ clinicBranding }: SmileTransformationSectionProps) {
   const [leadForm, setLeadForm] = useState<LeadFormData>({
     fullName: '',
     email: '',
@@ -157,6 +162,11 @@ export function SmileTransformationSection() {
   const selectedStyle = useMemo(() => STYLE_OPTIONS.find((option) => option.value === style) ?? STYLE_OPTIONS[1], [style]);
   const canGeneratePreview = isLeadCaptured && Boolean(uploadedImage) && !processingPreview;
   const canGenerateVideos = isLeadCaptured && Boolean(previewImage) && !videoProcessing;
+  const primaryColor = clinicBranding.primaryColor || BRAND_PRIMARY;
+  const accentColor = clinicBranding.accentColor || primaryColor;
+  const primarySoft = `${primaryColor}14`;
+  const primaryBorder = `${primaryColor}33`;
+  const primaryGradient = `linear-gradient(to right, ${primaryColor}, ${accentColor})`;
 
   function formatPhoneNumber(value: string) {
     const digits = value.replace(/\D/g, '').slice(0, 10);
@@ -396,16 +406,16 @@ export function SmileTransformationSection() {
   function renderInfoBanner() {
     if (videoProcessing) {
       return (
-        <div className="rounded-lg border border-cyan-200 bg-cyan-50 px-3 py-2 text-sm text-slate-700">
-          <span className="font-medium text-cyan-700">Working on your video:</span> {motivationalMessages[waitingMessageIndex]}
+        <div className="rounded-lg px-3 py-2 text-sm text-slate-700" style={{ border: `1px solid ${primaryBorder}`, backgroundColor: primarySoft }}>
+          <span className="font-medium" style={{ color: primaryColor }}>Working on your video:</span> {motivationalMessages[waitingMessageIndex]}
         </div>
       );
     }
 
     if (!isLeadCaptured) {
       return (
-        <div className="rounded-lg border border-cyan-200 bg-cyan-50 px-3 py-2 text-sm text-slate-700">
-          <span className="font-medium text-cyan-700">Step 1 first:</span> enter patient info to unlock photo upload and preview tools.
+        <div className="rounded-lg px-3 py-2 text-sm text-slate-700" style={{ border: `1px solid ${primaryBorder}`, backgroundColor: primarySoft }}>
+          <span className="font-medium" style={{ color: primaryColor }}>Step 1 first:</span> enter patient info to unlock photo upload and preview tools.
         </div>
       );
     }
@@ -435,7 +445,7 @@ export function SmileTransformationSection() {
             </video>
           ) : pending ? (
             <div className="flex flex-col items-center justify-center gap-3 px-4 py-16 text-center">
-              <Loader2 className="h-8 w-8 animate-spin text-cyan-600" />
+              <Loader2 className="h-8 w-8 animate-spin" style={{ color: primaryColor }} />
               <p className="text-sm text-slate-500">Creating video...</p>
             </div>
           ) : (
@@ -446,7 +456,10 @@ export function SmileTransformationSection() {
           )}
         </div>
         {message && (
-          <div className={`border-t px-3 py-2 text-xs ${message.type === 'error' ? 'border-red-100 bg-red-50 text-red-700' : message.type === 'success' ? 'border-emerald-100 bg-emerald-50 text-emerald-700' : 'border-cyan-100 bg-cyan-50 text-cyan-700'}`}>
+          <div
+            className={`border-t px-3 py-2 text-xs ${message.type === 'error' ? 'border-red-100 bg-red-50 text-red-700' : message.type === 'success' ? 'border-emerald-100 bg-emerald-50 text-emerald-700' : ''}`}
+            style={message.type === 'info' ? { borderColor: primaryBorder, backgroundColor: primarySoft, color: primaryColor } : undefined}
+          >
             {message.message}
           </div>
         )}
@@ -477,7 +490,7 @@ export function SmileTransformationSection() {
                     if (leadErrors.fullName) setLeadErrors((current) => ({ ...current, fullName: undefined }));
                   }}
                   placeholder="John Smith"
-                  className={`h-10 rounded-lg border border-slate-200 bg-slate-50 px-3 text-sm text-slate-700 placeholder:text-slate-400 focus-visible:border-cyan-500 focus-visible:ring-1 focus-visible:ring-cyan-500 ${leadErrors.fullName ? 'border-red-500' : ''}`}
+                  className={`h-10 rounded-lg border border-slate-200 bg-slate-50 px-3 text-sm text-slate-700 placeholder:text-slate-400 ${leadErrors.fullName ? 'border-red-500' : ''}`}
                 />
                 {leadErrors.fullName && <p className="mt-1 text-xs text-red-600">{leadErrors.fullName}</p>}
               </div>
@@ -496,7 +509,7 @@ export function SmileTransformationSection() {
                     if (leadErrors.email) setLeadErrors((current) => ({ ...current, email: undefined }));
                   }}
                   placeholder="john@example.com"
-                  className={`h-10 rounded-lg border border-slate-200 bg-slate-50 px-3 text-sm text-slate-700 placeholder:text-slate-400 focus-visible:border-cyan-500 focus-visible:ring-1 focus-visible:ring-cyan-500 ${leadErrors.email ? 'border-red-500' : ''}`}
+                  className={`h-10 rounded-lg border border-slate-200 bg-slate-50 px-3 text-sm text-slate-700 placeholder:text-slate-400 ${leadErrors.email ? 'border-red-500' : ''}`}
                 />
                 {leadErrors.email && <p className="mt-1 text-xs text-red-600">{leadErrors.email}</p>}
               </div>
@@ -515,7 +528,7 @@ export function SmileTransformationSection() {
                     if (leadErrors.phone) setLeadErrors((current) => ({ ...current, phone: undefined }));
                   }}
                   placeholder="(555) 123-4567"
-                  className={`h-10 rounded-lg border border-slate-200 bg-slate-50 px-3 text-sm text-slate-700 placeholder:text-slate-400 focus-visible:border-cyan-500 focus-visible:ring-1 focus-visible:ring-cyan-500 ${leadErrors.phone ? 'border-red-500' : ''}`}
+                  className={`h-10 rounded-lg border border-slate-200 bg-slate-50 px-3 text-sm text-slate-700 placeholder:text-slate-400 ${leadErrors.phone ? 'border-red-500' : ''}`}
                 />
                 {leadErrors.phone && <p className="mt-1 text-xs text-red-600">{leadErrors.phone}</p>}
               </div>
@@ -530,7 +543,7 @@ export function SmileTransformationSection() {
                       setLeadForm((current) => ({ ...current, interestedIn: e.target.value }));
                       if (leadErrors.interestedIn) setLeadErrors((current) => ({ ...current, interestedIn: undefined }));
                     }}
-                    className={`h-10 w-full rounded-lg border bg-white px-3 pr-10 text-sm text-slate-700 transition focus-visible:outline-none focus-visible:border-cyan-500 focus-visible:ring-1 focus-visible:ring-cyan-500 ${leadErrors.interestedIn ? 'border-red-500' : 'border-slate-200'}`}
+                    className={`h-10 w-full rounded-lg border bg-white px-3 pr-10 text-sm text-slate-700 transition focus-visible:outline-none ${leadErrors.interestedIn ? 'border-red-500' : 'border-slate-200'}`}
                     style={{ WebkitAppearance: 'none', MozAppearance: 'none', appearance: 'none' }}
                   >
                     <option value="">Select a service...</option>
@@ -553,11 +566,11 @@ export function SmileTransformationSection() {
                   value={leadForm.notes}
                   onChange={(e) => setLeadForm((current) => ({ ...current, notes: e.target.value }))}
                   placeholder="Tell us about your smile goals or any specific concerns..."
-                  className="min-h-[70px] rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-700 placeholder:text-slate-400 focus-visible:border-cyan-500 focus-visible:ring-1 focus-visible:ring-cyan-500"
+                  className="min-h-[70px] rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-700 placeholder:text-slate-400"
                 />
               </div>
 
-              <Button type="submit" className="h-10 w-full rounded-lg text-sm font-semibold text-white shadow-sm" style={{ background: 'linear-gradient(to right, #0891b2, #06b6d4)' }}>
+              <Button type="submit" className="h-10 w-full rounded-lg text-sm font-semibold text-white shadow-sm" style={{ background: primaryGradient }}>
                 {isLeadCaptured ? 'Update & Continue' : 'Get Started Free'}
               </Button>
 
@@ -585,7 +598,7 @@ export function SmileTransformationSection() {
               ].map(([title, body]) => (
                 <div key={title} className="rounded-lg border border-slate-100 bg-white px-4 py-3 shadow-sm">
                   <div className="flex items-start gap-2.5">
-                    <CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-cyan-600" />
+                    <CheckCircle className="mt-0.5 h-4 w-4 shrink-0" style={{ color: primaryColor }} />
                     <div>
                       <p className="text-sm font-medium text-slate-900">{title}</p>
                       <p className="mt-0.5 text-xs text-slate-500">{body}</p>
@@ -594,9 +607,9 @@ export function SmileTransformationSection() {
                 </div>
               ))}
             </div>
-            <div className="mt-4 rounded-lg border border-cyan-100 bg-cyan-50 px-4 py-3 text-center">
-              <p className="text-sm font-semibold text-cyan-800">Over 10,000+ smiles transformed!</p>
-              <p className="mt-0.5 text-xs text-cyan-600">Join thousands who've discovered their dream smile.</p>
+            <div className="mt-4 rounded-lg px-4 py-3 text-center" style={{ border: `1px solid ${primaryBorder}`, backgroundColor: primarySoft }}>
+              <p className="text-sm font-semibold" style={{ color: primaryColor }}>Over 10,000+ smiles transformed!</p>
+              <p className="mt-0.5 text-xs" style={{ color: primaryColor }}>Join thousands who've discovered their dream smile.</p>
             </div>
           </motion.div>
         </div>
@@ -608,7 +621,7 @@ export function SmileTransformationSection() {
               <div className="space-y-6">
                 <div className="grid gap-4 lg:grid-cols-2">
                   <motion.div id="smile-upload-panel" initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
-                    <div className="px-4 py-2.5" style={{ background: 'linear-gradient(to right, #0891b2, #06b6d4)' }}>
+                    <div className="px-4 py-2.5" style={{ background: primaryGradient }}>
                       <div className="flex items-center justify-between">
                         <h3 className="text-sm font-semibold text-white">2. Upload Photo</h3>
                         <span className="rounded-full px-2 py-0.5 text-xs font-medium text-white" style={{ backgroundColor: 'rgba(255,255,255,0.2)' }}>Step 2</span>
@@ -616,7 +629,8 @@ export function SmileTransformationSection() {
                     </div>
                     <div className="p-4">
                       <div
-                        className={`group relative aspect-[4/5] rounded-lg border-2 border-dashed transition-all ${dragActive ? 'border-cyan-500 bg-cyan-50' : 'border-slate-200 bg-slate-50 hover:border-cyan-400 hover:bg-cyan-50/30'}`}
+                        className="group relative aspect-[4/5] rounded-lg border-2 border-dashed transition-all bg-slate-50"
+                        style={dragActive ? { borderColor: primaryColor, backgroundColor: primarySoft } : undefined}
                         onDragEnter={handleDrag}
                         onDragLeave={handleDrag}
                         onDragOver={handleDrag}
@@ -635,7 +649,7 @@ export function SmileTransformationSection() {
                           </div>
                         ) : (
                           <button type="button" onClick={() => fileInputRef.current?.click()} className="flex h-full w-full flex-col items-center justify-center gap-2 p-4 text-center">
-                            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-cyan-50 text-cyan-600">
+                            <div className="flex h-10 w-10 items-center justify-center rounded-lg" style={{ backgroundColor: primarySoft, color: primaryColor }}>
                               <Upload className="h-5 w-5" />
                             </div>
                             <div>
@@ -650,7 +664,7 @@ export function SmileTransformationSection() {
                   </motion.div>
 
                   <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
-                    <div className="px-4 py-2.5" style={{ background: 'linear-gradient(to right, #0891b2, #06b6d4)' }}>
+                    <div className="px-4 py-2.5" style={{ background: primaryGradient }}>
                       <div className="flex items-center justify-between">
                         <h3 className="text-sm font-semibold text-white">4. AI Preview</h3>
                         <span className="rounded-full px-2 py-0.5 text-xs font-medium text-white" style={{ backgroundColor: 'rgba(255,255,255,0.2)' }}>Step 4</span>
@@ -663,7 +677,7 @@ export function SmileTransformationSection() {
                         ) : (
                           <div className="flex h-full flex-col items-center justify-center gap-2 p-4 text-center">
                             {processingPreview ? (
-                              <Loader2 className="h-8 w-8 animate-spin text-cyan-600" />
+                              <Loader2 className="h-8 w-8 animate-spin" style={{ color: primaryColor }} />
                             ) : (
                               <Sparkles className="h-8 w-8 text-slate-300" />
                             )}
@@ -683,23 +697,23 @@ export function SmileTransformationSection() {
 {STYLE_OPTIONS.map((option) => {
     const isSelected = style === option.value;
     return (
-      <label key={option.value} className="cursor-pointer">
+          <label key={option.value} className="cursor-pointer">
         <input type="radio" name="previewStyle" value={option.value} checked={isSelected} onChange={() => setStyle(option.value)} className="peer sr-only" />
         <div 
           className="rounded-lg border-2 px-3 py-2.5 text-center transition-all"
           style={isSelected 
-            ? { borderColor: '#0891b2', backgroundColor: '#ecfeff' } 
+            ? { borderColor: primaryColor, backgroundColor: primarySoft }
             : { borderColor: '#e2e8f0', backgroundColor: '#ffffff' }
           }
         >
-          <p className="text-sm font-medium" style={{ color: isSelected ? '#0891b2' : '#0f172a' }}>{option.label}</p>
+          <p className="text-sm font-medium" style={{ color: isSelected ? primaryColor : '#0f172a' }}>{option.label}</p>
           <p className="mt-0.5 text-xs text-slate-500">{option.helper}</p>
         </div>
       </label>
     );
   })}
                     </div>
-                    <Button onClick={generatePreview} disabled={!canGeneratePreview} className="h-10 w-full rounded-lg text-sm font-semibold text-white shadow-sm xl:w-auto xl:min-w-[180px]" style={{ background: 'linear-gradient(to right, #0891b2, #06b6d4)' }}>
+                    <Button onClick={generatePreview} disabled={!canGeneratePreview} className="h-10 w-full rounded-lg text-sm font-semibold text-white shadow-sm xl:w-auto xl:min-w-[180px]" style={{ background: primaryGradient }}>
                       {processingPreview ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Generating...</> : 'Generate Preview'}
                     </Button>
                   </div>
@@ -712,7 +726,7 @@ export function SmileTransformationSection() {
 
               <div className="space-y-4">
                 <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
-                  <div className="px-4 py-2.5" style={{ background: 'linear-gradient(to right, #0891b2, #06b6d4)' }}>
+                    <div className="px-4 py-2.5" style={{ background: primaryGradient }}>
                     <div className="flex items-center justify-between">
                       <h3 className="text-sm font-semibold text-white">5. Video</h3>
                       <span className="rounded-full px-2 py-0.5 text-xs font-medium text-white" style={{ backgroundColor: 'rgba(255,255,255,0.2)' }}>Step 5</span>
@@ -720,7 +734,7 @@ export function SmileTransformationSection() {
                   </div>
                   <div className="p-4">
                     <p className="mb-3 text-xs text-slate-500">Video may take 2-5 minutes to generate.</p>
-                    <Button onClick={() => generateSingleVideo('veo')} disabled={!canGenerateVideos} className="mb-3 h-9 w-full rounded-lg text-sm font-semibold text-white" style={{ background: 'linear-gradient(to right, #0891b2, #06b6d4)' }}>
+                    <Button onClick={() => generateSingleVideo('veo')} disabled={!canGenerateVideos} className="mb-3 h-9 w-full rounded-lg text-sm font-semibold text-white" style={{ background: primaryGradient }}>
                       {videoProcessing === 'veo' ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Creating...</> : 'Create AI Video'}
                     </Button>
                     {renderVideoCard('veo', 'AI VIDEO RESULT')}
@@ -735,9 +749,9 @@ export function SmileTransformationSection() {
 
         <div className="fixed bottom-6 left-1/2 z-50 w-full max-w-sm -translate-x-1/2 space-y-2 px-4">
           {successMessage && (
-            <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 15 }} className="rounded-lg border border-cyan-200 bg-white/95 p-3 text-sm shadow-lg backdrop-blur-md text-cyan-800">
+            <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 15 }} className="rounded-lg bg-white/95 p-3 text-sm shadow-lg backdrop-blur-md" style={{ border: `1px solid ${primaryBorder}`, color: primaryColor }}>
               <div className="flex items-center gap-2">
-                <CheckCircle className="h-4 w-4 text-cyan-600" />
+                <CheckCircle className="h-4 w-4" style={{ color: primaryColor }} />
                 <p className="text-xs font-medium">{successMessage}</p>
               </div>
             </motion.div>

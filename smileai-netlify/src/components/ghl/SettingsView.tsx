@@ -93,7 +93,8 @@ export function SettingsView({ clinicBranding, onBrandingChange }: SettingsViewP
         </div>
         <Button 
           onClick={handleSave}
-          className="bg-cyan-600 hover:bg-cyan-700 text-white shadow-sm w-full sm:w-auto text-sm h-10"
+          className="text-white shadow-sm w-full sm:w-auto text-sm h-10"
+          style={{ backgroundColor: localBranding.primaryColor }}
           disabled={isSaving}
         >
           <Save className="w-4 h-4 mr-2" />
@@ -124,9 +125,10 @@ export function SettingsView({ clinicBranding, onBrandingChange }: SettingsViewP
                     onClick={() => setActiveTab(tab.id as any)}
                     className={`flex items-center gap-1.5 px-3 py-3 border-b-2 transition-colors whitespace-nowrap text-sm ${
                       isActive
-                        ? 'border-cyan-600 text-cyan-700 font-medium bg-white'
+                        ? 'font-medium bg-white'
                         : 'border-transparent text-slate-500 hover:text-slate-700'
                     }`}
+                    style={isActive ? { borderColor: localBranding.primaryColor, color: localBranding.primaryColor } : undefined}
                   >
                     <Icon className="w-4 h-4" />
                     <span>{tab.label}</span>

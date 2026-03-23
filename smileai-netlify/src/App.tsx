@@ -104,8 +104,8 @@ function App() {
         <PremiumExamples clinicBranding={clinicBranding} />
       </div>
       <VideoExamples clinicBranding={clinicBranding} />
-      <SmileTransformationSection />
-      <HowItWorks />
+      <SmileTransformationSection clinicBranding={clinicBranding} />
+      <HowItWorks clinicBranding={clinicBranding} />
       <Testimonials clinicBranding={clinicBranding} />
       <Footer clinicBranding={clinicBranding} />
       <SocialProofNotifications enabled={!showLogin} />

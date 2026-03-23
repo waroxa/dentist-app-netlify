@@ -26,7 +26,7 @@ export function PatientCard({ patient, primaryColor, onViewContact }: PatientCar
       {/* Header */}
       <div className="flex items-start justify-between mb-3">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-gradient-to-br from-cyan-500 to-cyan-600 rounded-full flex items-center justify-center">
+          <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ background: `linear-gradient(135deg, ${primaryColor}, ${primaryColor}cc)` }}>
             <User className="w-5 h-5 text-white" />
           </div>
           <div>
@@ -59,8 +59,9 @@ export function PatientCard({ patient, primaryColor, onViewContact }: PatientCar
               ? 'bg-emerald-50 text-emerald-700'
               : patient.status === 'Pending'
               ? 'bg-amber-50 text-amber-700'
-              : 'bg-cyan-50 text-cyan-700'
+              : ''
           }`}
+          style={patient.status !== 'Active' && patient.status !== 'Pending' ? { backgroundColor: `${primaryColor}14`, color: primaryColor } : undefined}
         >
           {patient.status}
         </span>
@@ -82,7 +83,8 @@ export function PatientCard({ patient, primaryColor, onViewContact }: PatientCar
       <div className="flex gap-2 pt-3 border-t border-slate-100">
         <Button 
           size="sm" 
-          className="flex-1 bg-cyan-600 hover:bg-cyan-700 text-white text-xs h-8"
+          className="flex-1 text-white text-xs h-8"
+          style={{ backgroundColor: primaryColor }}
           onClick={() => onViewContact?.(patient.id)}
         >
           <Eye className="w-3.5 h-3.5 mr-1" />

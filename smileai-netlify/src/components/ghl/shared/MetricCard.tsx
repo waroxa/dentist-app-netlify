@@ -14,8 +14,8 @@ export function MetricCard({ title, value, change, trend, icon: Icon, primaryCol
   return (
     <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-4 sm:p-5 hover:shadow-md transition-shadow">
       <div className="flex items-start justify-between mb-3">
-        <div className="w-10 h-10 rounded-lg bg-cyan-50 flex items-center justify-center">
-          <Icon className="w-5 h-5 text-cyan-600" />
+        <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ backgroundColor: `${primaryColor}14` }}>
+          <Icon className="w-5 h-5" style={{ color: primaryColor }} />
         </div>
         <div className={`flex items-center gap-0.5 text-xs font-medium px-1.5 py-0.5 rounded-full ${
           trend === 'up' ? 'text-emerald-700 bg-emerald-50' : 'text-red-700 bg-red-50'

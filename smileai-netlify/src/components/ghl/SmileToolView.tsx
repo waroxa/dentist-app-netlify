@@ -13,6 +13,10 @@ export function SmileToolView({ clinicBranding }: SmileToolViewProps) {
   const [aiImage, setAiImage] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [dragActive, setDragActive] = useState(false);
+  const primaryColor = clinicBranding.primaryColor;
+  const accentColor = clinicBranding.accentColor || clinicBranding.primaryColor;
+  const primarySoft = `${primaryColor}14`;
+  const primaryBorder = `${primaryColor}30`;
 
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault();
@@ -72,11 +76,11 @@ export function SmileToolView({ clinicBranding }: SmileToolViewProps) {
       </div>
 
       {/* Info Banner */}
-      <div className="bg-cyan-50 border border-cyan-100 rounded-xl p-4 flex gap-3">
-        <Info className="w-5 h-5 text-cyan-600 flex-shrink-0 mt-0.5" />
+      <div className="rounded-xl p-4 flex gap-3" style={{ backgroundColor: primarySoft, border: `1px solid ${primaryBorder}` }}>
+        <Info className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: primaryColor }} />
         <div>
-          <h4 className="font-medium text-cyan-900 text-sm mb-0.5">How it works</h4>
-          <p className="text-sm text-cyan-700">
+          <h4 className="font-medium text-sm mb-0.5" style={{ color: primaryColor }}>How it works</h4>
+          <p className="text-sm" style={{ color: primaryColor }}>
             Upload a patient's photo, and our AI will generate a preview of their enhanced smile to visualize potential treatment outcomes.
           </p>
         </div>
@@ -89,11 +93,8 @@ export function SmileToolView({ clinicBranding }: SmileToolViewProps) {
           
           {!uploadedImage ? (
             <div
-              className={`relative border-2 border-dashed rounded-lg transition-all ${
-                dragActive
-                  ? 'border-cyan-500 bg-cyan-50/50'
-                  : 'border-slate-200 bg-slate-50/50 hover:border-cyan-400 hover:bg-cyan-50/30'
-              }`}
+              className="relative border-2 border-dashed rounded-lg transition-all border-slate-200 bg-slate-50/50"
+              style={dragActive ? { borderColor: primaryColor, backgroundColor: primarySoft } : undefined}
               onDragEnter={handleDrag}
               onDragLeave={handleDrag}
               onDragOver={handleDrag}
@@ -103,7 +104,7 @@ export function SmileToolView({ clinicBranding }: SmileToolViewProps) {
                 <Upload className="w-10 h-10 text-slate-400 mb-3" />
                 <p className="text-sm font-medium text-slate-700 mb-1">Drop photo here or click to upload</p>
                 <p className="text-xs text-slate-500 mb-4">Supports JPG, PNG - up to 10MB</p>
-                <div className="px-4 py-2 rounded-lg bg-cyan-600 hover:bg-cyan-700 text-white text-sm font-medium transition-colors">
+                <div className="px-4 py-2 rounded-lg text-white text-sm font-medium transition-colors" style={{ background: `linear-gradient(to right, ${primaryColor}, ${accentColor})` }}>
                   Browse Files
                 </div>
                 <input
@@ -127,7 +128,8 @@ export function SmileToolView({ clinicBranding }: SmileToolViewProps) {
                 <Button
                   onClick={handleGenerateSmile}
                   disabled={isProcessing}
-                  className="flex-1 bg-cyan-600 hover:bg-cyan-700 text-white text-sm h-10"
+                  className="flex-1 text-white text-sm h-10"
+                  style={{ background: `linear-gradient(to right, ${primaryColor}, ${accentColor})` }}
                 >
                   {isProcessing ? (
                     <>
@@ -161,7 +163,8 @@ export function SmileToolView({ clinicBranding }: SmileToolViewProps) {
           <h3 className="text-sm font-semibold text-slate-900 mb-4">Enhanced Smile Preview</h3>
           
           <div 
-            className={`border rounded-lg overflow-hidden mb-4 ${aiImage ? 'border-cyan-300' : 'border-slate-200'}`}
+            className="border rounded-lg overflow-hidden mb-4 border-slate-200"
+            style={aiImage ? { borderColor: primaryColor } : undefined}
           >
             {aiImage ? (
               <img
@@ -180,7 +183,7 @@ export function SmileToolView({ clinicBranding }: SmileToolViewProps) {
           {aiImage && (
             <div className="space-y-3">
               <div className="flex gap-2">
-                <Button className="flex-1 bg-cyan-600 hover:bg-cyan-700 text-white text-sm h-10">
+                <Button className="flex-1 text-white text-sm h-10" style={{ background: `linear-gradient(to right, ${primaryColor}, ${accentColor})` }}>
                   Save to Record
                 </Button>
                 <Button variant="outline" className="border-slate-200 text-slate-600 text-sm h-10">
