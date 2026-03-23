@@ -153,8 +153,8 @@ export function Support() {
             <div>
               <h2 className="text-xl font-semibold text-slate-900">Need priority help?</h2>
               <p className="mt-2 text-slate-700">
-                For urgent production issues, email <strong>support@smilevisionpro.ai</strong> with a short summary of
-                the issue and the clinic name in the subject line.
+                For express support, email <strong>info@RewardLion.com</strong> with a short summary of the issue and
+                the clinic name in the subject line.
               </p>
             </div>
           </div>
