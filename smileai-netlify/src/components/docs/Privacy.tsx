@@ -118,7 +118,7 @@ export function Privacy() {
             <li><strong>Withdrawal:</strong> Withdraw consent at any time</li>
           </ul>
 
-          <p>To exercise these rights, contact us at: <a href="mailto:privacy@smilevisionpro.ai" style={{ color: '#0EA5E9', textDecoration: 'none' }}>privacy@smilevisionpro.ai</a></p>
+          <p>To exercise these rights, contact us at: <a href="mailto:support@smilevisionpro.ai" style={{ color: '#0EA5E9', textDecoration: 'none' }}>support@smilevisionpro.ai</a></p>
         </Section>
 
         <Section title="7. AI-Generated Content Disclaimer">
@@ -164,7 +164,7 @@ export function Privacy() {
         <Section title="13. Contact Us">
           <p>If you have questions about this Privacy Policy, please contact us:</p>
           <ul>
-            <li><strong>Email:</strong> <a href="mailto:privacy@smilevisionpro.ai" style={{ color: '#0EA5E9', textDecoration: 'none' }}>privacy@smilevisionpro.ai</a></li>
+            <li><strong>Email:</strong> <a href="mailto:support@smilevisionpro.ai" style={{ color: '#0EA5E9', textDecoration: 'none' }}>support@smilevisionpro.ai</a></li>
             <li><strong>Support:</strong> <a href="mailto:support@smilevisionpro.ai" style={{ color: '#0EA5E9', textDecoration: 'none' }}>support@smilevisionpro.ai</a></li>
           </ul>
         </Section>

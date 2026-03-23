@@ -229,7 +229,7 @@ export function Terms() {
         <Section title="20. Contact Information">
           <p>For questions about these Terms, contact us:</p>
           <ul>
-            <li><strong>Email:</strong> <a href="mailto:legal@smilevisionpro.ai" style={{ color: '#0EA5E9', textDecoration: 'none' }}>legal@smilevisionpro.ai</a></li>
+            <li><strong>Email:</strong> <a href="mailto:support@smilevisionpro.ai" style={{ color: '#0EA5E9', textDecoration: 'none' }}>support@smilevisionpro.ai</a></li>
             <li><strong>Support:</strong> <a href="mailto:support@smilevisionpro.ai" style={{ color: '#0EA5E9', textDecoration: 'none' }}>support@smilevisionpro.ai</a></li>
           </ul>
         </Section>

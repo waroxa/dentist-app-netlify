@@ -40,17 +40,9 @@ export function SetupGuide() {
             <div>
               <h3 className="font-semibold text-slate-900">Shared controls</h3>
               <ul className="mt-2 list-disc space-y-2 pl-6">
-                <li><code>VIDEO_PROVIDER_DEFAULT</code> = <code>fal</code> or <code>veo</code>.</li>
+                <li><code>VIDEO_PROVIDER_DEFAULT</code> = <code>veo</code>.</li>
                 <li>The selected provider is stored with the smile job for traceability.</li>
                 <li>The frontend labels the completed result with the provider used.</li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-semibold text-slate-900">FAL configuration</h3>
-              <ul className="mt-2 list-disc space-y-2 pl-6">
-                <li><code>FAL_ENABLED=true</code></li>
-                <li><code>FAL_API_KEY</code></li>
-                <li><code>FAL_VIDEO_MODEL</code> (optional override)</li>
               </ul>
             </div>
             <div>
@@ -72,7 +64,7 @@ export function SetupGuide() {
           <ul className="mt-4 list-disc space-y-3 pl-6 text-slate-600">
             <li>Capture lead details first so each preview request is traceable.</li>
             <li>Request an AI smile preview after the upload is validated.</li>
-            <li>Offer FAL and Veo as real video providers from the generated preview image.</li>
+            <li>Offer real video generation from the generated preview image.</li>
             <li>Have your team review generated content before making treatment promises.</li>
           </ul>
         </section>
@@ -82,7 +74,7 @@ export function SetupGuide() {
           <ul className="mt-4 list-disc space-y-3 pl-6 text-slate-600">
             <li>If lead forms fail, confirm your database credentials and backend logs.</li>
             <li>If previews fail, verify the Gemini API key, image format, upload size, and backend function logs.</li>
-            <li>If a video provider fails, the UI should show the real provider error so you know whether FAL or Veo needs attention.</li>
+            <li>If video generation fails, the UI should show the provider error so you know what needs attention.</li>
             <li>If CRM sync fails, the lead should still save locally so you can retry safely.</li>
           </ul>
         </section>
