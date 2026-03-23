@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Save, Palette, Bell, CreditCard, Shield, MapPin, MessageSquare } from 'lucide-react';
+import { Save, Palette, Bell, CreditCard, Shield, MapPin, MessageSquare, RotateCcw } from 'lucide-react';
 import { ClinicBranding } from '../../App';
 import { Button } from '../ui/button';
 import { Checkbox } from '../ui/checkbox';
@@ -8,6 +8,7 @@ import { SecuritySettingsPanel } from './SecuritySettingsPanel';
 import { ContactSettingsPanel } from './ContactSettingsPanel';
 import { TestimonialsSettingsPanel } from './TestimonialsSettingsPanel';
 import { setClinicBranding } from '../../utils/ghl-storage';
+import { createDefaultClinicBranding } from '../../data/defaultBranding';
 
 interface SettingsViewProps {
   clinicBranding: ClinicBranding;
@@ -31,60 +32,60 @@ export function SettingsView({ clinicBranding, onBrandingChange }: SettingsViewP
     setLocalBranding(clinicBranding);
   }, [clinicBranding]);
 
-  const handleSave = async () => {
+  const showToast = (type: 'success' | 'error', title: string, message: string) => {
+    const toast = document.createElement('div');
+    toast.className = `fixed top-6 right-6 px-6 py-4 rounded-lg shadow-2xl z-50 ${
+      type === 'success' ? 'bg-green-600 text-white animate-in slide-in-from-top' : 'bg-red-600 text-white'
+    }`;
+    toast.innerHTML = `
+      <div class="flex items-center gap-3">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          ${
+            type === 'success'
+              ? '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>'
+              : '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>'
+          }
+        </svg>
+        <div>
+          <p class="font-semibold">${title}</p>
+          <p class="text-sm ${type === 'success' ? 'text-green-100' : 'text-red-100'}">${message}</p>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(toast);
+    setTimeout(() => {
+      toast.remove();
+    }, 4000);
+  };
+
+  const handleSave = async (brandingOverride?: ClinicBranding) => {
+    const brandingToSave = brandingOverride || localBranding;
     setIsSaving(true);
     try {
-      // Save to platform custom values
-      const success = await setClinicBranding(localBranding);
+      const success = await setClinicBranding(brandingToSave);
       
       if (success) {
-        // Update parent component state
-        onBrandingChange(localBranding);
-        
-        // Show success message
-        const successDiv = document.createElement('div');
-        successDiv.className = 'fixed top-6 right-6 bg-green-600 text-white px-6 py-4 rounded-lg shadow-2xl z-50 animate-in slide-in-from-top';
-        successDiv.innerHTML = `
-          <div class="flex items-center gap-3">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-            </svg>
-            <div>
-              <p class="font-semibold">Settings Saved!</p>
-              <p class="text-sm text-green-100">Your changes have been saved to the database and will appear on the homepage.</p>
-            </div>
-          </div>
-        `;
-        document.body.appendChild(successDiv);
-        setTimeout(() => {
-          successDiv.remove();
-        }, 4000);
+        setLocalBranding(brandingToSave);
+        onBrandingChange(brandingToSave);
+        showToast('success', 'Settings Saved!', 'Your changes have been saved to the database and will appear on the homepage.');
       } else {
         throw new Error('Failed to save settings');
       }
     } catch (error) {
       console.error('Error saving settings:', error);
-      // Show error message
-      const errorDiv = document.createElement('div');
-      errorDiv.className = 'fixed top-6 right-6 bg-red-600 text-white px-6 py-4 rounded-lg shadow-2xl z-50';
-      errorDiv.innerHTML = `
-        <div class="flex items-center gap-3">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-          </svg>
-          <div>
-            <p class="font-semibold">Save Failed</p>
-            <p class="text-sm text-red-100">Could not save settings. Please try again.</p>
-          </div>
-        </div>
-      `;
-      document.body.appendChild(errorDiv);
-      setTimeout(() => {
-        errorDiv.remove();
-      }, 4000);
+      showToast('error', 'Save Failed', 'Could not save settings. Please try again.');
     } finally {
       setIsSaving(false);
     }
+  };
+
+  const handleResetWebsite = async () => {
+    const confirmed = window.confirm('Reset the full website configuration back to the original defaults?');
+    if (!confirmed) return;
+
+    const defaults = createDefaultClinicBranding();
+    setActiveTab('branding');
+    await handleSave(defaults);
   };
 
   return (
@@ -95,15 +96,27 @@ export function SettingsView({ clinicBranding, onBrandingChange }: SettingsViewP
           <h2 className="text-xl sm:text-2xl font-semibold text-slate-900">Settings</h2>
           <p className="text-sm text-slate-500 mt-0.5">Customize your SmileVisionPro experience</p>
         </div>
-        <Button 
-          onClick={handleSave}
-          className="text-white shadow-sm w-full sm:w-auto text-sm h-10"
-          style={{ backgroundColor: localBranding.primaryColor }}
-          disabled={isSaving}
-        >
-          <Save className="w-4 h-4 mr-2" />
-          {isSaving ? 'Saving...' : 'Save Changes'}
-        </Button>
+        <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
+          <Button
+            onClick={handleResetWebsite}
+            type="button"
+            variant="outline"
+            className="w-full sm:w-auto text-sm h-10 border-slate-300"
+            disabled={isSaving}
+          >
+            <RotateCcw className="w-4 h-4 mr-2" />
+            Reset Website
+          </Button>
+          <Button 
+            onClick={() => void handleSave()}
+            className="text-white shadow-sm w-full sm:w-auto text-sm h-10"
+            style={{ backgroundColor: localBranding.primaryColor }}
+            disabled={isSaving}
+          >
+            <Save className="w-4 h-4 mr-2" />
+            {isSaving ? 'Saving...' : 'Save Changes'}
+          </Button>
+        </div>
       </div>
 
       {/* Settings Tabs */}
@@ -158,6 +171,7 @@ export function SettingsView({ clinicBranding, onBrandingChange }: SettingsViewP
             <TestimonialsSettingsPanel
               branding={localBranding}
               onBrandingChange={setLocalBranding}
+              onSave={handleSave}
             />
           )}
 

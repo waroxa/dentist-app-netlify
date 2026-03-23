@@ -15,6 +15,7 @@
  */
 
 import { hashPassword, verifyPassword, isHashedPassword } from './password-utils';
+import { cloneBuiltInTestimonials } from '../data/testimonials';
 
 // Custom value keys for platform storage - separate keys for each data type
 const STORAGE_KEYS = {
@@ -501,7 +502,7 @@ export async function getClinicBranding(): Promise<ClinicBranding | null> {
     primaryColor: branding?.colors?.primary || '#3b82f6',
     contactInfo: contactInfo || {},
     socialMedia: socialMedia || {},
-    testimonials: testimonials || [],
+    testimonials: testimonials && testimonials.length > 0 ? testimonials : cloneBuiltInTestimonials(),
     googleReviewsScript: googleReviews?.script || '',
   };
 }

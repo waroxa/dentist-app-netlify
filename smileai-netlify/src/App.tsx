@@ -17,6 +17,7 @@ import { PrivacyNotice } from './components/docs/HipaaNotice';
 import { StaffLoginModal } from './components/StaffLoginModal';
 import { getClinicBranding } from './utils/ghl-storage';
 import { LandingPageTestimonial } from './data/testimonials';
+import { createDefaultClinicBranding } from './data/defaultBranding';
 
 export interface ClinicBranding {
   clinicName: string;
@@ -33,12 +34,7 @@ export interface ClinicBranding {
 function App() {
   const [showLogin, setShowLogin] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
-  const [clinicBranding, setClinicBranding] = useState<ClinicBranding>({
-    clinicName: 'SmileVisionPro AI',
-    primaryColor: '#0584fa',
-    accentColor: '#3b82f6',
-    contactInfo: { email: 'support@smilevisionpro.ai' },
-  });
+  const [clinicBranding, setClinicBranding] = useState<ClinicBranding>(createDefaultClinicBranding);
 
   const path = window.location.pathname;
   const search = window.location.search;

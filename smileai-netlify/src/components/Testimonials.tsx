@@ -11,8 +11,9 @@ export function Testimonials({ clinicBranding }: TestimonialsProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
 
-  const customTestimonials = clinicBranding?.testimonials ?? [];
-  const testimonials = [...builtInTestimonials, ...customTestimonials];
+  const testimonials = clinicBranding?.testimonials && clinicBranding.testimonials.length > 0
+    ? clinicBranding.testimonials
+    : builtInTestimonials;
 
   const googleReviewsScript = clinicBranding?.googleReviewsScript;
 

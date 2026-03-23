@@ -55,3 +55,7 @@ export const builtInTestimonials: LandingPageTestimonial[] = [
     image: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&q=80',
   },
 ];
+
+export function cloneBuiltInTestimonials(): LandingPageTestimonial[] {
+  return builtInTestimonials.map((testimonial) => ({ ...testimonial }));
+}

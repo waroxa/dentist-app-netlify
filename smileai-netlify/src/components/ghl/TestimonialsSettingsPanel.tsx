@@ -1,25 +1,32 @@
 import { useState } from 'react';
-import { Star, Plus, Trash2, Upload, X, Save, Check, Code } from 'lucide-react';
+import { Star, Plus, Trash2, Upload, X, Save, Check, Code, RotateCcw } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import { Textarea } from '../ui/textarea';
 import { ClinicBranding } from '../../App';
-import { builtInTestimonials } from '../../data/testimonials';
+import { cloneBuiltInTestimonials } from '../../data/testimonials';
 import { Testimonial } from '../../utils/ghl-storage';
 
 interface TestimonialsSettingsPanelProps {
   branding: ClinicBranding;
   onBrandingChange: (branding: ClinicBranding) => void;
+  onSave: (brandingOverride?: ClinicBranding) => Promise<void>;
 }
 
-export function TestimonialsSettingsPanel({ branding, onBrandingChange }: TestimonialsSettingsPanelProps) {
+export function TestimonialsSettingsPanel({ branding, onBrandingChange, onSave }: TestimonialsSettingsPanelProps) {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [showScriptModal, setShowScriptModal] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
 
   const testimonials = branding.testimonials || [];
   const googleReviewsScript = branding.googleReviewsScript || '';
+
+  const updateBranding = (nextBranding: ClinicBranding) => {
+    onBrandingChange(nextBranding);
+    return nextBranding;
+  };
 
   const addTestimonial = () => {
     const newTestimonial: Testimonial = {
@@ -32,7 +39,7 @@ export function TestimonialsSettingsPanel({ branding, onBrandingChange }: Testim
       service: '',
     };
     
-    onBrandingChange({
+    updateBranding({
       ...branding,
       testimonials: [...testimonials, newTestimonial],
     });
@@ -40,7 +47,7 @@ export function TestimonialsSettingsPanel({ branding, onBrandingChange }: Testim
   };
 
   const updateTestimonial = (id: string, updates: Partial<Testimonial>) => {
-    onBrandingChange({
+    updateBranding({
       ...branding,
       testimonials: testimonials.map(t => 
         t.id === id ? { ...t, ...updates } : t
@@ -49,7 +56,7 @@ export function TestimonialsSettingsPanel({ branding, onBrandingChange }: Testim
   };
 
   const deleteTestimonial = (id: string) => {
-    onBrandingChange({
+    updateBranding({
       ...branding,
       testimonials: testimonials.filter(t => t.id !== id),
     });
@@ -69,10 +76,36 @@ export function TestimonialsSettingsPanel({ branding, onBrandingChange }: Testim
     reader.readAsDataURL(file);
   };
 
-  const handleSave = () => {
-    setSaved(true);
+  const handleSave = async () => {
+    setIsSaving(true);
+    try {
+      await onSave(branding);
+      setSaved(true);
+      setEditingId(null);
+      setTimeout(() => setSaved(false), 2000);
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleResetTestimonials = async () => {
+    const confirmed = window.confirm('Reset testimonials back to the original default set?');
+    if (!confirmed) return;
+
+    const nextBranding = updateBranding({
+      ...branding,
+      testimonials: cloneBuiltInTestimonials(),
+    });
+
     setEditingId(null);
-    setTimeout(() => setSaved(false), 2000);
+    setIsSaving(true);
+    try {
+      await onSave(nextBranding);
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2000);
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   return (
@@ -81,19 +114,31 @@ export function TestimonialsSettingsPanel({ branding, onBrandingChange }: Testim
       <div>
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-1">Custom Testimonials</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-1">Testimonials</h3>
             <p className="text-sm text-gray-600">
-              Add real testimonials from the clinic. They will appear together with the built-in demo testimonials on the landing page.
+              Add, edit, remove, or reset the testimonials shown on the landing page.
             </p>
           </div>
-          <Button
-            onClick={addTestimonial}
-            className="text-white"
-            style={{ backgroundColor: branding.primaryColor }}
-          >
-            <Plus className="w-4 h-4 mr-2" />
-            Add Testimonial
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button
+              onClick={() => void handleResetTestimonials()}
+              type="button"
+              variant="outline"
+              className="border-slate-300"
+              disabled={isSaving}
+            >
+              <RotateCcw className="w-4 h-4 mr-2" />
+              Reset Testimonials
+            </Button>
+            <Button
+              onClick={addTestimonial}
+              className="text-white"
+              style={{ backgroundColor: branding.primaryColor }}
+            >
+              <Plus className="w-4 h-4 mr-2" />
+              Add Testimonial
+            </Button>
+          </div>
         </div>
 
         {testimonials.length === 0 ? (
@@ -283,46 +328,6 @@ export function TestimonialsSettingsPanel({ branding, onBrandingChange }: Testim
         )}
       </div>
 
-      <div>
-        <div className="mb-4">
-          <h3 className="text-lg font-semibold text-gray-900 mb-1">Built-in Demo Testimonials</h3>
-          <p className="text-sm text-gray-600">
-            These stay on the site by default. They are visible here for reference, but they are not removed from this panel.
-          </p>
-        </div>
-
-        <div className="grid gap-4 md:grid-cols-2">
-          {builtInTestimonials.map((testimonial, index) => (
-            <div
-              key={testimonial.id}
-              className="rounded-lg border border-slate-200 bg-slate-50 p-5"
-            >
-              <div className="mb-3 flex items-start justify-between gap-3">
-                <div>
-                  <p className="font-medium text-slate-900">{testimonial.name}</p>
-                  <p className="text-sm text-slate-500">{testimonial.city}</p>
-                </div>
-                <span className="rounded-full bg-white px-2.5 py-1 text-xs font-medium text-slate-600 border border-slate-200">
-                  Demo #{index + 1}
-                </span>
-              </div>
-              <div className="mb-3 flex items-center gap-1">
-                {[...Array(5)].map((_, i) => (
-                  <Star
-                    key={i}
-                    className={`w-4 h-4 ${
-                      i < testimonial.rating ? 'text-yellow-500 fill-yellow-500' : 'text-gray-300'
-                    }`}
-                  />
-                ))}
-              </div>
-              <p className="text-sm leading-relaxed text-slate-600">{testimonial.text}</p>
-              <p className="mt-3 text-xs font-medium text-cyan-700">{testimonial.service}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-
       {/* Divider */}
       <div className="border-t border-gray-200"></div>
 
@@ -393,18 +398,24 @@ export function TestimonialsSettingsPanel({ branding, onBrandingChange }: Testim
       {/* Info Banner */}
       <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
         <p className="text-sm text-blue-800">
-          <strong>Tip:</strong> Click "Save Changes" at the top of the page to save your testimonials and Google Reviews script to the database.
+          <strong>Tip:</strong> The save button below now stores testimonial and reviews changes immediately.
         </p>
       </div>
 
       {/* Save Button */}
       <div className="flex items-center gap-3 pt-6 border-t border-gray-200">
         <Button
-          onClick={handleSave}
+          onClick={() => void handleSave()}
           className="text-white"
           style={{ backgroundColor: branding.primaryColor }}
+          disabled={isSaving}
         >
-          {saved ? (
+          {isSaving ? (
+            <>
+              <Save className="w-4 h-4 mr-2" />
+              Saving...
+            </>
+          ) : saved ? (
             <>
               <Check className="w-4 h-4 mr-2" />
               Saved!
