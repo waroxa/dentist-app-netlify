@@ -16,6 +16,7 @@ import { Terms } from './components/docs/Terms';
 import { PrivacyNotice } from './components/docs/HipaaNotice';
 import { StaffLoginModal } from './components/StaffLoginModal';
 import { getClinicBranding } from './utils/ghl-storage';
+import { LandingPageTestimonial } from './data/testimonials';
 
 export interface ClinicBranding {
   clinicName: string;
@@ -25,7 +26,7 @@ export interface ClinicBranding {
   heroImage?: string;
   contactInfo?: { address?: string; phone?: string; email?: string };
   socialMedia?: { facebook?: string; instagram?: string; tiktok?: string; linkedin?: string; youtube?: string };
-  testimonials?: Array<{ name: string; location: string; text: string; rating: number; image?: string }>;
+  testimonials?: LandingPageTestimonial[];
   googleReviewsScript?: string;
 }
 
@@ -44,7 +45,7 @@ function App() {
 
   const resolveWorkspaceKey = () => {
     const params = new URLSearchParams(window.location.search);
-    return params.get('location_id') || params.get('locationId') || sessionStorage.getItem('ghl_current_location_id') || localStorage.getItem('ghl_location_id') || 'default';
+    return params.get('location_id') || params.get('locationId') || sessionStorage.getItem('workspace_current_location_id') || localStorage.getItem('workspace_location_id') || 'default';
   };
 
   useEffect(() => {

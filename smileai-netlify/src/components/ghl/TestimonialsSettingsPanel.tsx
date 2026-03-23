@@ -4,7 +4,9 @@ import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import { Textarea } from '../ui/textarea';
-import { ClinicBranding, Testimonial } from '../../App';
+import { ClinicBranding } from '../../App';
+import { builtInTestimonials } from '../../data/testimonials';
+import { Testimonial } from '../../utils/ghl-storage';
 
 interface TestimonialsSettingsPanelProps {
   branding: ClinicBranding;
@@ -79,9 +81,9 @@ export function TestimonialsSettingsPanel({ branding, onBrandingChange }: Testim
       <div>
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-1">Testimonials</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-1">Custom Testimonials</h3>
             <p className="text-sm text-gray-600">
-              Add and manage patient testimonials. At least 5 recommended for the slider.
+              Add real testimonials from the clinic. They will appear together with the built-in demo testimonials on the landing page.
             </p>
           </div>
           <Button
@@ -279,6 +281,46 @@ export function TestimonialsSettingsPanel({ branding, onBrandingChange }: Testim
             ))}
           </div>
         )}
+      </div>
+
+      <div>
+        <div className="mb-4">
+          <h3 className="text-lg font-semibold text-gray-900 mb-1">Built-in Demo Testimonials</h3>
+          <p className="text-sm text-gray-600">
+            These stay on the site by default. They are visible here for reference, but they are not removed from this panel.
+          </p>
+        </div>
+
+        <div className="grid gap-4 md:grid-cols-2">
+          {builtInTestimonials.map((testimonial, index) => (
+            <div
+              key={testimonial.id}
+              className="rounded-lg border border-slate-200 bg-slate-50 p-5"
+            >
+              <div className="mb-3 flex items-start justify-between gap-3">
+                <div>
+                  <p className="font-medium text-slate-900">{testimonial.name}</p>
+                  <p className="text-sm text-slate-500">{testimonial.city}</p>
+                </div>
+                <span className="rounded-full bg-white px-2.5 py-1 text-xs font-medium text-slate-600 border border-slate-200">
+                  Demo #{index + 1}
+                </span>
+              </div>
+              <div className="mb-3 flex items-center gap-1">
+                {[...Array(5)].map((_, i) => (
+                  <Star
+                    key={i}
+                    className={`w-4 h-4 ${
+                      i < testimonial.rating ? 'text-yellow-500 fill-yellow-500' : 'text-gray-300'
+                    }`}
+                  />
+                ))}
+              </div>
+              <p className="text-sm leading-relaxed text-slate-600">{testimonial.text}</p>
+              <p className="mt-3 text-xs font-medium text-cyan-700">{testimonial.service}</p>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Divider */}

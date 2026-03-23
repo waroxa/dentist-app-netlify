@@ -134,7 +134,7 @@
   force = true
 
 [[redirects]]
-  from = "/api/ghl-refresh"
+  from = "/api/platform-refresh"
   to = "/.netlify/functions/ghl-refresh"
   status = 200
   force = true
@@ -150,12 +150,12 @@
   status = 301
 
 [[redirects]]
-  from = "/admin/ghl-connect"
+  from = "/admin/connect"
   to = "/admin"
   status = 301
 
 [[redirects]]
-  from = "/ghl-callback"
+  from = "/connect-callback"
   to = "/"
   status = 301
 

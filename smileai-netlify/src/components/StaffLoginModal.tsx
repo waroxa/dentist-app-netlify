@@ -29,8 +29,8 @@ function getWorkspaceKey() {
   return (
     params.get('location_id') ||
     params.get('locationId') ||
-    sessionStorage.getItem('ghl_current_location_id') ||
-    localStorage.getItem('ghl_location_id') ||
+    sessionStorage.getItem('workspace_current_location_id') ||
+    localStorage.getItem('workspace_location_id') ||
     'default'
   );
 }
@@ -270,7 +270,8 @@ export function StaffLoginModal({ isOpen, onClose, onSuccess }: StaffLoginModalP
                         setError('');
                       }}
                       placeholder="Enter your password"
-                      className="h-12 pr-12"
+                      className="h-12 pr-12 text-slate-900 placeholder:text-slate-400"
+                      style={{ color: '#0f172a', WebkitTextFillColor: '#0f172a' }}
                       autoFocus
                     />
                     <button
@@ -321,7 +322,8 @@ export function StaffLoginModal({ isOpen, onClose, onSuccess }: StaffLoginModalP
                             setError('');
                           }}
                           placeholder="Enter activation code"
-                          className="h-12 pr-12"
+                          className="h-12 pr-12 text-slate-900 placeholder:text-slate-400"
+                          style={{ color: '#0f172a', WebkitTextFillColor: '#0f172a' }}
                           autoFocus
                         />
                         <button
@@ -364,7 +366,8 @@ export function StaffLoginModal({ isOpen, onClose, onSuccess }: StaffLoginModalP
                         setError('');
                       }}
                       placeholder="Create a strong password"
-                      className="h-12 pr-12"
+                      className="h-12 pr-12 text-slate-900 placeholder:text-slate-400"
+                      style={{ color: '#0f172a', WebkitTextFillColor: '#0f172a' }}
                       autoFocus
                     />
                     <button
@@ -393,7 +396,8 @@ export function StaffLoginModal({ isOpen, onClose, onSuccess }: StaffLoginModalP
                         setError('');
                       }}
                       placeholder="Re-enter the password"
-                      className="h-12 pr-12"
+                      className="h-12 pr-12 text-slate-900 placeholder:text-slate-400"
+                      style={{ color: '#0f172a', WebkitTextFillColor: '#0f172a' }}
                     />
                     <button
                       type="button"

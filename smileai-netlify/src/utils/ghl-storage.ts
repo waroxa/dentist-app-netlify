@@ -31,6 +31,11 @@ const STORAGE_KEYS = {
 
 // Default password (for first-time setup: "admin123")
 const DEFAULT_PASSWORD = 'admin123';
+const CRM_STORAGE = {
+  CURRENT_WORKSPACE: 'workspace_current_location_id',
+  LOCATION_ID: 'crm_location_id',
+  API_KEY: 'crm_api_key',
+} as const;
 
 /**
  * Get CRM location ID from URL params or localStorage fallback
@@ -42,16 +47,16 @@ function getLocationId(): string | null {
   
   if (locationId) {
     // Cache it in sessionStorage for this session
-    sessionStorage.setItem('ghl_current_location_id', locationId);
+    sessionStorage.setItem(CRM_STORAGE.CURRENT_WORKSPACE, locationId);
     return locationId;
   }
   
   // Fallback to sessionStorage
-  const cached = sessionStorage.getItem('ghl_current_location_id');
+  const cached = sessionStorage.getItem(CRM_STORAGE.CURRENT_WORKSPACE);
   if (cached) return cached;
   
   // Last resort: get from settings (set by user in API Settings)
-  return localStorage.getItem('ghl_location_id');
+  return localStorage.getItem(CRM_STORAGE.LOCATION_ID);
 }
 
 /**
@@ -59,7 +64,7 @@ function getLocationId(): string | null {
  * NOTE: In production marketplace, this should come from the platform's SSO token
  */
 function getApiKey(): string | null {
-  return localStorage.getItem('ghl_api_key');
+  return localStorage.getItem(CRM_STORAGE.API_KEY);
 }
 
 /**
@@ -365,8 +370,8 @@ export async function setGoogleReviews(googleReviews: GoogleReviews): Promise<bo
 // ============================================
 
 export interface ApiCredentials {
-  ghlApiKey: string;
-  ghlLocationId: string;
+  crmApiKey: string;
+  crmLocationId: string;
 }
 
 /**
@@ -375,12 +380,12 @@ export interface ApiCredentials {
  */
 export async function getApiCredentials(): Promise<ApiCredentials | null> {
   // For now, use localStorage (will be replaced with platform SSO in production)
-  const apiKey = localStorage.getItem('ghl_api_key');
-  const locationId = localStorage.getItem('ghl_location_id');
+  const apiKey = localStorage.getItem(CRM_STORAGE.API_KEY);
+  const locationId = localStorage.getItem(CRM_STORAGE.LOCATION_ID);
   
   if (!apiKey || !locationId) return null;
   
-  return { ghlApiKey: apiKey, ghlLocationId: locationId };
+  return { crmApiKey: apiKey, crmLocationId: locationId };
 }
 
 /**
@@ -389,8 +394,8 @@ export async function getApiCredentials(): Promise<ApiCredentials | null> {
  */
 export async function setApiCredentials(credentials: ApiCredentials): Promise<boolean> {
   // For now, use localStorage (will be replaced with platform SSO in production)
-  localStorage.setItem('ghl_api_key', credentials.ghlApiKey);
-  localStorage.setItem('ghl_location_id', credentials.ghlLocationId);
+  localStorage.setItem(CRM_STORAGE.API_KEY, credentials.crmApiKey);
+  localStorage.setItem(CRM_STORAGE.LOCATION_ID, credentials.crmLocationId);
   return true;
 }
 

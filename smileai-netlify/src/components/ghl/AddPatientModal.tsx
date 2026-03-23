@@ -80,21 +80,21 @@ export function AddPatientModal({ isOpen, onClose, onPatientAdded, primaryColor 
 
     try {
       // Get CRM credentials from localStorage (debugging)
-      const ghlApiKey = localStorage.getItem('ghl_api_key');
-      const ghlLocationId = localStorage.getItem('ghl_location_id');
+      const crmApiKey = localStorage.getItem('crm_api_key');
+      const crmLocationId = localStorage.getItem('crm_location_id');
 
       console.log('DEBUG - Checking credentials:');
-      console.log('API Key exists:', !!ghlApiKey, 'Length:', ghlApiKey?.length);
-      console.log('Location ID exists:', !!ghlLocationId, 'Value:', ghlLocationId);
+      console.log('API Key exists:', !!crmApiKey, 'Length:', crmApiKey?.length);
+      console.log('Location ID exists:', !!crmLocationId, 'Value:', crmLocationId);
       console.log('All localStorage keys:', Object.keys(localStorage));
 
-      if (!ghlApiKey || !ghlLocationId) {
+      if (!crmApiKey || !crmLocationId) {
         throw new Error('CRM credentials not configured. Please set up API credentials in Settings.');
       }
 
       // Trim credentials to avoid whitespace issues
-      const trimmedApiKey = ghlApiKey.trim();
-      const trimmedLocationId = ghlLocationId.trim();
+      const trimmedApiKey = crmApiKey.trim();
+      const trimmedLocationId = crmLocationId.trim();
 
       if (!trimmedApiKey || !trimmedLocationId) {
         throw new Error('CRM credentials are empty. Please enter valid credentials in Settings.');
@@ -130,7 +130,7 @@ export function AddPatientModal({ isOpen, onClose, onPatientAdded, primaryColor 
         ]
       };
 
-      const response = await fetch('https://rest.gohighlevel.com/v1/contacts/', {
+      const response = await fetch('https://rest.leadconnectorhq.com/v1/contacts/', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${trimmedApiKey}`,
