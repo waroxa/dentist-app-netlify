@@ -17,11 +17,17 @@ export async function handler(event) {
   try {
     const body = safeParse(event.body);
     const workspaceKey = resolveWorkspaceKey(event, body);
+    const isDefaultWorkspace = workspaceKey === 'default';
 
     const existing = await getAdminCredential(workspaceKey);
     if (existing?.password_hash) return json(409, { error: 'Staff access has already been configured. Please use the password sign-in form.' });
 
     const install = await getWorkspaceInstall(workspaceKey);
+    if (!isDefaultWorkspace && !install) {
+      await auditLog('admin_activation_blocked_not_installed', { workspaceKey });
+      return json(403, { error: 'This location has not completed installation yet. Install the app for this location before creating a staff password.' });
+    }
+
     let isAuthorized = Boolean(install);
 
     if (!isAuthorized) {

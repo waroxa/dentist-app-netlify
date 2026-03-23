@@ -98,7 +98,7 @@ function NotInstalledState({ onInstall }: { onInstall: () => void }) {
             />
             <FeatureItem 
               icon={<Shield className="w-3.5 h-3.5" />}
-              text="HIPAA-compliant handling"
+              text="Privacy-focused handling"
             />
           </div>
 

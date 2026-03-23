@@ -1,5 +1,6 @@
 import { motion } from 'motion/react';
 import { Play, Sparkles } from 'lucide-react';
+import { ClinicBranding } from '../App';
 
 const EXAMPLE_VIDEOS = [
   {
@@ -16,13 +17,15 @@ const EXAMPLE_VIDEOS = [
   },
 ];
 
-export function VideoExamples() {
+export function VideoExamples({ clinicBranding }: { clinicBranding?: ClinicBranding }) {
+  const primaryColor = clinicBranding?.primaryColor || '#0891b2';
+  const accentColor = clinicBranding?.accentColor || '#06b6d4';
   return (
     <section className="bg-slate-50 px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
       <div className="mx-auto max-w-5xl">
         {/* Section Header */}
         <div className="text-center mb-8 sm:mb-10">
-          <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-white px-3 py-1.5 shadow-sm" style={{ border: '1px solid #06b6d4', color: '#0e7490' }}>
+          <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-white px-3 py-1.5 shadow-sm" style={{ border: `1px solid ${accentColor}`, color: primaryColor }}>
             <Play className="h-3.5 w-3.5" />
             <span className="text-xs font-semibold">AI Video Examples</span>
           </div>
@@ -46,7 +49,7 @@ export function VideoExamples() {
               className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm"
             >
               {/* Video Header */}
-              <div className="px-4 py-2.5" style={{ background: 'linear-gradient(to right, #0891b2, #06b6d4)' }}>
+              <div className="px-4 py-2.5" style={{ background: `linear-gradient(to right, ${primaryColor}, ${accentColor})` }}>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <Sparkles className="h-4 w-4 text-white" />
@@ -84,7 +87,7 @@ export function VideoExamples() {
               section?.scrollIntoView({ behavior: 'smooth' });
             }}
             className="inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold text-white rounded-lg shadow-md transition-all"
-            style={{ backgroundColor: '#0891b2' }}
+            style={{ backgroundColor: primaryColor }}
           >
             <Sparkles className="h-4 w-4" />
             Create Your Own AI Video

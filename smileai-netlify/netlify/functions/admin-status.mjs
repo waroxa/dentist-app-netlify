@@ -7,15 +7,21 @@ export async function handler(event) {
     const install = await getWorkspaceInstall(workspaceKey);
     const legacyConfigured = workspaceKey === 'default' && Boolean(process.env.SMILEVISION_ADMIN_PASSWORD);
     const configured = Boolean(credential?.password_hash || legacyConfigured);
-    const activationEnabled = configured ? false : Boolean(getAdminSetupSecret());
+    const isDefaultWorkspace = workspaceKey === 'default';
+    const activationEnabled = configured ? false : (isDefaultWorkspace ? Boolean(getAdminSetupSecret()) : Boolean(install));
     const setupMethod = !configured && install ? 'install' : 'secret';
+    const mode = configured ? 'login' : (!isDefaultWorkspace && !install ? 'unavailable' : 'setup');
+
     return json(200, {
       workspaceKey,
-      mode: configured ? 'login' : 'setup',
+      mode,
       configured,
       activationEnabled,
       setupMethod,
       installAuthorized: Boolean(install),
+      error: mode === 'unavailable'
+        ? 'This location has not completed installation yet. Install the app for this location before creating a staff password.'
+        : undefined,
     });
   } catch (error) {
     console.error('admin_status_failed', error);

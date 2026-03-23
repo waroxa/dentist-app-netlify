@@ -3,9 +3,6 @@ import { Button } from './ui/button';
 import { ClinicBranding } from '../App';
 import { motion } from 'motion/react';
 
-// Professional cyan color scheme
-const BRAND_PRIMARY = '#0891b2';
-
 interface HeroProps {
   clinicBranding: ClinicBranding;
 }
@@ -14,6 +11,10 @@ interface HeroProps {
 const TOOTH_LOGO = 'https://customer-assets.emergentagent.com/job_6ddaa510-f452-47bb-9414-8c025b23d77a/artifacts/67lipfsx_Untitled%20design%20%2845%29.png';
 
 export function Hero({ clinicBranding }: HeroProps) {
+  const primaryColor = clinicBranding.primaryColor || '#0891b2';
+  const accentColor = clinicBranding.accentColor || '#06b6d4';
+  const logo = clinicBranding.logo || TOOTH_LOGO;
+
   const scrollToTransform = () => {
     const section = document.getElementById('smile-transform');
     if (section) {
@@ -24,7 +25,7 @@ export function Hero({ clinicBranding }: HeroProps) {
   return (
     <section className="relative overflow-hidden bg-white">
       {/* Navigation - Logo Left, Buttons Right */}
-      <nav className="relative z-20 px-4 py-3 sm:px-6 sm:py-4 lg:px-8" style={{ backgroundColor: BRAND_PRIMARY }}>
+      <nav className="relative z-20 px-4 py-3 sm:px-6 sm:py-4 lg:px-8" style={{ backgroundColor: primaryColor }}>
         <div className="mx-auto max-w-7xl flex items-center justify-between">
           {/* Logo - Left */}
           <motion.div 
@@ -34,7 +35,7 @@ export function Hero({ clinicBranding }: HeroProps) {
             className="flex items-center gap-3"
           >
             <img 
-              src={TOOTH_LOGO} 
+              src={logo} 
               alt={clinicBranding.clinicName}
               className="h-10 w-10 sm:h-11 sm:w-11 object-contain rounded-lg bg-white p-1"
             />
@@ -58,7 +59,7 @@ export function Hero({ clinicBranding }: HeroProps) {
             <Button 
               onClick={scrollToTransform}
               className="text-sm h-9 px-4 font-semibold bg-white hover:bg-slate-50"
-              style={{ color: BRAND_PRIMARY }}
+              style={{ color: primaryColor }}
             >
               Try Free
             </Button>
@@ -95,7 +96,7 @@ export function Hero({ clinicBranding }: HeroProps) {
 
                 <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-white mb-4 leading-tight">
                   See Your Dream Smile
-                  <span className="block mt-1" style={{ color: '#06b6d4' }}>
+                  <span className="block mt-1" style={{ color: accentColor }}>
                     With AI in 30 Seconds
                   </span>
                 </h1>
@@ -111,7 +112,7 @@ export function Hero({ clinicBranding }: HeroProps) {
                       onClick={scrollToTransform}
                       size="lg"
                       className="text-white h-11 sm:h-12 px-6 sm:px-8 text-sm sm:text-base shadow-lg font-semibold w-full sm:w-auto"
-                      style={{ backgroundColor: BRAND_PRIMARY }}
+                      style={{ backgroundColor: primaryColor }}
                     >
                       Try AI Preview Free
                       <ArrowRight className="h-4 w-4 ml-2" />
@@ -135,11 +136,11 @@ export function Hero({ clinicBranding }: HeroProps) {
                 {/* Trust Indicators */}
                 <div className="flex flex-wrap gap-4 sm:gap-6">
                   <div className="flex items-center gap-2">
-                    <Shield className="h-4 w-4 sm:h-5 sm:w-5 text-cyan-400" />
+                    <Shield className="h-4 w-4 sm:h-5 sm:w-5" style={{ color: accentColor }} />
                     <span className="text-xs sm:text-sm font-medium text-white">100% Secure</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Award className="h-4 w-4 sm:h-5 sm:w-5 text-cyan-400" />
+                    <Award className="h-4 w-4 sm:h-5 sm:w-5" style={{ color: accentColor }} />
                     <span className="text-xs sm:text-sm font-medium text-white">AI Powered</span>
                   </div>
                   <div className="flex items-center gap-2">
@@ -159,7 +160,7 @@ export function Hero({ clinicBranding }: HeroProps) {
             className="absolute bottom-4 right-4 sm:bottom-6 sm:right-6 lg:bottom-8 lg:right-8"
           >
             <div className="flex items-center gap-3 rounded-xl bg-white p-3 sm:p-4 shadow-xl">
-              <div className="h-10 w-10 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: BRAND_PRIMARY }}>
+              <div className="h-10 w-10 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: primaryColor }}>
                 <span className="text-lg text-white">✨</span>
               </div>
               <div>

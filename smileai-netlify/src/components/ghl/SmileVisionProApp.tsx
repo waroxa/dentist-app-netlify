@@ -12,9 +12,10 @@ import { ViewType, ClinicBranding } from '../../App';
 interface SmileVisionProAppProps {
   clinicBranding: ClinicBranding;
   onBrandingChange: (branding: ClinicBranding) => void;
+  onLogout?: () => void;
 }
 
-export function SmileVisionProApp({ clinicBranding, onBrandingChange }: SmileVisionProAppProps) {
+export function SmileVisionProApp({ clinicBranding, onBrandingChange, onLogout }: SmileVisionProAppProps) {
   const [activeView, setActiveView] = useState<ViewType>('dashboard');
   const [selectedContactId, setSelectedContactId] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -36,7 +37,7 @@ export function SmileVisionProApp({ clinicBranding, onBrandingChange }: SmileVis
   if (selectedContactId) {
     return (
       <div className="min-h-screen bg-slate-50">
-        <AppHeader clinicBranding={clinicBranding} />
+        <AppHeader clinicBranding={clinicBranding} onLogout={onLogout} />
         <ContactProfile 
           contactId={selectedContactId}
           onBack={handleBackFromContact}
@@ -68,7 +69,7 @@ export function SmileVisionProApp({ clinicBranding, onBrandingChange }: SmileVis
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <AppHeader clinicBranding={clinicBranding} />
+      <AppHeader clinicBranding={clinicBranding} onLogout={onLogout} />
       
       {/* Mobile Menu Button */}
       <button

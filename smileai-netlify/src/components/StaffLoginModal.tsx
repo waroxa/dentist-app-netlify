@@ -81,13 +81,17 @@ export function StaffLoginModal({ isOpen, onClose, onSuccess }: StaffLoginModalP
         return;
       }
 
-      if (data.mode === 'setup') {
-        if (data.activationEnabled) {
-          setAccessMode('setup');
-          setStatusMessage('First-time staff access must be activated by an authorized workspace administrator.');
-        } else {
-          setAccessMode('unavailable');
-          setStatusMessage('Staff access setup is temporarily unavailable. Please confirm the private workspace configuration.');
+        if (data.mode === 'setup') {
+          if (data.activationEnabled) {
+            setAccessMode('setup');
+            setStatusMessage(
+              data.setupMethod === 'install'
+                ? 'This installed location can now create its first staff password.'
+                : 'First-time staff access must be activated by an authorized workspace administrator.'
+            );
+          } else {
+            setAccessMode('unavailable');
+            setStatusMessage('Staff access setup is temporarily unavailable. Please confirm the private workspace configuration.');
         }
         return;
       }
@@ -292,7 +296,7 @@ export function StaffLoginModal({ isOpen, onClose, onSuccess }: StaffLoginModalP
               <form onSubmit={handleAuthorizeActivation} className="space-y-4">
                 <div className="rounded-xl border border-blue-100 bg-blue-50 p-4 text-sm text-blue-900">
                   {setupMethod === 'install'
-                    ? 'This workspace has already been verified through installation. Continue to create the first staff password.'
+                    ? 'This location has already been verified through installation. Continue to create the first staff password for this location.'
                     : 'Enter the private activation code for this workspace to verify authorized access before creating the first staff password.'}
                 </div>
                 {workspaceKey !== 'default' && (

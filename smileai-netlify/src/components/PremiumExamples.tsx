@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Sparkles, ShieldCheck } from 'lucide-react';
+import { ClinicBranding } from '../App';
 import beforeImage1 from 'figma:asset/e48e1508ae690e5a9f1735226e02db94194bc3f0.png';
 import naturalImage1 from 'figma:asset/05a9c44d915ba53264dcf88fa1ff97bfe86621e6.png';
 import hollywoodImage1 from 'figma:asset/ba88f5071e0e5b56767bf8cea28598b75d5eaf55.png';
@@ -49,7 +50,9 @@ const EXAMPLES = [
   },
 ];
 
-export function PremiumExamples() {
+export function PremiumExamples({ clinicBranding }: { clinicBranding?: ClinicBranding }) {
+  const primaryColor = clinicBranding?.primaryColor || '#0891b2';
+  const accentColor = clinicBranding?.accentColor || '#06b6d4';
   const [selectedStates, setSelectedStates] = useState<Record<number, SmileState>>(
     EXAMPLES.reduce((acc, example) => {
       acc[example.id] = example.initialState;
@@ -74,13 +77,13 @@ export function PremiumExamples() {
           transition={{ duration: 0.5 }}
           className="mx-auto mb-8 max-w-3xl text-center sm:mb-10"
         >
-          <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-white px-3 py-1.5 shadow-sm" style={{ border: '1px solid #06b6d4', color: '#0e7490' }}>
+          <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-white px-3 py-1.5 shadow-sm" style={{ border: `1px solid ${accentColor}`, color: primaryColor }}>
             <Sparkles className="h-3.5 w-3.5" />
             <span className="text-xs font-semibold">Real Transformations</span>
           </div>
           <h2 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl lg:text-4xl">
             See What&apos;s Possible{' '}
-            <span style={{ color: '#0891b2' }}>In Under 30 Seconds</span>
+            <span style={{ color: primaryColor }}>In Under 30 Seconds</span>
           </h2>
           <p className="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-slate-600 sm:text-base">
             Explore real smile transformations with before, natural, and Hollywood options. Every image is watermarked with your practice logo.
@@ -101,7 +104,7 @@ export function PremiumExamples() {
                 transition={{ duration: 0.4, delay: index * 0.1 }}
                 className="flex flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-md hover:shadow-lg transition-shadow"
               >
-                <div className="px-4 py-2.5 text-center" style={{ background: 'linear-gradient(to right, #0891b2, #06b6d4)' }}>
+                <div className="px-4 py-2.5 text-center" style={{ background: `linear-gradient(to right, ${primaryColor}, ${accentColor})` }}>
                   <p className="text-sm font-semibold text-white">AI Enhanced Smile</p>
                 </div>
 
@@ -139,7 +142,7 @@ export function PremiumExamples() {
                               ? 'border-transparent text-white'
                               : 'border-slate-200 bg-white text-slate-600'
                           }`}
-                          style={isActive ? { backgroundColor: '#0891b2', borderColor: '#0891b2' } : {}}
+                          style={isActive ? { backgroundColor: primaryColor, borderColor: primaryColor } : {}}
                           aria-pressed={isActive}
                         >
                           {option.label}
@@ -149,7 +152,7 @@ export function PremiumExamples() {
                   </div>
 
                   <div className="mt-3 flex items-start gap-2 rounded-lg border border-slate-100 bg-slate-50 px-3 py-2.5">
-                    <ShieldCheck className="mt-0.5 h-4 w-4 flex-shrink-0" style={{ color: '#0891b2' }} />
+                    <ShieldCheck className="mt-0.5 h-4 w-4 flex-shrink-0" style={{ color: primaryColor }} />
                     <p className="text-xs text-slate-500">
                       We only adjust teeth and smile - not the face.
                     </p>

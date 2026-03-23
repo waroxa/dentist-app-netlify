@@ -566,7 +566,7 @@ export function SmileTransformationSection() {
                   By continuing, you agree to be contacted about your smile transformation. Your information is secure.
                 </p>
                 <div className="flex flex-wrap justify-center gap-3 text-xs text-slate-600">
-                  <span className="inline-flex items-center gap-1"><span className="text-emerald-500">✓</span>HIPAA Compliant</span>
+                  <span className="inline-flex items-center gap-1"><span className="text-emerald-500">✓</span>Privacy-Focused Workflow</span>
                   <span className="inline-flex items-center gap-1"><span className="text-emerald-500">✓</span>Secure</span>
                   <span className="inline-flex items-center gap-1"><span className="text-emerald-500">✓</span>Results in 24h</span>
                 </div>

@@ -34,8 +34,7 @@ export function Footer({ clinicBranding }: FooterProps) {
 
   const handleLoginSuccess = () => {
     setShowLoginModal(false);
-    // Reload the page to show the staff dashboard
-    window.location.reload();
+    window.location.href = `/admin${window.location.search}`;
   };
 
   const clinicName = clinicBranding?.clinicName || 'SmileAI Miami';
@@ -59,8 +58,8 @@ export function Footer({ clinicBranding }: FooterProps) {
           {/* Brand Column */}
           <div className="sm:col-span-2 lg:col-span-1">
             <div className="flex items-center gap-3 mb-4">
-              <img 
-                src={TOOTH_LOGO} 
+              <img
+                src={clinicBranding?.logo || TOOTH_LOGO}
                 alt={clinicName}
                 className="w-10 h-10 object-contain rounded-lg bg-white p-1"
               />
@@ -151,12 +150,10 @@ export function Footer({ clinicBranding }: FooterProps) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <p className="text-xs sm:text-sm text-gray-500 text-center sm:text-left">
-              © 2026 {clinicName}. All rights reserved. HIPAA compliant and regulated by the United States of America.
+              © 2026 {clinicName}. All rights reserved.
             </p>
             <div className="flex flex-wrap gap-4 sm:gap-6 text-xs sm:text-sm text-gray-500 justify-center">
-              <a href="#privacy-policy" className="hover:text-blue-400 transition-colors">Privacy Policy</a>
-              <a href="#terms-of-service" className="hover:text-blue-400 transition-colors">Terms of Service</a>
-              <a href="#hipaa-notice" className="hover:text-blue-400 transition-colors">HIPAA Notice</a>
+              <a href="/privacy-notice" className="hover:text-blue-400 transition-colors">Privacy Notice</a>
               <button onClick={handleStaffLogin} className="hover:text-blue-400 transition-colors cursor-pointer">Staff Login</button>
             </div>
           </div>
