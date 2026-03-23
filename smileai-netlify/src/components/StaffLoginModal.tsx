@@ -17,6 +17,8 @@ interface AdminStatusResponse {
   activationEnabled?: boolean;
   error?: string;
   workspaceKey?: string;
+  setupMethod?: 'install' | 'secret';
+  installAuthorized?: boolean;
 }
 
 const initialMessage = 'Use your administrator password to open the private control panel.';
@@ -44,6 +46,7 @@ export function StaffLoginModal({ isOpen, onClose, onSuccess }: StaffLoginModalP
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [activationAuthorized, setActivationAuthorized] = useState(false);
+  const [setupMethod, setSetupMethod] = useState<'install' | 'secret'>('secret');
   const [workspaceKey, setWorkspaceKey] = useState('default');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
@@ -70,6 +73,7 @@ export function StaffLoginModal({ isOpen, onClose, onSuccess }: StaffLoginModalP
       const res = await fetch(`/api/admin/status?workspaceKey=${encodeURIComponent(currentWorkspaceKey)}`, { credentials: 'include' });
       const data: AdminStatusResponse = await res.json();
       if (data.workspaceKey) setWorkspaceKey(data.workspaceKey);
+      setSetupMethod(data.setupMethod === 'install' ? 'install' : 'secret');
 
       if (!res.ok || data.mode === 'unavailable') {
         setAccessMode('unavailable');
@@ -287,46 +291,52 @@ export function StaffLoginModal({ isOpen, onClose, onSuccess }: StaffLoginModalP
             {accessMode === 'setup' && !activationAuthorized && (
               <form onSubmit={handleAuthorizeActivation} className="space-y-4">
                 <div className="rounded-xl border border-blue-100 bg-blue-50 p-4 text-sm text-blue-900">
-                  Enter the private activation code for this workspace to verify authorized access before creating the first staff password.
+                  {setupMethod === 'install'
+                    ? 'This workspace has already been verified through installation. Continue to create the first staff password.'
+                    : 'Enter the private activation code for this workspace to verify authorized access before creating the first staff password.'}
                 </div>
                 {workspaceKey !== 'default' && (
                   <p className="text-xs text-gray-500">Workspace ID: {workspaceKey}</p>
                 )}
-                <p className="text-xs text-gray-500">
-                  For workspace installs, use this format: <span className="font-mono">{workspaceKey}:your-setup-secret</span>
-                </p>
-                <div>
-                  <label htmlFor="activationSecret" className="mb-2 block text-sm font-medium text-gray-900">
-                    Activation code
-                  </label>
-                  <div className="relative">
-                    <Input
-                      id="activationSecret"
-                      type={showPassword ? 'text' : 'password'}
-                      value={activationSecret}
-                      onChange={(e) => {
-                        setActivationSecret(e.target.value);
-                        setError('');
-                      }}
-                      placeholder="Enter activation code"
-                      className="h-12 pr-12"
-                      autoFocus
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword((value) => !value)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                    >
-                      {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
-                    </button>
-                  </div>
-                </div>
+                {setupMethod === 'secret' && (
+                  <>
+                    <p className="text-xs text-gray-500">
+                      For workspace installs, use this format: <span className="font-mono">{workspaceKey}:your-setup-secret</span>
+                    </p>
+                    <div>
+                      <label htmlFor="activationSecret" className="mb-2 block text-sm font-medium text-gray-900">
+                        Activation code
+                      </label>
+                      <div className="relative">
+                        <Input
+                          id="activationSecret"
+                          type={showPassword ? 'text' : 'password'}
+                          value={activationSecret}
+                          onChange={(e) => {
+                            setActivationSecret(e.target.value);
+                            setError('');
+                          }}
+                          placeholder="Enter activation code"
+                          className="h-12 pr-12"
+                          autoFocus
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowPassword((value) => !value)}
+                          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                        >
+                          {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                        </button>
+                      </div>
+                    </div>
+                  </>
+                )}
                 <Button
                   type="submit"
-                  disabled={isLoading || !activationSecret}
+                  disabled={isLoading || (setupMethod === 'secret' && !activationSecret)}
                   className="h-12 w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700"
                 >
-                  {isLoading ? 'Verifying...' : 'Verify and continue'}
+                  {isLoading ? 'Verifying...' : setupMethod === 'install' ? 'Continue setup' : 'Verify and continue'}
                 </Button>
               </form>
             )}

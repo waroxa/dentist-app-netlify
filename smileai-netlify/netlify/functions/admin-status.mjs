@@ -1,17 +1,21 @@
-import { getAdminCredential, getAdminSetupSecret, json, resolveWorkspaceKey } from './_lib.mjs';
+import { getAdminCredential, getAdminSetupSecret, getWorkspaceInstall, json, resolveWorkspaceKey } from './_lib.mjs';
 
 export async function handler(event) {
   try {
     const workspaceKey = resolveWorkspaceKey(event);
     const credential = await getAdminCredential(workspaceKey);
+    const install = await getWorkspaceInstall(workspaceKey);
     const legacyConfigured = workspaceKey === 'default' && Boolean(process.env.SMILEVISION_ADMIN_PASSWORD);
     const configured = Boolean(credential?.password_hash || legacyConfigured);
     const activationEnabled = configured ? false : Boolean(getAdminSetupSecret());
+    const setupMethod = !configured && install ? 'install' : 'secret';
     return json(200, {
       workspaceKey,
       mode: configured ? 'login' : 'setup',
       configured,
       activationEnabled,
+      setupMethod,
+      installAuthorized: Boolean(install),
     });
   } catch (error) {
     console.error('admin_status_failed', error);

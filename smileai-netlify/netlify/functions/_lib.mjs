@@ -228,6 +228,19 @@ export async function setAdminCredential({ workspaceKey = 'default', passwordHas
   return data;
 }
 
+export async function getWorkspaceInstall(workspaceKey = 'default') {
+  const normalizedKey = normalizeWorkspaceKey(workspaceKey);
+  if (normalizedKey === 'default') return null;
+  const supabase = getSupabase();
+  const { data, error } = await supabase
+    .from('ghl_installs')
+    .select('locationId, agencyId, installed_at')
+    .eq('locationId', normalizedKey)
+    .maybeSingle();
+  if (error) throw error;
+  return data;
+}
+
 function getKeyBytes() {
   const raw = getEnv('TOKEN_ENCRYPTION_KEY');
   const normalized = raw.length === 44 ? Buffer.from(raw, 'base64') : Buffer.from(raw, 'hex');

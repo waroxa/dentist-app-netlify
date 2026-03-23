@@ -4,6 +4,7 @@ import {
   auditLog,
   getAdminCredential,
   getAdminSetupSecret,
+  getWorkspaceInstall,
   json,
   resolveWorkspaceKey,
   safeParse,
@@ -15,19 +16,24 @@ export async function handler(event) {
 
   try {
     const body = safeParse(event.body);
-    if (!body?.activationSecret) return json(400, { error: 'Activation code is required.' });
     const workspaceKey = resolveWorkspaceKey(event, body);
 
     const existing = await getAdminCredential(workspaceKey);
     if (existing?.password_hash) return json(409, { error: 'Staff access has already been configured. Please use the password sign-in form.' });
 
-    const provided = Buffer.from(String(body.activationSecret), 'utf8');
-    const candidates = [`${workspaceKey}:${getAdminSetupSecret()}`];
-    if (workspaceKey === 'default') candidates.push(getAdminSetupSecret());
-    const isAuthorized = candidates.some((candidate) => {
-      const expected = Buffer.from(candidate, 'utf8');
-      return expected.length === provided.length && crypto.timingSafeEqual(provided, expected);
-    });
+    const install = await getWorkspaceInstall(workspaceKey);
+    let isAuthorized = Boolean(install);
+
+    if (!isAuthorized) {
+      if (!body?.activationSecret) return json(400, { error: 'Activation code is required.' });
+      const provided = Buffer.from(String(body.activationSecret), 'utf8');
+      const candidates = [`${workspaceKey}:${getAdminSetupSecret()}`];
+      if (workspaceKey === 'default') candidates.push(getAdminSetupSecret());
+      isAuthorized = candidates.some((candidate) => {
+        const expected = Buffer.from(candidate, 'utf8');
+        return expected.length === provided.length && crypto.timingSafeEqual(provided, expected);
+      });
+    }
 
     if (!isAuthorized) {
       await auditLog('admin_activation_authorize_failed', { ip: event.headers['x-forwarded-for'] || 'unknown', workspaceKey });
