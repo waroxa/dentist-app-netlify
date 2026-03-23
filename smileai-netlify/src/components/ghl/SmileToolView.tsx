@@ -255,7 +255,7 @@ export function SmileToolView({ clinicBranding }: SmileToolViewProps) {
       });
       const data = await parseJsonResponse(response);
       if (!response.ok) throw new Error(data.error || 'Unable to sync media back to the patient record.');
-      setSuccessMessage('Media URLs have been synced to the patient record for GHL workflows.');
+      setSuccessMessage('Media URLs have been synced to the patient record.');
     } catch (error: any) {
       setErrorMessage(error.message || 'Unable to sync media back to the patient record.');
     } finally {
@@ -272,7 +272,7 @@ export function SmileToolView({ clinicBranding }: SmileToolViewProps) {
     <div className="mx-auto max-w-7xl space-y-6 lg:space-y-7">
       <div className="space-y-1.5">
         <h2 className="text-2xl font-semibold tracking-tight text-slate-900">Smile Tool</h2>
-        <p className="text-sm text-slate-500">Generate AI smile previews and videos, then sync the asset URLs back to the patient record.</p>
+        <p className="text-sm text-slate-500">Generate AI smile previews and videos, then save the asset URLs back to the patient record.</p>
       </div>
 
       <div className="rounded-2xl border bg-white p-5 shadow-sm" style={{ borderColor: primaryBorder }}>
@@ -281,52 +281,45 @@ export function SmileToolView({ clinicBranding }: SmileToolViewProps) {
           <div className="space-y-1">
             <h4 className="text-sm font-semibold" style={{ color: primaryColor }}>Recommended workflow</h4>
             <p className="text-sm leading-6 text-slate-600">
-              Pick a patient when you want the preview and video URLs written back into GHL automatically. You can still test the tool without linking a record first.
+              Pick a patient when you want the preview and video URLs saved directly to their record. You can still test the tool without linking a record first.
             </p>
           </div>
         </div>
       </div>
 
-      <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_auto]">
-        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-          <div className="space-y-2">
-            <Label htmlFor="patient-record" className="text-sm font-medium text-slate-700">Patient Record</Label>
-            <div className="flex flex-col gap-3 lg:flex-row">
-              <select
-                id="patient-record"
-                value={selectedLeadId}
-                onChange={(e) => setSelectedLeadId(e.target.value)}
-                className="h-12 w-full rounded-xl border border-slate-200 bg-white px-4 text-sm text-slate-700 focus-visible:outline-none"
-              >
-                <option value="">Use tool without linking a patient</option>
-                {patients.map((patient) => (
-                  <option key={patient.id} value={patient.id}>
-                    {patient.fullName || patient.name} - {patient.email}
-                  </option>
-                ))}
-              </select>
-              <Button
-                variant="outline"
-                onClick={fetchPatients}
-                disabled={patientsLoading}
-                className="h-12 border-slate-200 text-slate-600 hover:bg-slate-50"
-              >
-                {patientsLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <RefreshCw className="mr-2 h-4 w-4" />}
-                Refresh
-              </Button>
-            </div>
-            {selectedPatient && (
-              <p className="text-xs text-slate-500">
-                Linked patient: <span className="font-medium text-slate-700">{selectedPatient.fullName || selectedPatient.name}</span>
-                {selectedPatient.interestedIn ? ` • ${selectedPatient.interestedIn}` : ''}
-              </p>
-            )}
+      <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+        <div className="space-y-2">
+          <Label htmlFor="patient-record" className="text-sm font-medium text-slate-700">Patient Record</Label>
+          <div className="flex flex-col gap-3 lg:flex-row">
+            <select
+              id="patient-record"
+              value={selectedLeadId}
+              onChange={(e) => setSelectedLeadId(e.target.value)}
+              className="h-12 w-full rounded-xl border border-slate-200 bg-white px-4 text-sm text-slate-700 focus-visible:outline-none"
+            >
+              <option value="">Use tool without linking a patient</option>
+              {patients.map((patient) => (
+                <option key={patient.id} value={patient.id}>
+                  {patient.fullName || patient.name} - {patient.email}
+                </option>
+              ))}
+            </select>
+            <Button
+              variant="outline"
+              onClick={fetchPatients}
+              disabled={patientsLoading}
+              className="h-12 border-slate-200 text-slate-600 hover:bg-slate-50"
+            >
+              {patientsLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <RefreshCw className="mr-2 h-4 w-4" />}
+              Refresh
+            </Button>
           </div>
-        </div>
-
-        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-          <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Workflow Sync</p>
-          <p className="mt-2 text-sm text-slate-700">{selectedLeadId ? 'Ready to sync generated asset URLs back to the record.' : 'Select a patient to sync media URLs into GHL.'}</p>
+          {selectedPatient && (
+            <p className="text-xs text-slate-500">
+              Linked patient: <span className="font-medium text-slate-700">{selectedPatient.fullName || selectedPatient.name}</span>
+              {selectedPatient.interestedIn ? ` • ${selectedPatient.interestedIn}` : ''}
+            </p>
+          )}
         </div>
       </div>
 

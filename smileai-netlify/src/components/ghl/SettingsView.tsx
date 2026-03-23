@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Save, Upload, Palette, Bell, Lock, CreditCard, Zap, Shield, MapPin, MessageSquare } from 'lucide-react';
+import { Save, Palette, Bell, CreditCard, Shield, MapPin, MessageSquare } from 'lucide-react';
 import { ClinicBranding } from '../../App';
 import { Button } from '../ui/button';
-import { Input } from '../ui/input';
-import { Label } from '../ui/label';
 import { Checkbox } from '../ui/checkbox';
 import { BrandCustomizationPanel } from './BrandCustomizationPanel';
-import { ApiSettingsPanel } from './ApiSettingsPanel';
 import { SecuritySettingsPanel } from './SecuritySettingsPanel';
 import { ContactSettingsPanel } from './ContactSettingsPanel';
 import { TestimonialsSettingsPanel } from './TestimonialsSettingsPanel';
@@ -21,6 +18,13 @@ export function SettingsView({ clinicBranding, onBrandingChange }: SettingsViewP
   const [localBranding, setLocalBranding] = useState(clinicBranding);
   const [activeTab, setActiveTab] = useState<'branding' | 'contact' | 'testimonials' | 'notifications' | 'integration' | 'security' | 'billing'>('branding');
   const [isSaving, setIsSaving] = useState(false);
+  const visibleTabs = [
+    { id: 'branding', label: 'Branding', icon: Palette },
+    { id: 'contact', label: 'Contact', icon: MapPin },
+    { id: 'testimonials', label: 'Reviews', icon: MessageSquare },
+    { id: 'notifications', label: 'Alerts', icon: Bell },
+    { id: 'security', label: 'Security', icon: Shield },
+  ] as const;
 
   // Update local state when clinicBranding prop changes
   useEffect(() => {
@@ -107,22 +111,14 @@ export function SettingsView({ clinicBranding, onBrandingChange }: SettingsViewP
         <div className="border-b border-slate-100 bg-slate-50/50">
           <div className="overflow-x-auto scrollbar-hide">
             <div className="flex gap-0 px-2 min-w-max">
-              {[
-                { id: 'branding', label: 'Branding', icon: Palette },
-                { id: 'contact', label: 'Contact', icon: MapPin },
-                { id: 'testimonials', label: 'Reviews', icon: MessageSquare },
-                { id: 'notifications', label: 'Alerts', icon: Bell },
-                { id: 'integration', label: 'API', icon: Zap },
-                { id: 'security', label: 'Security', icon: Shield },
-                { id: 'billing', label: 'Billing', icon: CreditCard },
-              ].map((tab) => {
+              {visibleTabs.map((tab) => {
                 const Icon = tab.icon;
                 const isActive = activeTab === tab.id;
                 
                 return (
                   <button
                     key={tab.id}
-                    onClick={() => setActiveTab(tab.id as any)}
+                    onClick={() => setActiveTab(tab.id)}
                     className={`flex items-center gap-1.5 px-3 py-3 border-b-2 transition-colors whitespace-nowrap text-sm ${
                       isActive
                         ? 'font-medium bg-white'
@@ -207,10 +203,12 @@ export function SettingsView({ clinicBranding, onBrandingChange }: SettingsViewP
             </div>
           )}
 
-          {/* Integration Tab */}
+          {/* Integration Tab intentionally hidden for now */}
           {activeTab === 'integration' && (
             <div className="space-y-6">
-              <ApiSettingsPanel />
+              <div className="rounded-lg border border-slate-200 bg-slate-50 p-4 text-sm text-slate-500">
+                This section is hidden for now.
+              </div>
             </div>
           )}
 
@@ -221,7 +219,7 @@ export function SettingsView({ clinicBranding, onBrandingChange }: SettingsViewP
             </div>
           )}
 
-          {/* Billing Tab */}
+          {/* Billing Tab intentionally hidden for now */}
           {activeTab === 'billing' && (
             <div className="space-y-6">
               <div>

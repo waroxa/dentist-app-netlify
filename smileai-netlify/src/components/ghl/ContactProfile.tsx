@@ -12,7 +12,6 @@ import {
   ExternalLink,
   Clock,
   User,
-  MessageSquare,
   FileText,
   Eye,
   X as XIcon
@@ -56,7 +55,7 @@ export function ContactProfile({ contactId, onBack, primaryColor = '#0ea5e9' }: 
   const [selectedMedia, setSelectedMedia] = useState<MediaItem | null>(null);
   const [reviewStatus, setReviewStatus] = useState<ReviewStatusType>('Under Review');
 
-  // Mock contact data - in production, this would come from the CRM API
+  // Mock contact data - in production, this would come from the patient record service
   const contact: ContactData = {
     id: contactId || '12345',
     name: 'Sarah Johnson',
@@ -134,34 +133,18 @@ export function ContactProfile({ contactId, onBack, primaryColor = '#0ea5e9' }: 
       {/* Header */}
       <div className="bg-white border-b border-gray-200 sticky top-0 z-10">
         <div className="px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={onBack}
-                className="hover:bg-gray-100"
-              >
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Back to Patients
-              </Button>
-              <div className="h-6 w-px bg-gray-300" />
-              <h1 className="text-xl font-semibold text-gray-900">Contact Profile</h1>
-            </div>
-            <div className="flex items-center gap-2">
-              <Button variant="outline" size="sm">
-                <MessageSquare className="w-4 h-4 mr-2" />
-                Send Message
-              </Button>
-              <Button 
-                size="sm" 
-                style={{ backgroundColor: primaryColor }}
-                className="text-white hover:opacity-90"
-              >
-                <Calendar className="w-4 h-4 mr-2" />
-                Book Appointment
-              </Button>
-            </div>
+          <div className="flex items-center gap-4">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={onBack}
+              className="hover:bg-gray-100"
+            >
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Back to Patients
+            </Button>
+            <div className="h-6 w-px bg-gray-300" />
+            <h1 className="text-xl font-semibold text-gray-900">Contact Profile</h1>
           </div>
         </div>
       </div>
