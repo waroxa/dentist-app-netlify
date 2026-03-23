@@ -1,6 +1,6 @@
 import crypto from 'node:crypto';
 import { GoogleGenAI } from '@google/genai';
-import { auditLog, errorLog, getEnv, getImageBucket, json, log, parseDataUrl, retry, upsertJob, validateImageUpload, safeParse, setDerivedEnv, uploadBase64Asset } from './_lib.mjs';
+import { auditLog, errorLog, getEnv, getImageBucket, json, log, parseDataUrl, retry, upsertJob, validateImageUpload, safeParse, setDerivedEnv, syncLeadAssetsToCRM, uploadBase64Asset } from './_lib.mjs';
 
 const PROMPTS = {
   subtle: 'Transform only the teeth into a beautiful, natural smile. Remove any braces, retainers, or dental hardware. Fix crooked teeth to be perfectly straight and evenly aligned. Rebuild any missing or damaged teeth. Whiten teeth to a clean, natural shade with subtle highlights. Fix any gaps, chips, or discoloration. Maintain realistic texture and natural gum line. Do NOT change skin, hair, eyes, face shape, background or lighting. Focus exclusively on creating amazingly beautiful, straight, white teeth.',
@@ -91,6 +91,19 @@ export async function handler(event) {
     });
 
     await auditLog('smile_preview_completed', { jobId, leadId: body.leadId || null, intensity, previewAssetUrl: uploaded.publicUrl });
+    if (body.leadId) {
+      try {
+        await syncLeadAssetsToCRM({
+          leadId: body.leadId,
+          crmContactId: body.crmContactId || null,
+          previewUrl: uploaded.publicUrl,
+          status: 'Preview Ready',
+          previewJobId: jobId,
+        });
+      } catch (syncError) {
+        await auditLog('smile_preview_sync_failed', { jobId, leadId: body.leadId, message: syncError.message });
+      }
+    }
     log('smile_preview_completed', { jobId, intensity, previewAssetUrl: uploaded.publicUrl });
     return json(200, { success: true, jobId, previewImageUrl: previewUrl, previewAssetUrl: uploaded.publicUrl, intensity, provider: 'gemini' });
   } catch (error) {

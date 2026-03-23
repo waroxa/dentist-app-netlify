@@ -31,6 +31,18 @@
   force = true
 
 [[redirects]]
+  from = "/api/admin/patients"
+  to = "/.netlify/functions/admin-patients"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/admin/sync-patient-media"
+  to = "/.netlify/functions/admin-sync-patient-media"
+  status = 200
+  force = true
+
+[[redirects]]
   from = "/api/admin/activate-authorize"
   to = "/.netlify/functions/admin-activate-authorize"
   status = 200

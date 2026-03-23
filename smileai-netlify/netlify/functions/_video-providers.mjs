@@ -10,6 +10,7 @@ import {
   parseDataUrl,
   retry,
   safeParse,
+  syncLeadAssetsToCRM,
   uploadBase64Asset,
   upsertJob,
 } from './_lib.mjs';
@@ -330,6 +331,26 @@ async function completeJob(job, { assetUrl, providerJobId, metadata = {}, note }
     metadata: { ...(job.metadata || {}), ...metadata },
     updated_at: new Date().toISOString(),
   });
+
+  if (updated.lead_id && updated.type === 'smile_video' && updated.output_asset_url) {
+    try {
+      await syncLeadAssetsToCRM({
+        leadId: updated.lead_id,
+        videoUrl: updated.output_asset_url,
+        status: 'Video Ready',
+        videoJobId: updated.id,
+      });
+    } catch (syncError) {
+      await upsertJob({
+        ...updated,
+        metadata: {
+          ...(updated.metadata || {}),
+          assetSyncError: syncError.message,
+        },
+        updated_at: new Date().toISOString(),
+      });
+    }
+  }
 
   return json(200, {
     success: true,

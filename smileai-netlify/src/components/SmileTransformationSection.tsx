@@ -138,6 +138,10 @@ export function SmileTransformationSection({ clinicBranding }: SmileTransformati
     notes: '',
   });
   const [leadErrors, setLeadErrors] = useState<LeadFormErrors>({});
+  const [leadId, setLeadId] = useState<string | null>(null);
+  const [crmContactId, setCrmContactId] = useState<string | null>(null);
+  const [leadSubmitting, setLeadSubmitting] = useState(false);
+  const [leadSubmitError, setLeadSubmitError] = useState<string | null>(null);
   const [isLeadCaptured, setIsLeadCaptured] = useState(false);
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
@@ -197,7 +201,7 @@ export function SmileTransformationSection({ clinicBranding }: SmileTransformati
     return Object.keys(nextErrors).length === 0;
   }
 
-  function handleLeadSubmit(e: React.FormEvent) {
+  function _legacyHandleLeadSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!validateLeadForm()) return;
     setIsLeadCaptured(true);
@@ -205,6 +209,39 @@ export function SmileTransformationSection({ clinicBranding }: SmileTransformati
     requestAnimationFrame(() => {
       document.getElementById('smile-upload-panel')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
+  }
+
+  async function submitLeadForm(e: React.FormEvent) {
+    e.preventDefault();
+    if (!validateLeadForm()) return;
+
+    setLeadSubmitting(true);
+    setLeadSubmitError(null);
+    setSuccessMessage(null);
+
+    try {
+      if (!leadId) {
+        const response = await fetch('/api/lead-submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(leadForm),
+        });
+        const data = await parseJsonResponse(response);
+        if (!response.ok) throw new Error(data.error || 'We could not save your request right now. Please try again.');
+        setLeadId(data.leadId || null);
+        setCrmContactId(data.crmContactId || null);
+      }
+
+      setIsLeadCaptured(true);
+      setSuccessMessage('Thanks! Your preview form is saved. Upload a photo to continue.');
+      requestAnimationFrame(() => {
+        document.getElementById('smile-upload-panel')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    } catch (error: any) {
+      setLeadSubmitError(error.message || 'We could not save your request right now. Please try again.');
+    } finally {
+      setLeadSubmitting(false);
+    }
   }
 
   function resetGeneratedAssets() {
@@ -275,7 +312,7 @@ export function SmileTransformationSection({ clinicBranding }: SmileTransformati
       const res = await fetch('/api/smile-preview', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ imageDataUrl: uploadedImage, intensity: style }),
+        body: JSON.stringify({ imageDataUrl: uploadedImage, intensity: style, leadId, crmContactId }),
       });
       const data = await parseJsonResponse(res);
       if (!res.ok) throw new Error(data.error || 'We couldn\'t generate the smile preview right now. Please try again.');
@@ -296,7 +333,7 @@ export function SmileTransformationSection({ clinicBranding }: SmileTransformati
     const res = await fetch(getVideoEndpoint(provider), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ imageUrl: previewImage, provider }),
+      body: JSON.stringify({ imageUrl: previewImage, provider, leadId }),
     });
     const data = await parseJsonResponse(res);
     if (!res.ok) throw new Error(data.error || `Unable to start AI Video.`);
@@ -476,7 +513,7 @@ export function SmileTransformationSection({ clinicBranding }: SmileTransformati
               <h2 className="text-xl font-semibold text-slate-900">Step 1: Enter Your Information</h2>
               <p className="mt-1 text-sm text-slate-500">We'll create your personalized smile preview in the next step</p>
             </div>
-            <form onSubmit={handleLeadSubmit} className="space-y-4">
+            <form onSubmit={submitLeadForm} className="space-y-4">
               <div>
                 <Label htmlFor="lead-fullName" className="mb-1.5 flex items-center gap-1.5 text-sm font-medium text-slate-700">
                   <User className="h-4 w-4 text-slate-400" />
@@ -570,8 +607,8 @@ export function SmileTransformationSection({ clinicBranding }: SmileTransformati
                 />
               </div>
 
-              <Button type="submit" className="h-10 w-full rounded-lg text-sm font-semibold text-white shadow-sm" style={{ background: primaryGradient }}>
-                {isLeadCaptured ? 'Update & Continue' : 'Get Started Free'}
+              <Button type="submit" disabled={leadSubmitting} className="h-10 w-full rounded-lg text-sm font-semibold text-white shadow-sm" style={{ background: primaryGradient }}>
+                {leadSubmitting ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Saving...</> : isLeadCaptured ? 'Continue to Upload Photo' : 'Get Started Free'}
               </Button>
 
               <div className="space-y-3 pt-2 text-center">
@@ -756,11 +793,11 @@ export function SmileTransformationSection({ clinicBranding }: SmileTransformati
               </div>
             </motion.div>
           )}
-          {(previewError || videoError) && (
+          {(leadSubmitError || previewError || videoError) && (
             <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 15 }} className="rounded-lg border border-red-200 bg-white/95 p-3 text-sm text-red-800 shadow-lg backdrop-blur-md">
               <div className="flex items-center gap-2">
                 <AlertCircle className="h-4 w-4 text-red-600" />
-                <p className="text-xs font-medium">{previewError || videoError}</p>
+                <p className="text-xs font-medium">{leadSubmitError || previewError || videoError}</p>
               </div>
             </motion.div>
           )}

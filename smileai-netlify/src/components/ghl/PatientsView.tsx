@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Search, Filter, Download, Plus, Mail, Phone, Calendar, Loader2 } from 'lucide-react';
+import React, { useEffect, useMemo, useState } from 'react';
+import { Search, Filter, Download, Plus, Loader2, AlertCircle, RefreshCw } from 'lucide-react';
 import { ClinicBranding } from '../../App';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
@@ -11,215 +11,222 @@ interface PatientsViewProps {
   onViewContact?: (contactId: string) => void;
 }
 
+interface PatientRecord {
+  id: string;
+  crmContactId?: string | null;
+  name: string;
+  email: string;
+  phone: string;
+  interestedIn?: string;
+  source?: string;
+  createdAt: string;
+  lastVisit: string;
+  status: string;
+  assessmentCompleted: boolean;
+  consultationScheduled: boolean;
+  avatar: string | null;
+}
+
+function formatSubmittedAt(value: string) {
+  try {
+    return `Submitted ${new Date(value).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}`;
+  } catch {
+    return 'Recently submitted';
+  }
+}
+
 export function PatientsView({ clinicBranding, onViewContact }: PatientsViewProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
-  const [patients, setPatients] = useState<any[]>([]);
+  const [patients, setPatients] = useState<PatientRecord[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
-  // Fetch patients from the CRM on component mount
+  async function fetchPatients() {
+    setIsLoading(true);
+    setLoadError(null);
+
+    try {
+      const response = await fetch('/api/admin/patients', { credentials: 'include' });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(data.error || 'Failed to load patients.');
+      setPatients(data.patients || []);
+    } catch (error: any) {
+      setLoadError(error.message || 'Failed to load patients.');
+      setPatients([]);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
   useEffect(() => {
     fetchPatients();
   }, []);
 
-  const fetchPatients = async () => {
-    setIsLoading(true);
-    try {
-      const ghlApiKey = localStorage.getItem('ghl_api_key');
-      const ghlLocationId = localStorage.getItem('ghl_location_id');
+  const filteredPatients = useMemo(() => {
+    return patients.filter((patient) => {
+      const matchesSearch = !searchQuery ||
+        patient.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        patient.email?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        patient.phone?.includes(searchQuery);
 
-      if (!ghlApiKey || !ghlLocationId) {
-        console.log('CRM credentials not configured');
-        setIsLoading(false);
-        return;
-      }
+      const matchesStatus = filterStatus === 'all' || patient.status.toLowerCase() === filterStatus;
+      return matchesSearch && matchesStatus;
+    });
+  }, [patients, searchQuery, filterStatus]);
 
-      const response = await fetch(
-        `https://rest.gohighlevel.com/v1/contacts/?locationId=${ghlLocationId}`,
-        {
-          method: 'GET',
-          headers: {
-            'Authorization': `Bearer ${ghlApiKey}`,
-            'Content-Type': 'application/json',
-            'Version': '2021-07-28'
-          }
-        }
-      );
-
-      if (response.ok) {
-        const data = await response.json();
-        // Filter contacts that have SmileVisionPro tag or were created via the app
-        const smileVisionContacts = data.contacts?.filter((contact: any) => 
-          contact.tags?.includes('SmileVisionPro') || 
-          contact.source?.includes('SmileVisionPro')
-        ) || [];
-        setPatients(smileVisionContacts);
-      } else {
-        console.error('Failed to fetch contacts:', response.status);
-      }
-    } catch (error) {
-      console.error('Error fetching patients:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handlePatientAdded = () => {
-    // Refresh patient list
-    fetchPatients();
-  };
-
-  // Filter patients based on search and status
-  const filteredPatients = patients.filter(patient => {
-    const matchesSearch = searchQuery === '' || 
-      patient.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      patient.email?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      patient.phone?.includes(searchQuery);
-    
-    // For now, show all in 'all' filter. You can add custom fields for status filtering
-    const matchesStatus = filterStatus === 'all';
-    
-    return matchesSearch && matchesStatus;
-  });
-
-  const primaryTone = `${clinicBranding.primaryColor}14`;
+  const hasPatients = patients.length > 0;
+  const hasFilteredResults = filteredPatients.length > 0;
+  const emptyTitle = hasPatients ? 'No matching patients' : 'No patients yet';
+  const emptyBody = hasPatients
+    ? 'Try a different search or switch tabs to see more patient records.'
+    : 'New landing page submissions will appear here automatically once they are saved.';
 
   return (
-    <div className="space-y-6 max-w-7xl">
-      {/* Page Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h2 className="text-xl sm:text-2xl font-semibold text-slate-900">Patients</h2>
-          <p className="text-sm text-slate-500 mt-0.5">Manage your patient database and interactions</p>
+    <div className="mx-auto max-w-7xl space-y-6 lg:space-y-7">
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+        <div className="space-y-1.5">
+          <h2 className="text-2xl font-semibold tracking-tight text-slate-900">Patients</h2>
+          <p className="text-sm text-slate-500">Manage your patient database and interactions</p>
         </div>
-        <Button 
-          onClick={() => setIsAddModalOpen(true)}
-          className="shadow-sm w-full sm:w-auto text-sm h-10"
-          style={{ backgroundColor: clinicBranding.primaryColor, color: '#ffffff' }}
-        >
-          <Plus className="w-4 h-4 mr-2" />
-          Add Patient
-        </Button>
+        <div className="flex flex-col gap-2 sm:flex-row">
+          <Button
+            variant="outline"
+            onClick={fetchPatients}
+            className="h-11 border-slate-200 text-slate-600 hover:bg-slate-50"
+          >
+            <RefreshCw className="mr-2 h-4 w-4" />
+            Refresh
+          </Button>
+          <Button
+            onClick={() => setIsAddModalOpen(true)}
+            className="h-11 px-5 text-sm font-semibold text-white shadow-sm"
+            style={{ backgroundColor: clinicBranding.primaryColor }}
+          >
+            <Plus className="mr-2 h-4 w-4" />
+            Add Patient
+          </Button>
+        </div>
       </div>
 
-      {/* Search and Filters */}
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-4">
-        <div className="flex flex-col sm:flex-row gap-3">
-          <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
+      <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+        <div className="flex flex-col gap-3 xl:flex-row xl:items-center">
+          <div className="relative flex-1">
+            <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
             <Input
               type="text"
               placeholder="Search patients by name, email, or phone..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-9 h-10 text-sm border-slate-200"
+              className="h-12 rounded-xl border-slate-200 pl-11 pr-4 text-sm text-slate-700 placeholder:text-slate-400"
             />
           </div>
-          <div className="flex gap-2">
-            <Button variant="outline" className="border-slate-200 text-slate-600 hover:bg-slate-50 text-sm h-10">
-              <Filter className="w-4 h-4 mr-2" />
+          <div className="flex flex-col gap-2 sm:flex-row">
+            <Button variant="outline" className="h-12 border-slate-200 text-slate-600 hover:bg-slate-50">
+              <Filter className="mr-2 h-4 w-4" />
               Filter
             </Button>
-            <Button variant="outline" className="border-slate-200 text-slate-600 hover:bg-slate-50 text-sm h-10">
-              <Download className="w-4 h-4 mr-2" />
+            <Button variant="outline" className="h-12 border-slate-200 text-slate-600 hover:bg-slate-50">
+              <Download className="mr-2 h-4 w-4" />
               Export
             </Button>
           </div>
         </div>
 
-        {/* Filter Tabs */}
-        <div className="flex gap-1.5 mt-4 pt-4 border-t border-slate-100">
-          {['all', 'active', 'pending', 'completed'].map((status) => (
-            <button
-              key={status}
-              onClick={() => setFilterStatus(status)}
-              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
-                filterStatus === status
-                  ? 'text-white'
-                  : 'text-slate-600 bg-slate-100 hover:bg-slate-200'
-              }`}
-              style={filterStatus === status ? { backgroundColor: clinicBranding.primaryColor } : undefined}
-            >
-              {status.charAt(0).toUpperCase() + status.slice(1)}
-            </button>
-          ))}
+        <div className="mt-5 flex flex-wrap gap-2 border-t border-slate-100 pt-5">
+          {['all', 'active', 'pending', 'completed'].map((status) => {
+            const isActive = filterStatus === status;
+            return (
+              <button
+                key={status}
+                onClick={() => setFilterStatus(status)}
+                className={`rounded-xl px-4 py-2 text-sm font-medium transition-colors ${
+                  isActive ? 'text-white shadow-sm' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                }`}
+                style={isActive ? { backgroundColor: clinicBranding.primaryColor } : undefined}
+              >
+                {status.charAt(0).toUpperCase() + status.slice(1)}
+              </button>
+            );
+          })}
         </div>
       </div>
 
-      {/* Patients Grid */}
-      {isLoading ? (
-        <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-10 text-center">
-          <div className="max-w-sm mx-auto">
-            <div className="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Loader2 className="w-6 h-6 animate-spin" style={{ color: clinicBranding.primaryColor }} />
+      {loadError ? (
+        <div className="rounded-2xl border border-red-200 bg-white p-8 shadow-sm">
+          <div className="mx-auto flex max-w-md flex-col items-center text-center">
+            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-red-50">
+              <AlertCircle className="h-5 w-5 text-red-500" />
             </div>
-            <h3 className="text-sm font-semibold text-slate-900 mb-1">Loading patients...</h3>
-            <p className="text-xs text-slate-500">
-              Please wait while we fetch your patient data
-            </p>
+            <h3 className="text-base font-semibold text-slate-900">We could not load patients</h3>
+            <p className="mt-1 text-sm text-slate-500">{loadError}</p>
+            <Button onClick={fetchPatients} className="mt-5 text-white" style={{ backgroundColor: clinicBranding.primaryColor }}>
+              Try Again
+            </Button>
           </div>
         </div>
-      ) : filteredPatients.length === 0 ? (
-        <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-10 text-center">
-          <div className="max-w-sm mx-auto">
-            <div className="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Plus className="w-6 h-6 text-slate-400" />
+      ) : isLoading ? (
+        <div className="rounded-2xl border border-slate-200 bg-white p-12 shadow-sm">
+          <div className="mx-auto flex max-w-sm flex-col items-center text-center">
+            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-slate-100">
+              <Loader2 className="h-6 w-6 animate-spin" style={{ color: clinicBranding.primaryColor }} />
             </div>
-            <h3 className="text-sm font-semibold text-slate-900 mb-1">No patients yet</h3>
-            <p className="text-xs text-slate-500 mb-5">
-              Patient submissions from your landing page will appear here
-            </p>
-            <Button 
-              onClick={() => setIsAddModalOpen(true)}
-              className="shadow-sm text-sm"
-              style={{ backgroundColor: clinicBranding.primaryColor, color: '#ffffff' }}
-            >
-              <Plus className="w-4 h-4 mr-2" />
-              Add Your First Patient
-            </Button>
+            <h3 className="text-sm font-semibold text-slate-900">Loading patients...</h3>
+            <p className="mt-1 text-sm text-slate-500">Pulling the latest submissions and generated media.</p>
+          </div>
+        </div>
+      ) : !hasFilteredResults ? (
+        <div className="rounded-2xl border border-slate-200 bg-white px-6 py-14 shadow-sm">
+          <div className="mx-auto flex max-w-md flex-col items-center text-center">
+            <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-slate-100">
+              <Plus className="h-6 w-6 text-slate-400" />
+            </div>
+            <h3 className="text-lg font-semibold text-slate-900">{emptyTitle}</h3>
+            <p className="mt-2 text-sm leading-6 text-slate-500">{emptyBody}</p>
+            {!hasPatients && (
+              <Button
+                onClick={() => setIsAddModalOpen(true)}
+                className="mt-6 h-11 px-5 text-sm font-semibold text-white shadow-sm"
+                style={{ backgroundColor: clinicBranding.primaryColor }}
+              >
+                <Plus className="mr-2 h-4 w-4" />
+                Add Your First Patient
+              </Button>
+            )}
           </div>
         </div>
       ) : (
         <>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
             {filteredPatients.map((patient) => (
               <PatientCard
                 key={patient.id}
-                patient={patient}
+                patient={{
+                  ...patient,
+                  lastVisit: formatSubmittedAt(patient.lastVisit),
+                }}
                 primaryColor={clinicBranding.primaryColor}
                 onViewContact={onViewContact}
               />
             ))}
           </div>
 
-          {/* Pagination */}
-          <div className="flex items-center justify-between bg-white rounded-xl border border-slate-200 shadow-sm px-5 py-3">
-            <p className="text-xs text-slate-500">
-              Showing <span className="font-medium text-slate-700">{filteredPatients.length}</span> of <span className="font-medium text-slate-700">{patients.length}</span> patients
+          <div className="flex flex-col gap-3 rounded-2xl border border-slate-200 bg-white px-5 py-4 shadow-sm sm:flex-row sm:items-center sm:justify-between">
+            <p className="text-sm text-slate-500">
+              Showing <span className="font-semibold text-slate-700">{filteredPatients.length}</span> of <span className="font-semibold text-slate-700">{patients.length}</span> patients
             </p>
-            <div className="flex gap-2">
-              <Button variant="outline" className="border-slate-200 text-slate-600 text-sm h-9" disabled>
-                Previous
-              </Button>
-              <Button 
-                variant="outline" 
-                className="text-sm h-9"
-                style={{ borderColor: primaryTone, color: clinicBranding.primaryColor }}
-                disabled
-              >
-                Next
-              </Button>
-            </div>
+            <p className="text-xs text-slate-400">
+              Leads sync into this list from the public form, then their preview and video URLs attach as assets are generated.
+            </p>
           </div>
         </>
       )}
 
-      {/* Add Patient Modal */}
       <AddPatientModal
         isOpen={isAddModalOpen}
         onClose={() => setIsAddModalOpen(false)}
-        onPatientAdded={handlePatientAdded}
+        onPatientAdded={fetchPatients}
         primaryColor={clinicBranding.primaryColor}
       />
     </div>

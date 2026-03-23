@@ -283,6 +283,138 @@ export async function upsertJob(job) {
   return data;
 }
 
+export async function getLeadRecord(leadId) {
+  if (!leadId) return null;
+  const supabase = getSupabase();
+  const { data, error } = await supabase.from('leads').select('*').eq('id', leadId).maybeSingle();
+  if (error) throw error;
+  return data;
+}
+
+export async function getActiveIntegrationConnection(provider = 'ghl') {
+  const supabase = getSupabase();
+  const { data, error } = await supabase
+    .from('integration_connections')
+    .select('*')
+    .eq('provider', provider)
+    .eq('is_active', true)
+    .order('updated_at', { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  if (error) throw error;
+  return data;
+}
+
+export async function getLeadCrmContactId(leadId) {
+  if (!leadId) return null;
+  const supabase = getSupabase();
+  const { data, error } = await supabase
+    .from('audit_logs')
+    .select('metadata, created_at')
+    .eq('action', 'lead_created')
+    .order('created_at', { ascending: false })
+    .limit(500);
+  if (error) throw error;
+  const match = (data || []).find((entry) => entry?.metadata?.leadId === leadId && entry?.metadata?.crmContactId);
+  return match?.metadata?.crmContactId || null;
+}
+
+function buildGhlCustomFields(fieldMap) {
+  return Object.entries(fieldMap)
+    .filter(([, value]) => value !== null && value !== undefined && String(value).trim() !== '')
+    .map(([key, value]) => ({ key, field_value: String(value) }));
+}
+
+async function requestGhl(connection, path, { method = 'GET', body } = {}) {
+  if (!connection?.access_token_encrypted) throw new Error('Missing active GHL access token.');
+  const accessToken = decryptSecret(connection.access_token_encrypted);
+  const response = await fetch(`https://services.leadconnectorhq.com${path}`, {
+    method,
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+      Version: '2021-07-28',
+    },
+    body: body ? JSON.stringify(body) : undefined,
+  });
+  const text = await response.text();
+  const data = safeParse(text) || {};
+  if (!response.ok) {
+    throw new Error(data?.message || data?.error || text || `GHL request failed with ${response.status}`);
+  }
+  return data;
+}
+
+export async function syncLeadAssetsToCRM({
+  leadId,
+  crmContactId = null,
+  previewUrl = null,
+  videoUrl = null,
+  status = null,
+  previewJobId = null,
+  videoJobId = null,
+}) {
+  if (!leadId) return { synced: false, reason: 'missing_lead' };
+
+  const [lead, connection] = await Promise.all([
+    getLeadRecord(leadId),
+    getActiveIntegrationConnection('ghl'),
+  ]);
+
+  if (!lead) return { synced: false, reason: 'lead_not_found' };
+  if (!connection?.location_id || !connection?.access_token_encrypted) {
+    return { synced: false, reason: 'missing_connection' };
+  }
+
+  const resolvedContactId = crmContactId || await getLeadCrmContactId(leadId);
+  if (!resolvedContactId) return { synced: false, reason: 'missing_contact' };
+
+  const customFields = buildGhlCustomFields({
+    smile_preview_url: previewUrl,
+    smile_video_url: videoUrl,
+    transformation_status: status,
+    smile_preview_job_id: previewJobId,
+    smile_video_job_id: videoJobId,
+  });
+
+  if (customFields.length) {
+    await requestGhl(connection, `/contacts/${resolvedContactId}`, {
+      method: 'PUT',
+      body: { customFields },
+    });
+  }
+
+  const noteLines = [
+    `SmileVisionPro asset update for ${lead.full_name || 'patient'}.`,
+    status ? `Status: ${status}` : null,
+    previewUrl ? `Preview URL: ${previewUrl}` : null,
+    videoUrl ? `Video URL: ${videoUrl}` : null,
+  ].filter(Boolean);
+
+  if (noteLines.length > 1) {
+    try {
+      await requestGhl(connection, `/contacts/${resolvedContactId}/notes`, {
+        method: 'POST',
+        body: { body: noteLines.join('\n') },
+      });
+    } catch (error) {
+      await auditLog('lead_asset_note_sync_failed', { leadId, crmContactId: resolvedContactId, message: error.message });
+    }
+  }
+
+  await auditLog('lead_asset_synced', {
+    leadId,
+    crmContactId: resolvedContactId,
+    status,
+    previewUrl,
+    videoUrl,
+    previewJobId,
+    videoJobId,
+  });
+
+  return { synced: true, crmContactId: resolvedContactId };
+}
+
 export async function retry(fn, retries = 2) {
   let lastError;
   for (let attempt = 0; attempt <= retries; attempt += 1) {
