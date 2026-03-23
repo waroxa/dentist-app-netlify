@@ -25,6 +25,24 @@
   force = true
 
 [[redirects]]
+  from = "/api/admin/status"
+  to = "/.netlify/functions/admin-status"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/admin/activate-authorize"
+  to = "/.netlify/functions/admin-activate-authorize"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/admin/activate-complete"
+  to = "/.netlify/functions/admin-activate-complete"
+  status = 200
+  force = true
+
+[[redirects]]
   from = "/api/lead-submit"
   to = "/.netlify/functions/lead-submit"
   status = 200

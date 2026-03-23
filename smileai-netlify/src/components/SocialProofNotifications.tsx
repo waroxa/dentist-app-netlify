@@ -1,8 +1,15 @@
 import { useEffect, useState } from 'react';
 import { toast, Toaster } from 'sonner@2.0.3';
-import { Sparkles, Users, X } from 'lucide-react';
+import { X } from 'lucide-react';
 
-export function SocialProofNotifications() {
+interface SocialProofNotificationsProps {
+  enabled?: boolean;
+}
+
+const NOTIFICATION_INTERVAL_MS = 25000;
+const LAST_NOTIFICATION_KEY = 'svpro_social_proof_last_shown_at';
+
+export function SocialProofNotifications({ enabled = true }: SocialProofNotificationsProps) {
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
@@ -10,7 +17,7 @@ export function SocialProofNotifications() {
   }, []);
 
   useEffect(() => {
-    if (!isClient) return;
+    if (!isClient || !enabled) return;
 
     const dentistNames = [
       'Dr. Sarah Martinez',
@@ -83,6 +90,11 @@ export function SocialProofNotifications() {
     let activeToastId: string | number | null = null;
 
     const showNotification = () => {
+      const now = Date.now();
+      const lastShownAt = Number(localStorage.getItem(LAST_NOTIFICATION_KEY) || '0');
+      if (lastShownAt && now - lastShownAt < NOTIFICATION_INTERVAL_MS) return;
+      localStorage.setItem(LAST_NOTIFICATION_KEY, String(now));
+
       // Dismiss previous toast before showing new one
       if (activeToastId !== null) {
         toast.dismiss(activeToastId);
@@ -126,15 +138,19 @@ export function SocialProofNotifications() {
       );
     };
 
-    // Show first notification after 3 seconds
+    const now = Date.now();
+    const lastShownAt = Number(localStorage.getItem(LAST_NOTIFICATION_KEY) || '0');
+    const delayUntilNext = lastShownAt
+      ? Math.max(NOTIFICATION_INTERVAL_MS - (now - lastShownAt), 0)
+      : NOTIFICATION_INTERVAL_MS;
+
     const initialTimeout = setTimeout(() => {
       showNotification();
-    }, 3000);
+    }, delayUntilNext);
 
-    // Then show every 25 seconds
     const interval = setInterval(() => {
       showNotification();
-    }, 25000);
+    }, NOTIFICATION_INTERVAL_MS);
 
     return () => {
       clearTimeout(initialTimeout);
@@ -143,7 +159,7 @@ export function SocialProofNotifications() {
         toast.dismiss(activeToastId);
       }
     };
-  }, [isClient]);
+  }, [enabled, isClient]);
 
   if (!isClient) return null;
 

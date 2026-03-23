@@ -116,7 +116,7 @@ function App() {
       <HowItWorks />
       <Testimonials clinicBranding={clinicBranding} />
       <Footer clinicBranding={clinicBranding} />
-      <SocialProofNotifications />
+      <SocialProofNotifications enabled={!showLogin} />
       <StaffLoginModal isOpen={showLogin} onClose={() => setShowLogin(false)} onSuccess={() => { setShowLogin(false); setIsAdmin(true); window.location.href = '/admin'; }} />
     </div>
   );
