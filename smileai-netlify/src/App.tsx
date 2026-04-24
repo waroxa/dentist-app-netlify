@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import { SmileVisionProApp } from './components/ghl/SmileVisionProApp';
 import { Hero } from './components/Hero';
 import { SmileTransformationSection } from './components/SmileTransformationSection';
@@ -18,6 +18,7 @@ import { StaffLoginModal } from './components/StaffLoginModal';
 import { getClinicBranding } from './utils/ghl-storage';
 import { LandingPageTestimonial } from './data/testimonials';
 import { createDefaultClinicBranding } from './data/defaultBranding';
+import { GHLCallbackPage } from './pages/GHLCallbackPage';
 
 export interface ClinicBranding {
   clinicName: string;
@@ -69,6 +70,7 @@ function App() {
   if (path === '/privacy') return <Privacy />;
   if (path === '/terms') return <Terms />;
   if (path === '/privacy-notice' || path === '/hipaa-notice') return <PrivacyNotice />;
+  if (path === '/ghl-callback') return <GHLCallbackPage />;
 
   if (path.startsWith('/admin')) {
     return isAdmin ? (
@@ -120,3 +122,4 @@ function App() {
 }
 
 export default App;
+

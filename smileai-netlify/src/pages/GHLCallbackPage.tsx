@@ -1,4 +1,4 @@
-// src/pages/GHLCallbackPage.tsx
+﻿// src/pages/GHLCallbackPage.tsx
 // Browser landing page when the CRM redirects back after authorization.
 // Reads ?code from URL, sends it to our Netlify Function (not directly to the CRM),
 // then redirects to the admin panel. client_secret NEVER touches this file.
@@ -8,7 +8,7 @@ import { Loader2, CheckCircle, AlertCircle } from 'lucide-react';
 
 export function GHLCallbackPage() {
   const [status, setStatus] = useState<'processing' | 'success' | 'error'>('processing');
-  const [message, setMessage] = useState('Connecting to CRM…');
+  const [message, setMessage] = useState('Connecting to CRMâ€¦');
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -27,8 +27,8 @@ export function GHLCallbackPage() {
       return;
     }
 
-    // POST code to our Netlify Function – token exchange happens there
-    fetch('/api/ghl-refresh'.replace('ghl-refresh', 'ghl-callback'), {
+    // POST code to our Netlify Function â€“ token exchange happens there
+    fetch('/api/ghl-callback', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ code, state: params.get('state') }),
@@ -41,7 +41,7 @@ export function GHLCallbackPage() {
           const locationId  = finalParams.get('locationId');
           if (locationId) localStorage.setItem('ghl_connected_location', locationId);
           setStatus('success');
-          setMessage('Connected! Redirecting…');
+          setMessage('Connected! Redirectingâ€¦');
           setTimeout(() => { window.location.href = res.url; }, 1000);
           return;
         }
@@ -55,7 +55,7 @@ export function GHLCallbackPage() {
         const data = await res.json();
         if (data.locationId) localStorage.setItem('ghl_connected_location', data.locationId);
         setStatus('success');
-        setMessage('Connected! Redirecting…');
+        setMessage('Connected! Redirectingâ€¦');
         setTimeout(() => {
           window.location.href = `/admin/ghl-connect?success=true&locationId=${data.locationId ?? ''}`;
         }, 1000);
@@ -98,7 +98,7 @@ export function GHLCallbackPage() {
               href="/admin/ghl-connect"
               className="inline-block px-5 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700 transition-colors"
             >
-              ← Back to Settings
+              â† Back to Settings
             </a>
           </>
         )}
@@ -107,3 +107,4 @@ export function GHLCallbackPage() {
     </div>
   );
 }
+
