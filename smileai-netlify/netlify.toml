@@ -134,18 +134,6 @@
   force = true
 
 [[redirects]]
-  from = "/api/ghl-callback"
-  to = "/.netlify/functions/ghl-callback"
-  status = 200
-  force = true
-
-[[redirects]]
-  from = "/api/platform-refresh"
-  to = "/.netlify/functions/ghl-refresh"
-  status = 200
-  force = true
-
-[[redirects]]
   from = "/marketplace"
   to = "/"
   status = 301

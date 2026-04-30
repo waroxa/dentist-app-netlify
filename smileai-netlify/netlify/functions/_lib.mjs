@@ -233,12 +233,14 @@ export async function getWorkspaceInstall(workspaceKey = 'default') {
   if (normalizedKey === 'default') return null;
   const supabase = getSupabase();
   const { data, error } = await supabase
-    .from('ghl_installs')
-    .select('locationId, agencyId, installed_at')
-    .eq('locationId', normalizedKey)
+    .from('integration_connections')
+    .select('location_id, provider, updated_at')
+    .eq('provider', 'ghl')
+    .eq('location_id', normalizedKey)
+    .eq('is_active', true)
     .maybeSingle();
   if (error) throw error;
-  return data;
+  return data ? { locationId: data.location_id, provider: data.provider, installed_at: data.updated_at } : null;
 }
 
 function getKeyBytes() {

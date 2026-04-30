@@ -18,7 +18,6 @@ import { StaffLoginModal } from './components/StaffLoginModal';
 import { getClinicBranding } from './utils/ghl-storage';
 import { LandingPageTestimonial } from './data/testimonials';
 import { createDefaultClinicBranding } from './data/defaultBranding';
-import { GHLCallbackPage } from './pages/GHLCallbackPage';
 
 export interface ClinicBranding {
   clinicName: string;
@@ -70,7 +69,10 @@ function App() {
   if (path === '/privacy') return <Privacy />;
   if (path === '/terms') return <Terms />;
   if (path === '/privacy-notice' || path === '/hipaa-notice') return <PrivacyNotice />;
-  if (path === '/ghl-callback') return <GHLCallbackPage />;
+  if (path === '/ghl-callback') {
+    window.location.replace('/admin/integrations');
+    return null;
+  }
 
   if (path.startsWith('/admin')) {
     return isAdmin ? (
