@@ -36,7 +36,7 @@ All OAuth flows through public domain endpoints on `https://www.smilevisionpro.a
 3. Browser navigates to: https://www.smilevisionpro.ai/oauth/start
    → Backend: Generates state, saves to DB, redirects to CRM
 
-4. Browser at CRM: https://marketplace.gohighlevel.com/oauth/chooselocation?...
+4. Browser at CRM: https://marketplace.CRM.com/oauth/chooselocation?...
    → User authorizes and selects location
 
 5. CRM redirects to: https://www.smilevisionpro.ai/oauth/callback?code=xxx&state=xxx
@@ -61,7 +61,7 @@ All OAuth flows through public domain endpoints on `https://www.smilevisionpro.a
 **Example:**
 ```
 GET https://www.smilevisionpro.ai/oauth/start
-→ 302 Redirect to: https://marketplace.gohighlevel.com/oauth/chooselocation?...
+→ 302 Redirect to: https://marketplace.CRM.com/oauth/chooselocation?...
 ```
 
 ### 2. `/oauth/callback` (GET)
@@ -459,3 +459,4 @@ window.location.href = '/oauth/start'; // Simple redirect
 
 **Status:** Frontend implementation complete ✅  
 **Next:** Backend endpoints need to be created/updated to handle these public routes
+

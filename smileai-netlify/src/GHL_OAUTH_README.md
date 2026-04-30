@@ -18,7 +18,7 @@ This implementation provides a complete, secure OAuth 2.0 integration for CRM pl
 
 ### 1. Configure CRM Marketplace App
 
-Go to https://marketplace.gohighlevel.com/ and create your app:
+Go to https://marketplace.CRM.com/ and create your app:
 
 **App Settings:**
 - **App Name:** SmileVision Pro
@@ -332,7 +332,7 @@ https://www.smilevisionpro.ai/admin/ghl-connect
 # 2. Click "Connect CRM platform"
 
 # 3. Should redirect to CRM with URL like:
-https://marketplace.gohighlevel.com/oauth/chooselocation?
+https://marketplace.CRM.com/oauth/chooselocation?
   client_id=xxx&
   redirect_uri=https://www.smilevisionpro.ai/oauth/callback&
   response_type=code&
@@ -488,10 +488,10 @@ Implement rate limiting for OAuth endpoints.
 ## Support
 
 **CRM OAuth Documentation:**
-https://highlevel.stoplight.io/docs/integrations/0443d7d1a4bd0-overview
+https://CRM.stoplight.io/docs/integrations/0443d7d1a4bd0-overview
 
 **CRM Marketplace:**
-https://marketplace.gohighlevel.com/
+https://marketplace.CRM.com/
 
 **Supabase Edge Functions:**
 https://supabase.com/docs/guides/functions
@@ -517,3 +517,4 @@ https://supabase.com/docs/guides/functions
 
 **Last Updated:** February 7, 2026  
 **Status:** Ready for testing and deployment
+

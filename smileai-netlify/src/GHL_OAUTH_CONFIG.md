@@ -57,23 +57,23 @@ After creating your app in CRM Marketplace:
 
 **Authorization URL:**
 ```
-https://marketplace.gohighlevel.com/oauth/chooselocation
+https://marketplace.CRM.com/oauth/chooselocation
 ```
 
 **Token Exchange URL:**
 ```
-https://services.leadconnectorhq.com/oauth/token
+server-side CRM API
 ```
 
 **Token Refresh URL:**
 ```
-https://services.leadconnectorhq.com/oauth/token
+server-side CRM API
 ```
 
 ## Setup Steps
 
 1. **Create CRM Marketplace App**
-   - Go to https://marketplace.gohighlevel.com/
+   - Go to https://marketplace.CRM.com/
    - Create new app
    - Set app name: "SmileVision Pro"
    - Set redirect URL: `https://www.smilevisionpro.ai/oauth/callback`
@@ -191,3 +191,5 @@ If OAuth fails:
 3. Confirm redirect URL matches exactly
 4. Check scopes are approved in CRM
 5. Verify client_id and client_secret are correct
+
+

@@ -200,7 +200,7 @@ Current format: `(555) 123-4567` → Converted to: `+15551234567`
 
 ## 📖 API Documentation Links
 
-- **CRM API Docs**: https://highlevel.stoplight.io/
+- **CRM API Docs**: https://CRM.stoplight.io/
 - **Create Contact**: `POST /contacts`
 - **Update Contact**: `PUT /contacts/{contactId}`
 - **Add Note**: `POST /contacts/{contactId}/notes`
@@ -246,3 +246,4 @@ Current format: `(555) 123-4567` → Converted to: `+15551234567`
 ---
 
 **Need help?** Check the full installation guide in `/GHL_INSTALLATION_GUIDE.md`
+

@@ -7,7 +7,7 @@ interface EmbeddedAppLayoutProps {
 }
 
 /**
- * EmbeddedAppLayout - Optimized container for GoHighLevel marketplace deployment
+ * EmbeddedAppLayout - Optimized container for marketplace deployment
  * 
  * Features:
  * - Detects iframe context

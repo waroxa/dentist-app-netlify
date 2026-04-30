@@ -9,7 +9,7 @@ SCENARIO: Dental practice installs app for first time
 STEPS:
 1. Open app in browser
 2. Click "Staff Login" in footer
-3. Enter password: "admin123" (default)
+3. Enter password: "a password you set" (default)
 4. Click "Login"
 
 EXPECTED:
@@ -30,7 +30,7 @@ SCENARIO: Staff wants to set custom password
 STEPS:
 1. Login as staff (see Test 1)
 2. Go to Settings → Security
-3. Enter current password: "admin123"
+3. Enter current password: "a password you set"
 4. Enter new password: "MySecure123"
 5. Confirm new password: "MySecure123"
 6. Click "Update Password"
@@ -92,7 +92,7 @@ EXPECTED:
 
 VERIFY (using browser DevTools):
 API Network Requests:
-- POST https://services.leadconnectorhq.com/locations/{locationId}/customValues
+- POST server-side CRM API
 - Body: { "key": "smileai_admin_password_hash", "value": "pbkdf2$..." }
 - Response: 200 OK
 ```
@@ -315,3 +315,5 @@ Before deploying to CRM marketplace:
 - [ ] WILL_IT_WORK.md confirmed
 
 **Status**: READY FOR DEPLOYMENT ✅
+
+

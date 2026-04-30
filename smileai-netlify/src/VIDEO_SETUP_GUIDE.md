@@ -62,7 +62,7 @@ Only needed if you want leads to sync to CRM platform.
 ### Step 1: Get CRM API Key & Location ID
 
 1. **Go to CRM platform Dashboard:**
-   - Open: https://app.gohighlevel.com
+   - Open: https://app.CRM.com
    - Click: **Settings** → **API**
    - Copy your **API Key**
 
@@ -162,3 +162,4 @@ supabase functions deploy make-server-1ddb0231
 ---
 
 **Need help?** Check the error message in the red alert box - it now shows the exact issue!
+

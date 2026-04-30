@@ -7,7 +7,6 @@ import { Testimonials } from './components/Testimonials';
 import { Footer } from './components/Footer';
 import { SocialProofNotifications } from './components/SocialProofNotifications';
 import { RealResultsVideos } from './components/RealResultsVideos';
-import { initializeGHLSSO, getGHLConfigStatus } from './utils/ghl-sso';
 import { GettingStarted } from './components/docs/GettingStarted';
 import { SetupGuide } from './components/docs/SetupGuide';
 import { Support } from './components/docs/Support';
@@ -88,21 +87,6 @@ function App() {
       console.log('🎯 Running in embedded mode (iframe)');
       // Add body class for embedded-specific styles
       document.body.classList.add('embedded-mode');
-    }
-  }, []);
-
-  // Initialize embedded CRM SSO on mount
-  useEffect(() => {
-    const ghlDetected = initializeGHLSSO();
-    
-    if (ghlDetected) {
-      const status = getGHLConfigStatus();
-      console.log('🎉 CRM integration status:', status);
-      
-      if (status.configured) {
-        console.log('✅ App is now connected to the CRM.');
-        console.log('   Location ID:', status.locationId);
-      }
     }
   }, []);
 

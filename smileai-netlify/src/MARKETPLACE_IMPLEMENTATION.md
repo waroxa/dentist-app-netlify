@@ -482,7 +482,7 @@ npm run deploy
 - `test-iframe.html` - Testing template
 
 ### External Resources
-- [CRM Marketplace Docs](https://developer.gohighlevel.com/)
+- [CRM Marketplace Docs](https://developer.CRM.com/)
 - [Tailwind 8px Grid](https://tailwindcss.com/docs/customizing-spacing)
 - [React Iframe Communication](https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage)
 
@@ -504,3 +504,4 @@ npm run deploy
 **Date:** February 7, 2026  
 **Version:** 1.0.0  
 **Status:** Ready for Testing
+

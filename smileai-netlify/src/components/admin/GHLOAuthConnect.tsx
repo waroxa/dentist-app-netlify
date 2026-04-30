@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { projectId, publicAnonKey } from '../../utils/supabase/info';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   Link2, Unlink, CheckCircle, AlertCircle, Loader2, 
@@ -17,26 +16,14 @@ interface OAuthConnection {
   is_expired: boolean;
 }
 
-// Backend API wrapper - all calls go through server-side functions
-// Supabase function still handles status/disconnect (existing logic untouched)
-// Token refresh now goes through Netlify function (no client_secret in browser)
-const SUPABASE_BASE = `https://${projectId}.supabase.co/functions/v1/make-server-c5a5d193`;
 
 const API = {
-  // Start OAuth flow - navigate browser directly to Supabase function URL.
-  // We cannot use fetch() here because the server returns a 302 redirect to the platform authorization page,
-  // which browsers block with CORS when called via fetch. Direct navigation works perfectly.
   async startOAuth() {
-    const oauthUrl = `${SUPABASE_BASE}/oauth/start`;
-    console.log('🚀 Navigating to OAuth start:', oauthUrl);
-    window.location.href = oauthUrl;
+    window.location.href = '/api/oauth/start';
   },
 
-  // Get connection status (existing Supabase function)
   async getStatus() {
-    const response = await fetch(`${SUPABASE_BASE}/oauth/status`, {
-      headers: { 'Authorization': `Bearer ${publicAnonKey}` },
-    });
+    const response = await fetch('/api/oauth/status', { credentials: 'include' });
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({ error: 'Failed to load connections' }));
       throw new Error(errorData.error || 'Failed to load connections');
@@ -44,14 +31,11 @@ const API = {
     return response.json();
   },
 
-  // Disconnect location (existing Supabase function)
   async disconnect(locationId: string) {
-    const response = await fetch(`${SUPABASE_BASE}/oauth/disconnect`, {
+    const response = await fetch('/api/oauth/disconnect', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${publicAnonKey}`,
-      },
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
       body: JSON.stringify({ locationId }),
     });
     if (!response.ok) {
@@ -61,21 +45,11 @@ const API = {
     return response.json();
   },
 
-  // Refresh token – now calls Netlify function (GHL_CLIENT_SECRET stays server-side)
   async refresh(locationId: string) {
-    const response = await fetch('/api/ghl-refresh', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ locationId }),
-    });
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({ error: 'Failed to refresh token' }));
-      throw new Error(errorData.error || 'Failed to refresh token');
-    }
-    return response.json();
+    void locationId;
+    return this.getStatus();
   },
 };
-
 export function GHLOAuthConnect() {
   const [connections, setConnections] = useState<OAuthConnection[]>([]);
   const [isLoading, setIsLoading] = useState(false);

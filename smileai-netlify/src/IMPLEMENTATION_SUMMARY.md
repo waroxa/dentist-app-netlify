@@ -85,7 +85,7 @@ useEffect(() => {
                               │
                               ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│ 4. User at CRM: marketplace.gohighlevel.com/oauth/chooselocation│
+│ 4. User at CRM: marketplace.CRM.com/oauth/chooselocation│
 │    User: Authorizes app and selects location                     │
 └─────────────────────────────────────────────────────────────────┘
                               │
@@ -321,3 +321,4 @@ Create: `pages/api/oauth/[...path].ts`
 **Date:** February 7, 2026  
 **Status:** Frontend implementation complete ✅  
 **Ready For:** Backend endpoint updates and testing
+

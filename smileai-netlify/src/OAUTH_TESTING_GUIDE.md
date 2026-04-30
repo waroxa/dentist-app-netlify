@@ -54,7 +54,7 @@ GHL_REDIRECT_URI=https://www.smilevisionpro.ai/oauth/callback
 
 **Option A: Create Real CRM Marketplace App**
 
-1. Go to https://marketplace.gohighlevel.com/
+1. Go to https://marketplace.CRM.com/
 2. Sign up/login
 3. Create new app
 4. Set redirect URL: `https://www.smilevisionpro.ai/oauth/callback`
@@ -111,7 +111,7 @@ if (path === '/admin/ghl-connect') {
 - Browser redirects to CRM authorization page
 - URL should look like:
   ```
-  https://marketplace.gohighlevel.com/oauth/chooselocation?
+  https://marketplace.CRM.com/oauth/chooselocation?
     client_id=xxx&
     redirect_uri=https://www.smilevisionpro.ai/oauth/callback&
     response_type=code&
@@ -592,3 +592,4 @@ Once OAuth works:
 **Testing Date:** February 7, 2026  
 **Status:** Ready to test  
 **Estimated Time:** 15-30 minutes for full test
+

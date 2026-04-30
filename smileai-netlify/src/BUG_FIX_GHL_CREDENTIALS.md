@@ -17,27 +17,27 @@ Changed credential retrieval from `sessionStorage` to `localStorage` in:
 ### 1. `/components/ghl/AddPatientModal.tsx`
 **Before:**
 ```javascript
-const ghlApiKey = sessionStorage.getItem('ghl_api_key');
-const ghlLocationId = sessionStorage.getItem('ghl_location_id');
+const ghlApiKey = sessionStorage.getItem('server_side_crm_token');
+const ghlLocationId = sessionStorage.getItem('crm_location_id');
 ```
 
 **After:**
 ```javascript
-const ghlApiKey = localStorage.getItem('ghl_api_key');
-const ghlLocationId = localStorage.getItem('ghl_location_id');
+const ghlApiKey = localStorage.getItem('server_side_crm_token');
+const ghlLocationId = localStorage.getItem('crm_location_id');
 ```
 
 ### 2. `/components/ghl/PatientsView.tsx`
 **Before:**
 ```javascript
-const ghlApiKey = sessionStorage.getItem('ghl_api_key');
-const ghlLocationId = sessionStorage.getItem('ghl_location_id');
+const ghlApiKey = sessionStorage.getItem('server_side_crm_token');
+const ghlLocationId = sessionStorage.getItem('crm_location_id');
 ```
 
 **After:**
 ```javascript
-const ghlApiKey = localStorage.getItem('ghl_api_key');
-const ghlLocationId = localStorage.getItem('ghl_location_id');
+const ghlApiKey = localStorage.getItem('server_side_crm_token');
+const ghlLocationId = localStorage.getItem('crm_location_id');
 ```
 
 ## How to Test
@@ -88,3 +88,4 @@ const ghlLocationId = localStorage.getItem('ghl_location_id');
 ---
 
 **The Add Patient feature is now fully functional!** 🎉
+

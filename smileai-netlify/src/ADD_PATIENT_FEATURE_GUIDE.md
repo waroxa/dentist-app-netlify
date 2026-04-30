@@ -72,7 +72,7 @@ Success → Refresh Patient List → Modal Closes
 
 ### Endpoint Used
 ```
-POST https://rest.gohighlevel.com/v1/contacts/
+POST server-side CRM APIcontacts/
 ```
 
 ### Authentication
@@ -389,7 +389,7 @@ headers: {
    - Used in the grid
 
 ### API Integration
-- **Endpoint**: `https://rest.gohighlevel.com/v1/contacts/`
+- **Endpoint**: `server-side CRM APIcontacts/`
 - **Method**: POST (create), GET (fetch)
 - **Auth**: Bearer token from sessionStorage
 
@@ -408,9 +408,9 @@ headers: {
 ### Fetching Patients from CRM
 ```tsx
 const fetchPatients = async () => {
-  const ghlApiKey = sessionStorage.getItem('ghl_api_key');
+  const ghlApiKey = sessionStorage.getItem('server_side_crm_token');
   const response = await fetch(
-    `https://rest.gohighlevel.com/v1/contacts/?locationId=${locationId}`,
+    `server-side CRM APIcontacts/?locationId=${locationId}`,
     {
       headers: {
         'Authorization': `Bearer ${ghlApiKey}`,
@@ -425,7 +425,7 @@ const fetchPatients = async () => {
 
 ### Creating a Patient
 ```tsx
-const response = await fetch('https://rest.gohighlevel.com/v1/contacts/', {
+const response = await fetch('server-side CRM APIcontacts/', {
   method: 'POST',
   headers: {
     'Authorization': `Bearer ${ghlApiKey}`,
@@ -461,3 +461,4 @@ The Add Patient feature is fully functional and ready for use! 🎉
 3. Test with a sample patient
 
 **Ready to add patients!** 🏥✨
+

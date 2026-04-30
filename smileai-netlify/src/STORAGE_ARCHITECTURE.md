@@ -18,7 +18,7 @@ All of the following are stored in CRM platform Custom Values API:
 - **Key**: `smileai_admin_password_hash`
 - **Format**: PBKDF2 hash (not plain text!)
 - **Example**: `pbkdf2$YWJjMTIzZGVmNDU2...`
-- **Default**: Hash of "admin123" (created on first launch)
+- **Default**: Hash of "a password you set" (created on first launch)
 - **Security**: Uses Web Crypto API with PBKDF2-SHA256, 100,000 iterations
 
 #### b. **Clinic Branding** 🎨
@@ -48,8 +48,8 @@ All of the following are stored in CRM platform Custom Values API:
 
 ### 4. **Cache** (localStorage - temporary) ⚡
 - `smileai_clinic_branding` - Local cache for faster loading
-- `ghl_api_key` - Development only (SSO in production)
-- `ghl_location_id` - Development only (SSO in production)
+- `server_side_crm_token` - Development only (SSO in production)
+- `crm_location_id` - Development only (SSO in production)
 - **Note**: This is a READ cache only. Source of truth is CRM Custom Values.
 
 ## 🔒 Security Features

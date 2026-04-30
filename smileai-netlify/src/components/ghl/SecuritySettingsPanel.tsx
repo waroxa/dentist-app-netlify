@@ -123,12 +123,12 @@ export function SecuritySettingsPanel() {
             <AlertCircle className="w-5 h-5 text-amber-600" />
           )}
           <p className="text-sm font-medium text-gray-900">
-            {hasPassword ? 'Custom Password Set' : 'Using Default Password'}
+            {hasPassword ? 'Custom Password Set' : 'Password Not Set'}
           </p>
         </div>
         {!hasPassword && (
           <p className="text-xs text-gray-600 ml-7">
-            You're currently using the default password "admin123". Please set a custom password for security.
+            Create a strong password before enabling staff access.
           </p>
         )}
       </div>
@@ -138,7 +138,7 @@ export function SecuritySettingsPanel() {
         {/* Current Password */}
         <div>
           <Label htmlFor="currentPassword" className="text-sm font-medium text-gray-900 mb-2 block">
-            {hasPassword ? 'Current Password *' : 'Default Password (admin123) *'}
+            {hasPassword ? 'Current Password *' : 'Current Password'}
           </Label>
           <div className="relative">
             <Input
@@ -149,7 +149,7 @@ export function SecuritySettingsPanel() {
                 setCurrentPassword(e.target.value);
                 setError('');
               }}
-              placeholder={hasPassword ? 'Enter current password' : 'Enter admin123'}
+              placeholder={hasPassword ? 'Enter current password' : 'No current password required'}
               className="pr-12"
             />
             <button

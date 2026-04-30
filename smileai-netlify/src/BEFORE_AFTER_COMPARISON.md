@@ -249,7 +249,7 @@ Request Headers:
 Response:
   {
     "success": true,
-    "authUrl": "https://marketplace.gohighlevel.com/oauth/chooselocation?...",
+    "authUrl": "https://marketplace.CRM.com/oauth/chooselocation?...",
     "state": "abc123..."
   }
 ```
@@ -264,7 +264,7 @@ Request Headers:
   (normal browser headers only)
   
 Status: 302 Found
-Location: https://marketplace.gohighlevel.com/oauth/chooselocation?...
+Location: https://marketplace.CRM.com/oauth/chooselocation?...
 
 ↑ ↑ ↑
 NO AUTH HEADERS! Clean redirect!
@@ -391,3 +391,4 @@ curl -v https://www.smilevisionpro.ai/oauth/start
 - ✅ **User Experience:** Faster redirects
 
 **Overall:** Frontend is now production-ready and follows OAuth security best practices! 🎉
+

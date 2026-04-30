@@ -4,7 +4,7 @@
 
 ### Step 1: Create CRM platform Account
 
-1. Go to https://www.gohighlevel.com/
+1. Go to https://www.CRM.com/
 2. Sign up for an account
 3. Choose a plan (you need at least Agency plan to create marketplace apps)
 4. Complete account setup
@@ -12,7 +12,7 @@
 ### Step 2: Access Marketplace Developer Portal
 
 1. Login to CRM platform
-2. Go to: https://marketplace.gohighlevel.com/
+2. Go to: https://marketplace.CRM.com/
 3. Click **"Developer"** or **"Build Apps"** in the navigation
 4. If you don't see this option, you may need to:
    - Contact CRM support to enable developer access
@@ -109,7 +109,7 @@ If you have a CRM development/test account:
 
 1. Login to your CRM account
 2. Go to **Settings** → **Integrations** → **Developer Settings**
-3. Or direct link: `https://app.gohighlevel.com/settings/integrations`
+3. Or direct link: `https://app.CRM.com/settings/integrations`
 4. Look for "OAuth Apps" or "API Settings"
 5. Create test credentials there
 
@@ -123,7 +123,7 @@ If you have a CRM development/test account:
 
 **Solutions:**
 - Check if you have Agency or SaaS Mode enabled
-- Contact CRM support: support@gohighlevel.com
+- Contact CRM support: support@CRM.com
 - Ask to enable developer/marketplace access
 - May need to upgrade plan
 
@@ -193,9 +193,9 @@ Later, when you get credentials:
 ## Support Contacts
 
 **CRM platform:**
-- Support: support@gohighlevel.com
-- Documentation: https://highlevel.stoplight.io/
-- Community: https://www.facebook.com/groups/gohighlevel
+- Support: support@CRM.com
+- Documentation: https://CRM.stoplight.io/
+- Community: https://www.facebook.com/groups/CRM
 
 **For Marketplace:**
 - Ask about developer/marketplace access
@@ -229,3 +229,4 @@ Later, when you get credentials:
 - Get Marketplace Access: 1-3 days (support request)
 - Create App & Get Keys: 10 minutes (once access granted)
 - Full Testing: 15 minutes (after credentials added)
+

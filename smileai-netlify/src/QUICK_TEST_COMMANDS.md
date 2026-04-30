@@ -202,7 +202,7 @@ https://www.smilevisionpro.ai/admin/ghl-connect
 
 ### Expected OAuth Redirect (after clicking Connect)
 ```
-https://marketplace.gohighlevel.com/oauth/chooselocation?
+https://marketplace.CRM.com/oauth/chooselocation?
   client_id=YOUR_CLIENT_ID&
   redirect_uri=https://www.smilevisionpro.ai/oauth/callback&
   response_type=code&
@@ -312,3 +312,4 @@ curl -s "https://${PROJECT_ID}.supabase.co/functions/v1/make-server-1ddb0231/ghl
 
 **Quick Reference:** Copy commands as needed  
 **Full Guide:** See `/OAUTH_TESTING_GUIDE.md`
+

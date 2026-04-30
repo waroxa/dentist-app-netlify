@@ -28,8 +28,8 @@
 
 ### Test 1: Hash Generation
 ```typescript
-const hash1 = await hashPassword('admin123');
-const hash2 = await hashPassword('admin123');
+const hash1 = await hashPassword('a password you set');
+const hash2 = await hashPassword('a password you set');
 
 // Result: Different hashes (different salts)
 // hash1: pbkdf2$abc123...
@@ -51,7 +51,7 @@ const isValid2 = await verifyPassword('wrongPassword', hash);
 
 ### Test 3: Migration from Plain Text
 ```typescript
-const plainText = 'admin123';
+const plainText = 'a password you set';
 const isHashed = isHashedPassword(plainText); // false
 
 // Hash it
@@ -135,3 +135,4 @@ Companies using PBKDF2:
 4. ✅ Fallback to localStorage during development
 
 **Ready for production!** 🚀
+

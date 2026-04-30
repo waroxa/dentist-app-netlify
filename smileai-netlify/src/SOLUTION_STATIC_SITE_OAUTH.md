@@ -116,7 +116,7 @@ curl -v https://pvophjpndtqxkoygposy.supabase.co/functions/v1/make-server-c5a5d1
   -H "Authorization: Bearer YOUR_PUBLIC_ANON_KEY"
 
 # Should return: 302 Found
-# Location: https://marketplace.gohighlevel.com/oauth/chooselocation?...
+# Location: https://marketplace.CRM.com/oauth/chooselocation?...
 ```
 
 ### 3. Test in Browser
@@ -261,3 +261,4 @@ supabase functions deploy make-server-c5a5d193
 ✅ **Code Quality:** Clean, maintainable API interface  
 
 **Status:** Ready to deploy and test! 🚀
+

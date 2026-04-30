@@ -73,7 +73,7 @@ Look for this field in the CRM Marketplace submission form:
 │ │ │ Enter URL                                                           │ │ │
 │ │ └─────────────────────────────────────────────────────────────────────┘ │ │
 │ │                                                                         │ │
-│ │ Provide a URL that can be displayed in a frame within Highlevel        │ │
+│ │ Provide a URL that can be displayed in a frame within CRM        │ │
 │ └─────────────────────────────────────────────────────────────────────────┘ │
 │                                                                             │
 │ Add a Getting Started guide to simplify the onboarding experience for your │
@@ -132,3 +132,4 @@ Support Details Page:
 You're all set! 🎉
 
 Just deploy your app and fill in the CRM form with your actual URL!
+

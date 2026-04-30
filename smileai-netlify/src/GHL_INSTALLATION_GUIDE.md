@@ -93,12 +93,12 @@ SmileVisionPro is a complete AI smile transformation landing page and CRM market
 1. **First Time Login**:
    - Go to Landing Page → Footer → Click **"Staff Login"**
    - A login modal will appear
-   - Enter the **default password**: `admin123`
+   - Enter the **default password**: `a password you set`
    - Click **"Login"**
 
 2. **Change Default Password** (CRITICAL!):
    - Once logged in, go to **Settings** → **Security** tab
-   - Enter current password: `admin123`
+   - Enter current password: `a password you set`
    - Set a NEW strong password (min. 6 characters)
    - Confirm new password
    - Click **"Update Password"**
@@ -330,8 +330,8 @@ All contacts have a custom field **"transformation_status"** with values:
 - Submit support ticket through CRM Marketplace
 
 ### For Developers:
-- API endpoint: `https://rest.gohighlevel.com/v1/`
-- Documentation: https://highlevel.stoplight.io/
+- API endpoint: `server-side CRM API`
+- Documentation: https://CRM.stoplight.io/
 - Test with CRM API sandbox before production
 
 ---

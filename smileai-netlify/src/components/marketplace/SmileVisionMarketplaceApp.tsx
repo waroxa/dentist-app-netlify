@@ -8,7 +8,7 @@ import { Button } from '../ui/button';
 import { EmbeddedAppLayout } from './EmbeddedAppLayout';
 
 /**
- * SmileVisionMarketplaceApp - Premium SaaS interface for GoHighLevel marketplace
+ * SmileVisionMarketplaceApp - Premium SaaS interface for marketplace deployment
  * Mobile-first (390x844), designed for iframe embedding
  */
 export function SmileVisionMarketplaceApp() {

@@ -26,8 +26,8 @@
    - `api_key` / `access_token` from URL parameters
    
 2. These are saved to localStorage:
-   - `ghl_location_id` - The location where app is installed
-   - `ghl_api_key` - API key for that location
+   - `crm_location_id` - The location where app is installed
+   - `server_side_crm_token` - API key for that location
 
 3. When a lead submits the form:
    - Contact is created in the CRM location using the stored location_id
@@ -74,8 +74,8 @@ The app will automatically detect and save these credentials!
 ## 🔒 **CRM Integration Security:**
 
 ### **Where Credentials Are Stored:**
-- ✅ `localStorage.ghl_location_id` - Location where app is installed
-- ✅ `localStorage.ghl_api_key` - API key for CRM access
+- ✅ `localStorage.crm_location_id` - Location where app is installed
+- ✅ `localStorage.server_side_crm_token` - API key for CRM access
 
 ### **When Credentials Are Used:**
 1. **Lead Form Submission** → Creates CRM contact in the correct location
@@ -221,3 +221,4 @@ If you encounter any issues:
 
 **Last Updated:** January 22, 2026
 **Status:** READY FOR SUBMISSION (pending preview images)
+

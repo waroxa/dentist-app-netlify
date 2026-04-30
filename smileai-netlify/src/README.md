@@ -4,7 +4,7 @@
 
 ### 🔐 1. **Password-Protected Admin Dashboard** (NEW!)
 - **Login Modal**: Click "Staff Login" → Password required
-- **Default Password**: `admin123` (first-time setup)
+- **Default Password**: `a password you set` (first-time setup)
 - **Custom Passwords**: Change in Settings → Security tab
 - **Session Management**: Stays logged in until logout
 - **Logout Button**: Top-right corner of dashboard
@@ -126,12 +126,12 @@ Contact's `transformation_status` field updates automatically:
 
 2. **First Login** 🔐:
    - Landing Page → Footer → "Staff Login"
-   - Enter default password: `admin123`
+   - Enter default password: `a password you set`
    - Click "Login"
 
 3. **IMMEDIATELY Change Password**:
    - Settings → Security tab
-   - Enter current password: `admin123`
+   - Enter current password: `a password you set`
    - Set new strong password (min. 6 characters)
    - Click "Update Password"
 
@@ -257,7 +257,7 @@ Contact's `transformation_status` field updates automatically:
 ## 🎉 Summary
 
 You now have a **complete, production-ready** AI smile transformation landing page with:
-- ✅ **Password-protected admin dashboard** (default: admin123, customizable in Settings → Security)
+- ✅ **Password-protected admin dashboard** (default: a password you set, customizable in Settings → Security)
 - ✅ **Login/logout system** with session management
 - ✅ Lead capture FIRST (before image upload)
 - ✅ Automatic CRM platform integration
@@ -271,7 +271,7 @@ You now have a **complete, production-ready** AI smile transformation landing pa
 
 **🔐 Security Features**:
 - Password-protected admin access
-- Default password: `admin123` (must be changed on first login)
+- Default password: `a password you set` (must be changed on first login)
 - Custom password management in Settings → Security tab
 - Session-based authentication (stays logged in until logout)
 - Logout button clears session and returns to landing page

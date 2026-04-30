@@ -388,7 +388,7 @@ In Supabase Dashboard:
 
 ### 3. Create CRM Marketplace App
 
-1. Go to https://marketplace.gohighlevel.com/
+1. Go to https://marketplace.CRM.com/
 2. Create new app
 3. Set redirect URL
 4. Select scopes
@@ -472,8 +472,8 @@ Before going to production:
 - `/components/admin/GHLOAuthConnect.tsx` - Admin dashboard
 
 **External resources:**
-- CRM OAuth Docs: https://highlevel.stoplight.io/docs/integrations/0443d7d1a4bd0-overview
-- CRM Marketplace: https://marketplace.gohighlevel.com/
+- CRM OAuth Docs: https://CRM.stoplight.io/docs/integrations/0443d7d1a4bd0-overview
+- CRM Marketplace: https://marketplace.CRM.com/
 - Supabase Functions: https://supabase.com/docs/guides/functions
 
 ---
@@ -501,3 +501,4 @@ Before going to production:
 
 **Implementation Date:** February 7, 2026  
 **Status:** ✅ Complete and ready for deployment
+

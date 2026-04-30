@@ -41,8 +41,8 @@ This error means the app can't find your CRM API credentials in localStorage. Fo
 2. **Check localStorage**
    - Type this in the console:
    ```javascript
-   console.log('API Key:', localStorage.getItem('ghl_api_key'));
-   console.log('Location ID:', localStorage.getItem('ghl_location_id'));
+   console.log('API Key:', localStorage.getItem('server_side_crm_token'));
+   console.log('Location ID:', localStorage.getItem('crm_location_id'));
    ```
 
 3. **What You Should See**
@@ -174,12 +174,12 @@ If all else fails, manually set credentials:
 
 ```javascript
 // Open browser console and run:
-localStorage.setItem('ghl_api_key', 'YOUR_ACTUAL_API_KEY_HERE');
-localStorage.setItem('ghl_location_id', 'YOUR_ACTUAL_LOCATION_ID_HERE');
+localStorage.setItem('server_side_crm_token', 'YOUR_ACTUAL_API_KEY_HERE');
+localStorage.setItem('crm_location_id', 'YOUR_ACTUAL_LOCATION_ID_HERE');
 
 // Verify it worked:
-console.log(localStorage.getItem('ghl_api_key'));
-console.log(localStorage.getItem('ghl_location_id'));
+console.log(localStorage.getItem('server_side_crm_token'));
+console.log(localStorage.getItem('crm_location_id'));
 ```
 
 Then try adding a patient again.
@@ -279,3 +279,4 @@ For now, localStorage is acceptable for internal staff use.
 ---
 
 **Good luck! The feature works - just need to save those credentials! 🚀**
+

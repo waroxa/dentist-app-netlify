@@ -91,7 +91,7 @@ const handleSave = async () => {
 
 ### Storage Location
 All settings are saved in **CRM platform Custom Values API**:
-- **Endpoint**: `https://services.leadconnectorhq.com/locations/{locationId}/customValues`
+- **Endpoint**: `server-side CRM API`
 - **Key**: `smileai_clinic_branding`
 - **Value**: JSON string containing all branding data
 
@@ -416,3 +416,4 @@ Homepage/Footer loads
 ---
 
 **🎉 Settings now properly save to the database and appear on the homepage!**
+

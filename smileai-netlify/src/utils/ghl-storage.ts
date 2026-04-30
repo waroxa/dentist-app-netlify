@@ -1,8 +1,8 @@
 /**
  * CRM storage utility - location-specific storage using custom values
  * 
- * This utility stores all app settings in platform custom values
- * to ensure each sub-account has isolated data (marketplace-ready).
+ * This utility stores app presentation settings locally in the browser.
+ * Marketplace API credentials and OAuth tokens are never stored here.
  * 
  * Data stored with SEPARATE KEYS for better organization:
  * - Hashed admin password (PBKDF2 via Web Crypto API)
@@ -11,7 +11,6 @@
  * - Social media (facebook, instagram, tiktok, linkedin, youtube)
  * - Testimonials (patient reviews)
  * - Google Reviews script (widget embed code)
- * - API credentials (for CRM integration)
  */
 
 import { hashPassword, verifyPassword, isHashedPassword } from './password-utils';
@@ -25,21 +24,16 @@ const STORAGE_KEYS = {
   SOCIAL_MEDIA: 'smileai_social_media',
   TESTIMONIALS: 'smileai_testimonials',
   GOOGLE_REVIEWS: 'smileai_google_reviews',
-  API_CREDENTIALS: 'smileai_api_credentials',
   // Legacy key for migration
   LEGACY_CLINIC_BRANDING: 'smileai_clinic_branding',
 } as const;
 
-// Default password (for first-time setup: "admin123")
-const DEFAULT_PASSWORD = 'admin123';
 const CRM_STORAGE = {
   CURRENT_WORKSPACE: 'workspace_current_location_id',
-  LOCATION_ID: 'crm_location_id',
-  API_KEY: 'crm_api_key',
 } as const;
 
 /**
- * Get CRM location ID from URL params or localStorage fallback
+ * Get CRM location ID from URL params or sessionStorage fallback
  */
 function getLocationId(): string | null {
   // First, try to get from URL params (embedded CRM context)
@@ -56,100 +50,25 @@ function getLocationId(): string | null {
   const cached = sessionStorage.getItem(CRM_STORAGE.CURRENT_WORKSPACE);
   if (cached) return cached;
   
-  // Last resort: get from settings (set by user in API Settings)
-  return localStorage.getItem(CRM_STORAGE.LOCATION_ID);
+  return null;
 }
 
 /**
- * Get CRM API key from localStorage
- * NOTE: In production marketplace, this should come from the platform's SSO token
- */
-function getApiKey(): string | null {
-  return localStorage.getItem(CRM_STORAGE.API_KEY);
-}
-
-/**
- * Generic function to get a custom value from the platform
+ * Generic function to get a local presentation setting.
  */
 async function getCustomValue(key: string): Promise<string | null> {
-  try {
-    const apiKey = getApiKey();
-    const locationId = getLocationId();
-
-    if (!apiKey || !locationId) {
-      console.warn('CRM credentials not configured, falling back to localStorage');
-      return localStorage.getItem(key);
-    }
-
-    const response = await fetch(
-      `https://services.leadconnectorhq.com/locations/${locationId}/customValues/${key}`,
-      {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${apiKey}`,
-          'Version': '2021-07-28',
-        },
-      }
-    );
-
-    if (!response.ok) {
-      if (response.status === 404) {
-        // Custom value doesn't exist yet
-        return null;
-      }
-      throw new Error(`Failed to get custom value: ${response.status}`);
-    }
-
-    const data = await response.json();
-    return data.value || null;
-  } catch (error) {
-    console.error(`Error getting custom value ${key}:`, error);
-    // Fallback to localStorage during development
-    return localStorage.getItem(key);
-  }
+  return localStorage.getItem(key);
 }
 
 /**
- * Generic function to set a custom value in the platform
+ * Generic function to set a local presentation setting.
  */
 async function setCustomValue(key: string, value: string): Promise<boolean> {
   try {
-    const apiKey = getApiKey();
-    const locationId = getLocationId();
-
-    if (!apiKey || !locationId) {
-      console.warn('CRM credentials not configured, falling back to localStorage');
-      localStorage.setItem(key, value);
-      return true;
-    }
-
-    const response = await fetch(
-      `https://services.leadconnectorhq.com/locations/${locationId}/customValues`,
-      {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${apiKey}`,
-          'Content-Type': 'application/json',
-          'Version': '2021-07-28',
-        },
-        body: JSON.stringify({
-          key: key,
-          value: value,
-        }),
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error(`Failed to set custom value: ${response.status}`);
-    }
-
-    // Also cache in localStorage for faster access
     localStorage.setItem(key, value);
     return true;
   } catch (error) {
     console.error(`Error setting custom value ${key}:`, error);
-    // Fallback to localStorage during development
-    localStorage.setItem(key, value);
     return false;
   }
 }
@@ -163,13 +82,6 @@ async function setCustomValue(key: string, value: string): Promise<boolean> {
  */
 export async function getPasswordHash(): Promise<string | null> {
   const hash = await getCustomValue(STORAGE_KEYS.ADMIN_PASSWORD_HASH);
-  
-  // If no password is set, create default password hash
-  if (!hash) {
-    const defaultHash = await hashPassword(DEFAULT_PASSWORD);
-    await setPasswordHash(defaultHash);
-    return defaultHash;
-  }
   
   return hash;
 }
@@ -376,28 +288,20 @@ export interface ApiCredentials {
 }
 
 /**
- * Get API credentials from the platform
- * NOTE: In production, API key should come from platform SSO, not stored
+ * Get API credentials.
+ * OAuth credentials are server-side only, so this always returns null.
  */
 export async function getApiCredentials(): Promise<ApiCredentials | null> {
-  // For now, use localStorage (will be replaced with platform SSO in production)
-  const apiKey = localStorage.getItem(CRM_STORAGE.API_KEY);
-  const locationId = localStorage.getItem(CRM_STORAGE.LOCATION_ID);
-  
-  if (!apiKey || !locationId) return null;
-  
-  return { crmApiKey: apiKey, crmLocationId: locationId };
+  return null;
 }
 
 /**
- * Set API credentials
- * NOTE: In production, this should not be needed (platform SSO handles it)
+ * Set API credentials.
+ * Kept for compatibility; credentials must be configured through OAuth.
  */
 export async function setApiCredentials(credentials: ApiCredentials): Promise<boolean> {
-  // For now, use localStorage (will be replaced with platform SSO in production)
-  localStorage.setItem(CRM_STORAGE.API_KEY, credentials.crmApiKey);
-  localStorage.setItem(CRM_STORAGE.LOCATION_ID, credentials.crmLocationId);
-  return true;
+  void credentials;
+  return false;
 }
 
 // ============================================
@@ -585,7 +489,6 @@ export async function migrateLocalStorageToGHL(): Promise<void> {
  * Check if platform custom values are configured
  */
 export function isGHLStorageConfigured(): boolean {
-  const apiKey = getApiKey();
   const locationId = getLocationId();
-  return !!(apiKey && locationId);
+  return !!locationId;
 }

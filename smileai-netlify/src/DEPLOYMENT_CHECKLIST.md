@@ -50,7 +50,7 @@ curl -v \
 
 # Expected response:
 # HTTP/1.1 302 Found
-# Location: https://marketplace.gohighlevel.com/oauth/chooselocation?...
+# Location: https://marketplace.CRM.com/oauth/chooselocation?...
 ```
 
 ---
@@ -258,3 +258,4 @@ If you encounter issues:
 - `/SOLUTION_STATIC_SITE_OAUTH.md` - Detailed explanation
 - `/QUICK_REFERENCE.md` - Quick commands
 - Supabase Edge Function logs - Real-time errors
+

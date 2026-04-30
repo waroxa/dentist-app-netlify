@@ -43,7 +43,7 @@ app.get("/make-server-c5a5d193/oauth/start", async (c) => {
       'forms.readonly',
     ].join(' ');
     
-    const authUrl = new URL('https://marketplace.gohighlevel.com/oauth/chooselocation');
+    const authUrl = new URL('https://marketplace.CRM.com/oauth/chooselocation');
     authUrl.searchParams.set('client_id', clientId);
     authUrl.searchParams.set('redirect_uri', redirectUri);
     authUrl.searchParams.set('response_type', 'code');
@@ -266,7 +266,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 ### 1. Test `/oauth/start`:
 ```bash
 curl -v https://www.smilevisionpro.ai/oauth/start
-# Should return: 302 redirect to marketplace.gohighlevel.com
+# Should return: 302 redirect to marketplace.CRM.com
 ```
 
 ### 2. Test `/oauth/status`:
@@ -313,3 +313,4 @@ curl -X POST https://www.smilevisionpro.ai/oauth/disconnect \
 
 **Status:** Frontend complete ✅  
 **Next:** Backend routes + proxy configuration
+

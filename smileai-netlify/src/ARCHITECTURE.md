@@ -63,7 +63,7 @@ The app mode switcher is **removed in production**. Instead:
 
 **CRM Internal Dashboard:**
 - Accessed through CRM platform Marketplace
-- URL: `https://app.gohighlevel.com/location/{locationId}/marketplace/apps/smilevisionpro`
+- URL: `https://app.CRM.com/location/{locationId}/marketplace/apps/smilevisionpro`
 - **OAuth Authentication** handled automatically by CRM
 - Only authorized clinic staff can access
 - CRM passes authentication tokens in URL/headers
@@ -211,8 +211,8 @@ npm run build
 
 # Deploy to your hosting (Vercel, Netlify, etc.)
 # Set environment variables:
-# - VITE_GHL_API_KEY
-# - VITE_GHL_LOCATION_ID
+# - VITE_server_side_crm_token
+# - VITE_crm_location_id
 # - VITE_GEMINI_API_KEY
 ```
 
@@ -334,8 +334,8 @@ npm run build
 
 ```env
 # CRM platform
-VITE_GHL_API_KEY=your-ghl-api-key
-VITE_GHL_LOCATION_ID=your-location-id
+VITE_server_side_crm_token=your-ghl-api-key
+VITE_crm_location_id=your-location-id
 
 # Google Gemini AI
 VITE_GEMINI_API_KEY=your-gemini-api-key
@@ -372,10 +372,11 @@ VITE_GHL_OAUTH_REDIRECT=https://your-domain.com/auth/callback
 ## 📞 Support
 
 For questions about:
-- **CRM platform Integration:** [CRM Developer Docs](https://developers.gohighlevel.com/)
+- **CRM platform Integration:** [CRM Developer Docs](https://developers.CRM.com/)
 - **App Configuration:** See Settings view in CRM dashboard
 - **Technical Issues:** Check browser console for errors
 
 ---
 
 **Built with:** React, TypeScript, Tailwind CSS, CRM platform API, Google Gemini AI
+

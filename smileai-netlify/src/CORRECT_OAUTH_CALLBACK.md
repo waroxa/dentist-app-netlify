@@ -24,7 +24,7 @@ https://pvophjpndtqxkoygposy.supabase.co/functions/v1/make-server-c5a5d193/oauth
 1. User clicks "Connect CRM platform" in your admin dashboard
 2. Frontend calls: `POST /make-server-c5a5d193/oauth/initiate`
 3. Server generates state and returns CRM authorization URL
-4. Frontend redirects user to CRM: `https://marketplace.gohighlevel.com/oauth/chooselocation?...`
+4. Frontend redirects user to CRM: `https://marketplace.CRM.com/oauth/chooselocation?...`
 5. User authorizes and selects location in CRM
 6. **CRM redirects to:** `https://pvophjpndtqxkoygposy.supabase.co/functions/v1/make-server-c5a5d193/oauth/callback?code=xxx&state=xxx`
 7. Server exchanges code for tokens
@@ -80,3 +80,4 @@ https://pvophjpndtqxkoygposy.supabase.co/functions/v1/make-server-c5a5d193/oauth
 Just need to ensure:
 1. CRM Marketplace app uses this exact URL
 2. All code uses `make-server-c5a5d193` prefix (not `make-server-1ddb0231`)
+

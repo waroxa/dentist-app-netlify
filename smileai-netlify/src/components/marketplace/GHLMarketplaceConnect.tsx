@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { projectId, publicAnonKey } from '../../utils/supabase/info';
 import { AnimatePresence, motion } from 'motion/react';
 import { 
   Link2, Unlink, CheckCircle, AlertCircle, Loader2, 
@@ -19,107 +18,38 @@ interface OAuthConnection {
   is_expired: boolean;
 }
 
-// Backend API wrapper
+
 const API = {
-  baseUrl: `https://${projectId}.supabase.co/functions/v1/make-server-c5a5d193`,
-  
   async startOAuth() {
-    try {
-      console.log('🚀 Starting OAuth flow...');
-      console.log('📍 Calling:', `${this.baseUrl}/oauth/start`);
-      
-      const response = await fetch(`${this.baseUrl}/oauth/start`, {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${publicAnonKey}`,
-        },
-        redirect: 'manual',
-      });
-      
-      console.log('📥 Response status:', response.status);
-      console.log('📥 Response headers:', Object.fromEntries(response.headers.entries()));
-      
-      const redirectUrl = response.headers.get('location') || response.url;
-      console.log('🔗 Redirect URL:', redirectUrl);
-      
-      if (redirectUrl && redirectUrl.includes('gohighlevel.com')) {
-        console.log('✅ Redirecting to CRM authorization...');
-        window.location.href = redirectUrl;
-        return;
-      }
-      
-      if (response.ok) {
-        const data = await response.json();
-        console.log('📦 Response data:', data);
-        if (data.authUrl) {
-          console.log('✅ Using authUrl from JSON response');
-          window.location.href = data.authUrl;
-          return;
-        }
-      }
-      
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error('❌ Backend error:', errorText);
-        throw new Error(`Backend error (${response.status}): ${errorText}`);
-      }
-      
-      throw new Error('Failed to start OAuth flow - no redirect URL received');
-    } catch (error) {
-      console.error('❌ OAuth start error:', error);
-      throw error;
-    }
+    window.location.href = '/api/oauth/start';
   },
-  
+
   async getStatus() {
-    const response = await fetch(`${this.baseUrl}/oauth/status`, {
-      headers: {
-        'Authorization': `Bearer ${publicAnonKey}`,
-      },
-    });
-    
+    const response = await fetch('/api/oauth/status', { credentials: 'include' });
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({ error: 'Failed to load connections' }));
       throw new Error(errorData.error || 'Failed to load connections');
     }
-    
     return await response.json();
   },
-  
+
   async disconnect(locationId: string) {
-    const response = await fetch(`${this.baseUrl}/oauth/disconnect`, {
+    const response = await fetch('/api/oauth/disconnect', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${publicAnonKey}`,
-      },
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
       body: JSON.stringify({ locationId }),
     });
-    
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({ error: 'Failed to disconnect' }));
       throw new Error(errorData.error || 'Failed to disconnect');
     }
-    
     return await response.json();
   },
-  
+
   async refresh(locationId: string) {
-    const response = await fetch(`${this.baseUrl}/oauth/refresh`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${publicAnonKey}`,
-      },
-      body: JSON.stringify({ locationId }),
-    });
-    
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({ error: 'Failed to refresh token' }));
-      throw new Error(errorData.error || 'Failed to refresh token');
-    }
-    
-    return await response.json();
+    void locationId;
+    return this.getStatus();
   },
 };
 

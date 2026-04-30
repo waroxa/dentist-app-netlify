@@ -28,12 +28,12 @@
 ### Password Hashing
 ```typescript
 // Test 1: Hash a password
-const hash = await hashPassword('admin123');
+const hash = await hashPassword('a password you set');
 console.log(hash);
 // Output: pbkdf2$r7Kx3mP9... (70 chars, always different)
 
 // Test 2: Verify correct password
-const isValid = await verifyPassword('admin123', hash);
+const isValid = await verifyPassword('a password you set', hash);
 console.log(isValid); // true ✅
 
 // Test 3: Verify wrong password
@@ -95,9 +95,9 @@ await migrateLocalStorageToGHL();
 ### New Users (fresh install)
 ```typescript
 // On first launch:
-// 1. Default password "admin123" is auto-hashed
+// 1. Default password "a password you set" is auto-hashed
 // 2. Hash stored in CRM Custom Values
-// 3. User can login with "admin123"
+// 3. User can login with "a password you set"
 // 4. User changes password in Settings → Security
 ```
 
@@ -124,7 +124,7 @@ Location B (Dr. Jones):
 - Storage: CRM Custom Values for Location B
 
 Location C (Dr. Lee):
-- Password: admin123 (default)
+- Password: a password you set (default)
 - Hash: pbkdf2$ghi789...
 - Branding: "Your Dental Practice" (default)
 - Testimonials: []
@@ -184,7 +184,7 @@ Location C (Dr. Lee):
 7. ✅ **Lead capture**: Already using CRM Contacts API correctly
 
 ### What to test:
-1. ✅ Login with default password "admin123"
+1. ✅ Login with default password "a password you set"
 2. ✅ Change password in Settings → Security
 3. ✅ Logout and login with new password
 4. ✅ Submit a lead (should go to CRM Contacts)
@@ -210,3 +210,4 @@ Location C (Dr. Lee):
 4. Deploy to CRM marketplace
 
 **It will work!** 🎉
+
