@@ -1,5 +1,6 @@
 import crypto from 'node:crypto';
 import { createClient } from '@supabase/supabase-js';
+import { ensureFreshConnection } from './_oauth-refresh.mjs';
 
 const jsonHeaders = {
   'Content-Type': 'application/json; charset=utf-8',
@@ -328,8 +329,9 @@ function buildGhlCustomFields(fieldMap) {
 }
 
 async function requestGhl(connection, path, { method = 'GET', body } = {}) {
-  if (!connection?.access_token_encrypted) throw new Error('Missing active GHL access token.');
-  const accessToken = decryptSecret(connection.access_token_encrypted);
+  const fresh = await ensureFreshConnection(connection);
+  if (!fresh?.access_token_encrypted) throw new Error('Missing active GHL access token.');
+  const accessToken = decryptSecret(fresh.access_token_encrypted);
   const response = await fetch(`https://services.leadconnectorhq.com${path}`, {
     method,
     headers: {
