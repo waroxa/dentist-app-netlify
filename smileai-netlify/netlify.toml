@@ -134,6 +134,12 @@
   force = true
 
 [[redirects]]
+  from = "/api/ghl-webhook"
+  to = "/.netlify/functions/ghl-uninstall"
+  status = 200
+  force = true
+
+[[redirects]]
   from = "/marketplace"
   to = "/"
   status = 301
